@@ -24,23 +24,7 @@ Route::get('/dashboard', function () {
     $user = auth()->user();
     
     if ($user->isAdmin()) {
-        return redirect()->route('alumni.index'); // Redirect admin to alumni list
-    }
-    
-    return redirect()->route('profile.show'); // Redirect alumni to their profile
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-// In routes/web.php, update the dashboard route
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    
-    if ($user->isAdmin()) {
         return redirect()->route('admin.dashboard');
-    }
-    
-    // For alumni, check if they have a profile
-    if (!$user->alumni) {
-        return redirect()->route('profile.create')->with('info', 'Please complete your alumni profile first.');
     }
     
     return redirect()->route('profile.show');

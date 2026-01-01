@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumni;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,14 +12,18 @@ class ProfileController extends Controller
     // Show alumni profile
     public function show()
     {
+        /** @var User $user */
         $user = Auth::user();
-        $alumni = Auth::user()->alumni;
+        $alumni = $user->alumni;
         
         if (!$alumni) {
+            // Check if user is admin
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            }
             return redirect()->route('profile.create')->with('info', 'Please complete your alumni profile.');
         }
         
-        // Use the app layout (not cms) for alumni
         return view('profile.show', compact('alumni'));
     }
 
@@ -88,6 +93,7 @@ public function edit()
     // Update alumni profile
     public function update(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
         $alumni = $user->alumni;
 

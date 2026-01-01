@@ -18,33 +18,19 @@
                     
                     <!-- Show Profile link for alumni -->
                     @if(auth()->check() && auth()->user()->isAlumni())
-                        <x-nav-link :href="route('profile.show')" :active="request()->routeIs('profile.*')">
+                        <x-nav-link :href="route('profile.show')" :active="request()->routeIs('profile.*')" class="text-gray-700 hover:text-gray-900">
                             {{ __('My Profile') }}
                         </x-nav-link>
                     @endif
                 </div>
             </div>
 
-            <!-- In resources/views/welcome.blade.php or layout -->
-<div class="text-center mt-4">
-    <a href="{{ route('survey.create') }}" class="btn btn-primary btn-lg">
-        <i class="fas fa-user-plus me-2"></i> Register as Alumni
-    </a>
-</div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <img 
-    src="{{ asset('images/tadika-logo.jpg') }}" 
-    alt="My Photo"
-    class="w-20 h-20 rounded-full object-cover"
-/>
-                            </div>
+                            <div class="me-2">{{ Auth::user()->name }}</div>
                         </button>
                     </x-slot>
 

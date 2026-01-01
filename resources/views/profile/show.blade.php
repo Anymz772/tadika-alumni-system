@@ -112,9 +112,9 @@
                 
                 <div class="card-footer">
                     <div class="d-flex justify-content-between">
-                        <a href="{{ route('alumni.edit', $alumni->id) }}" class="btn btn-warning btn-sm">
-    <i class="bi bi-pencil"></i> Edit Profile
-</a>
+                        <a href="{{ route('profile.edit') }}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i> Edit Profile
+                        </a>
 
                         <a href="{{ route('dashboard') }}" class="btn btn-secondary">
                             <i class="fas fa-home me-2"></i> Back to Dashboard
