@@ -33,42 +33,52 @@
 </head>
 <body>
     <!-- In the sidebar -->
-<ul class="nav flex-column mt-4">
-    <li class="nav-item">
-        <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ Request::is('alumni*') && !Request::is('alumni/create') ? 'active' : '' }}" href="{{ route('alumni.index') }}">
-            <i class="fas fa-users"></i> Manage Alumni
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ Request::is('alumni/create') ? 'active' : '' }}" href="{{ route('alumni.create') }}">
-            <i class="fas fa-user-plus"></i> Add New Alumni
-        </a>
-    </li>
-    <li class="nav-item mt-4">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white">
+    <h4 class="text-center py-3 border-bottom border-secondary">
+        Tadika Admin
+    </h4>
+    
+    <ul class="nav nav-pills flex-column mb-auto mt-3">
+        
+        <li class="nav-item mb-2">
+            <a href="{{ route('admin.dashboard') }}" 
+               class="nav-link text-white {{ Request::is('admin/dashboard') ? 'active' : '' }}">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
             </a>
-        </form>
-    </li>
-</ul>
-<!-- Add to sidebar navigation -->
-<li class="nav-item">
-    <a class="nav-link {{ Request::is('admin/surveys*') ? 'active' : '' }}" href="{{ route('survey.index') }}">
-        <i class="fas fa-clipboard-list me-2"></i> Survey Submissions
-        @if(\App\Models\AlumniSurvey::where('status', 'pending')->count() > 0)
-            <span class="badge bg-danger float-end">
-                {{ \App\Models\AlumniSurvey::where('status', 'pending')->count() }}
-            </span>
-        @endif
-    </a>
-</li>
+        </li>
+
+        <li class="nav-item mb-2">
+            <a href="{{ route('alumni.index') }}" 
+               class="nav-link text-white {{ Request::is('admin/alumni') ? 'active' : '' }}">
+                <i class="bi bi-people-fill me-2"></i> Manage Alumni
+            </a>
+        </li>
+
+        <li class="nav-item mb-2">
+            <a href="{{ route('alumni.create') }}" 
+               class="nav-link text-white {{ Request::is('admin/alumni/create') ? 'active' : '' }}">
+                <i class="bi bi-person-plus-fill me-2"></i> Add New Alumni
+            </a>
+        </li>
+
+        <li class="nav-item mb-2">
+            <a href="{{ url('admin/surveys') }}" 
+               class="nav-link text-white {{ Request::is('admin/surveys*') ? 'active bg-primary' : '' }}">
+                <i class="bi bi-clipboard-data me-2"></i> Survey Submission
+            </a>
+        </li>
+
+    </ul>
+
+    <hr>
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </button>
+    </form>
+</div>
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
