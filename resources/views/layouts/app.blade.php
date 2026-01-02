@@ -37,7 +37,8 @@
             @endif
 
         <!-- Only show if user is logged in and has alumni profile -->
-@auth
+<!--
+        @auth
     @if(auth()->user()->alumni)
         <div class="mt-3 text-center">
             <a href="{{ route('profile.edit', auth()->user()->alumni->id) }}" class="btn btn-warning btn-sm">
@@ -46,18 +47,11 @@
         </div>
     @endif
 @endauth
+-->
 
             <!-- Page Content -->
             <main>
-                <div class="py-12">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 text-gray-900">
-                                @yield('content')
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @yield('content')
             </main>
         </div>
         
