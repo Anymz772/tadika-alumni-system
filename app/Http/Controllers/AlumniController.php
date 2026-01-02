@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Alumni;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AlumniController extends Controller
 {
@@ -61,7 +60,7 @@ class AlumniController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'role' => 'alumni'
         ]);
 
@@ -98,44 +97,47 @@ class AlumniController extends Controller
 
     // Update alumni
     public function update(Request $request, Alumni $alumni)
-    {
-        $request->validate([
-            'full_name' => 'required|string|max:255',
-            'year_graduated' => 'required|digits:4|integer',
-            'contact_number' => 'required|string|max:15',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'parent_contact' => 'required|string|max:15',
-            'email' => 'required|email|unique:users,email,' . $alumni->user_id,
-        ]);
+{
+    $request->validate([
+        'full_name' => 'required|string|max:255',
+        'year_graduated' => 'required|digits:4|integer',
+        'contact_number' => 'required|string|max:15',
+        'email' => 'required|email|unique:users,email,' . $alumni->user_id,
+        // Validation for the password
+        'password' => 'nullable|confirmed|min:8', 
+    ]);
 
-        // Update alumni record
-        $alumni->update([
-            'full_name' => $request->full_name,
-            'ic_number' => $request->ic_number,
-            'year_graduated' => $request->year_graduated,
-            'current_workplace' => $request->current_workplace,
-            'job_position' => $request->job_position,
-            'contact_number' => $request->contact_number,
-            'address' => $request->address,
-            'father_name' => $request->father_name,
-            'mother_name' => $request->mother_name,
-            'parent_contact' => $request->parent_contact,
-            'email' => $request->email,
-        ]);
+    // 1. Update the profile details in the 'alumnis' table
+    $alumni->update([
+        'full_name' => $request->full_name,
+        'year_graduated' => $request->year_graduated,
+        'contact_number' => $request->contact_number,
+        'father_name' => $request->father_name,
+        'mother_name' => $request->mother_name,
+        'parent_contact' => $request->parent_contact,
+        'email' => $request->email,
+        'ic_number' => $request->ic_number,
+        'current_workplace' => $request->current_workplace,
+        'job_position' => $request->job_position,
+        'address' => $request->address,
+    ]);
 
-        // Update user email if changed
-        if ($request->email !== $alumni->user->email) {
-            $alumni->user->update(['email' => $request->email]);
-        }
+    // 2. Prepare the data for the 'users' table (Login table)
+    $userUpdates = [
+        'email' => $request->email,
+        'name' => $request->full_name,
+    ];
 
-        // Update user name if full_name is different
-        if ($alumni->user->name !== $request->full_name) {
-            $alumni->user->update(['name' => $request->full_name]);
-        }
-
-        return redirect()->route('alumni.index')->with('success', 'Alumni updated successfully.');
+    // 3. ONLY update password if the user actually typed one
+    if ($request->filled('password')) {
+        $userUpdates['password'] = $request->password;
     }
+
+    // 4. Update the actual User account linked to this alumni
+    $alumni->user->update($userUpdates);
+
+    return redirect()->route('alumni.index')->with('success', 'Alumni and Login credentials updated successfully.');
+}
 
     // Delete alumni
     public function destroy(Alumni $alumni)
@@ -153,7 +155,7 @@ class AlumniController extends Controller
         ]);
         
         $alumni->user->update([
-            'password' => Hash::make($request->password)
+            'password' => $request->password
         ]);
         
         return back()->with('success', 'Password reset successfully for ' . $alumni->full_name);

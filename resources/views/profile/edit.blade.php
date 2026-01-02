@@ -1,5 +1,21 @@
 @extends('layouts.app')
 
+@if ($errors->any())
+    <div class="alert alert-danger shadow-sm">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+@if (session('success'))
+    <div class="alert alert-success shadow-sm">
+        {{ session('success') }}
+    </div>
+@endif
+
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -138,6 +154,24 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="card mb-4 shadow-sm border-warning">
+        <div class="card-header bg-warning text-dark"><h5>Change Password</h5></div>
+        <div class="card-body">
+            <p class="text-muted small">Leave these fields blank if you do not wish to change your password.</p>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>New Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Minimum 8 characters">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Confirm New Password</label>
+                    <input type="password" name="password_confirmation" class="form-control" placeholder="Re-type password">
+                </div>
+            </div>
+        </div>
+    </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ route('profile.show') }}" class="btn btn-secondary me-md-2">
