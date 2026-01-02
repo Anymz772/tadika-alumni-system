@@ -37,7 +37,8 @@
             @endif
 
         <!-- Only show if user is logged in and has alumni profile -->
-@auth
+<!--
+        @auth
     @if(auth()->user()->alumni)
         <div class="mt-3 text-center">
             <a href="{{ route('profile.edit', auth()->user()->alumni->id) }}" class="btn btn-warning btn-sm">
@@ -46,6 +47,7 @@
         </div>
     @endif
 @endauth
+-->
 
             <!-- Page Content -->
             <main>

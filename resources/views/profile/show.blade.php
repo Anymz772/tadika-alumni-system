@@ -10,11 +10,6 @@
                         <h4 class="mb-0">
                             <i class="fas fa-user-circle me-2"></i>My Alumni Profile
                         </h4>
-                        <div>
-                            <a href="{{ route('profile.edit') }}" class="btn btn-light btn-sm">
-                                <i class="fas fa-edit me-1"></i> Edit Profile
-                            </a>
-                        </div>
                     </div>
                 </div>
                 
