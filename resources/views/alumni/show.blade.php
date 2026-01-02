@@ -17,6 +17,13 @@
 @endsection
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
 <div class="row">
     <div class="col-md-4">
         <div class="card">
@@ -76,12 +83,24 @@
                         <div class="card border-warning">
                             <div class="card-body">
                                 <h6 class="text-warning">Reset Password</h6>
+                                @if($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul class="mb-0">
+                                            @foreach($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <form action="{{ route('alumni.reset-password', $alumni->id) }}" method="POST">
                                     @csrf
-                                    <div class="input-group">
+                                    <div class="mb-2">
                                         <input type="password" name="password" class="form-control" placeholder="New password" required>
-                                        <button type="submit" class="btn btn-warning">Reset</button>
                                     </div>
+                                    <div class="mb-2">
+                                        <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm new password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning w-100">Reset Password</button>
                                 </form>
                             </div>
                         </div>
