@@ -108,13 +108,30 @@ public function edit()
             'father_name' => 'required|string|max:255',
             'mother_name' => 'required|string|max:255',
             'parent_contact' => 'required|string|max:15',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        $alumni->update($request->all());
+        $alumni->update($request->only([
+            'full_name',
+            'year_graduated',
+            'contact_number',
+            'father_name',
+            'mother_name',
+            'parent_contact',
+            'ic_number',
+            'current_workplace',
+            'job_position',
+            'address'
+        ]));
 
         // Update user name if changed
         if ($user->name !== $request->full_name) {
             $user->update(['name' => $request->full_name]);
+        }
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            $user->update(['password' => $request->password]);
         }
 
         return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
