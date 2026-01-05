@@ -10,7 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+     <link rel="icon" href="{{ asset('images/tadika-logo.png') }}" type="image/png">
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -115,7 +116,7 @@
                 <div class="col-md-6">
                     <div class="tadika-logo">
                        <div class="logo-img">
-    <img src="{{ asset('images/tadika-logo.jpg') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
+    <img src="{{ asset('images/tadika-logo.png') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
 </div>
                         <div class="logo-text">
                             <h3>ALUMNI TADIKA MINDA INVOSI</h3>
@@ -223,7 +224,7 @@
                 <div class="col-md-4">
                     <div class="tadika-logo">
                        <div class="logo-img">
-    <img src="{{ asset('images/tadika-logo.jpg') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
+    <img src="{{ asset('images/tadika-logo.png') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
 </div>
                         <div class="logo-text">
                             <h5>ALUMNI TADIKA MINDA INOVASI</h5>
