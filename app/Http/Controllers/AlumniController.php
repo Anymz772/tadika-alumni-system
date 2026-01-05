@@ -12,26 +12,30 @@ class AlumniController extends Controller
     public function index(Request $request)
     {
         $query = Alumni::with('user')->latest();
-        
+
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('contact_number', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('contact_number', 'like', "%{$search}%");
             });
         }
-        
-        if ($request->has('year') && !empty($request->year)) {
-            $query->where('year_graduated', $request->year);
+
+        if ($request->has('year_from') && !empty($request->year_from)) {
+            $query->where('year_graduated', '>=', $request->year_from);
         }
-        
+
+        if ($request->has('year_to') && !empty($request->year_to)) {
+            $query->where('year_graduated', '<=', $request->year_to);
+        }
+
         if ($request->has('workplace') && !empty($request->workplace)) {
             $query->where('current_workplace', 'like', "%{$request->workplace}%");
         }
-        
+
         $alumni = $query->paginate(10)->withQueryString();
-        
+
         return view('alumni.index', compact('alumni'));
     }
 
@@ -143,7 +147,7 @@ class AlumniController extends Controller
     public function destroy(Alumni $alumni)
     {
         $alumni->user->delete();
-        
+
         return redirect()->route('alumni.index')->with('success', 'Alumni deleted successfully.');
     }
 
@@ -153,11 +157,11 @@ class AlumniController extends Controller
         $request->validate([
             'password' => 'required|string|min:8|confirmed',
         ]);
-        
+
         $alumni->user->update([
             'password' => $request->password
         ]);
-        
+
         return back()->with('success', 'Password reset successfully for ' . $alumni->full_name);
     }
 }

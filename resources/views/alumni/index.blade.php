@@ -25,20 +25,25 @@
                 <form method="GET" action="{{ route('alumni.index') }}" class="row g-3">
                     <div class="col-md-3">
                         <label class="form-label">Search Name/Email</label>
-                        <input type="text" name="search" class="form-control" 
-                               value="{{ request('search') }}" placeholder="Search...">
+                        <input type="text" name="search" class="form-control"
+                            value="{{ request('search') }}" placeholder="Search...">
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Graduation Year</label>
-                        <input type="number" name="year" class="form-control" 
-                               value="{{ request('year') }}" placeholder="e.g., 2020" min="2000" max="{{ date('Y') }}">
+                    <div class="col-md-2">
+                        <label class="form-label">Graduation Year From</label>
+                        <input type="number" name="year_from" class="form-control"
+                            value="{{ request('year_from') }}" placeholder="e.g., 2010" min="2000" max="{{ date('Y') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Graduation Year To</label>
+                        <input type="number" name="year_to" class="form-control"
+                            value="{{ request('year_to') }}" placeholder="e.g., 2020" min="2000" max="{{ date('Y') }}">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Workplace</label>
-                        <input type="text" name="workplace" class="form-control" 
-                               value="{{ request('workplace') }}" placeholder="Company name">
+                        <input type="text" name="workplace" class="form-control"
+                            value="{{ request('workplace') }}" placeholder="Company name">
                     </div>
-                    <div class="col-md-3 d-flex align-items-end">
+                    <div class="col-md-2 d-flex align-items-end">
                         <div class="btn-group w-100">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-search me-2"></i> Search
@@ -74,7 +79,7 @@
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-users me-2"></i>Alumni List</h5>
             </div>
-            
+
             <div class="card-body">
                 @if($alumni->count() > 0)
                 <div class="table-responsive">
@@ -96,8 +101,8 @@
                                 <td>
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
-                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 
-                                                 style="width: 50px; height: 50px;">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 50px; height: 50px;">
                                                 <i class="fas fa-user-graduate text-primary"></i>
                                             </div>
                                         </div>
@@ -130,20 +135,20 @@
                                 <td>
                                     <div class="action-buttons">
                                         <!-- Quick View Modal Button -->
-                                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" 
-                                                data-bs-target="#quickViewModal{{ $item->id }}">
+                                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal{{ $item->id }}">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        
+
                                         <!-- Edit Button -->
                                         <a href="{{ route('alumni.edit', $item->id) }}" class="btn btn-sm btn-warning">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        
+
                                         <!-- Delete Button -->
-                                        <form action="{{ route('alumni.destroy', $item->id) }}" method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Are you sure you want to delete {{ $item->full_name }}?')">
+                                        <form action="{{ route('alumni.destroy', $item->id) }}" method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Are you sure you want to delete {{ $item->full_name }}?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">
@@ -165,18 +170,18 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-md-4 text-center">
-                                                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                                                         style="width: 100px; height: 100px;">
+                                                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                                        style="width: 100px; height: 100px;">
                                                         <i class="fas fa-user-graduate fa-3x text-primary"></i>
                                                     </div>
                                                     <h5>{{ $item->full_name }}</h5>
                                                     <p class="text-muted">{{ $item->job_position ?? 'Alumni' }}</p>
-                                                    
+
                                                     <div class="mt-3">
                                                         <span class="badge bg-primary">{{ $item->year_graduated }} Graduate</span>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="col-md-8">
                                                     <div class="row">
                                                         <div class="col-md-6">
@@ -185,7 +190,7 @@
                                                             <p><i class="fas fa-phone me-2 text-muted"></i>{{ $item->contact_number }}</p>
                                                             <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->address ?? 'Address not specified' }}</p>
                                                         </div>
-                                                        
+
                                                         <div class="col-md-6">
                                                             <h6 class="text-primary">Professional Information</h6>
                                                             <p><i class="fas fa-briefcase me-2 text-muted"></i>{{ $item->current_workplace ?? 'Not specified' }}</p>
@@ -193,9 +198,9 @@
                                                             <p><i class="fas fa-id-card me-2 text-muted"></i>{{ $item->ic_number ?? 'IC not provided' }}</p>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <hr>
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <h6 class="text-primary">Parents Information</h6>
@@ -231,7 +236,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <div class="text-muted">
@@ -241,7 +246,7 @@
                         {{ $alumni->links() }}
                     </div>
                 </div>
-                
+
                 @else
                 <div class="text-center py-5">
                     <div class="mb-3">
@@ -266,9 +271,11 @@
         padding: 5px 10px;
         margin-right: 5px;
     }
+
     .action-buttons .btn:last-child {
         margin-right: 0;
     }
+
     .modal-body p {
         margin-bottom: 10px;
     }
