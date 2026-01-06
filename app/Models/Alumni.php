@@ -23,7 +23,8 @@ class Alumni extends Model
         'father_name',
         'mother_name',
         'parent_contact',
-        'email'
+        'email',
+        'photo'
     ];
 
     public function user()

@@ -6,6 +6,7 @@ use App\Models\Alumni;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -15,7 +16,7 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $alumni = $user->alumni;
-        
+
         if (!$alumni) {
             // Check if user is admin
             if ($user->isAdmin()) {
@@ -23,7 +24,7 @@ class ProfileController extends Controller
             }
             return redirect()->route('profile.create')->with('info', 'Please complete your alumni profile.');
         }
-        
+
         return view('profile.show', compact('alumni'));
     }
 
@@ -31,11 +32,11 @@ class ProfileController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
+
         if ($user->alumni) {
             return redirect()->route('profile.show');
         }
-        
+
         // Use the app layout (not cms) for alumni
         return view('profile.create');
     }
@@ -44,7 +45,7 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        
+
         if ($user->alumni) {
             return redirect()->route('profile.show');
         }
@@ -53,9 +54,9 @@ class ProfileController extends Controller
             'full_name' => 'required|string|max:255',
             'year_graduated' => 'required|digits:4|integer',
             'contact_number' => 'required|string|max:15',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'parent_contact' => 'required|string|max:15',
+            'father_name' => 'nullable|string|max:255',
+            'mother_name' => 'nullable|string|max:255',
+            'parent_contact' => 'nullable|string|max:15',
         ]);
 
         // Create alumni profile
@@ -78,17 +79,17 @@ class ProfileController extends Controller
     }
 
     // Edit alumni profile
-public function edit()
-{
-    $user = Auth::user();
-    $alumni = $user->alumni;
-    
-    if (!$alumni) {
-        return redirect()->route('profile.create')->with('error', 'Please create your alumni profile first.');
+    public function edit()
+    {
+        $user = Auth::user();
+        $alumni = $user->alumni;
+
+        if (!$alumni) {
+            return redirect()->route('profile.create')->with('error', 'Please create your alumni profile first.');
+        }
+
+        return view('profile.edit', compact('alumni'));
     }
-    
-    return view('profile.edit', compact('alumni'));
-}
 
     // Update alumni profile
     public function update(Request $request)
@@ -105,13 +106,14 @@ public function edit()
             'full_name' => 'required|string|max:255',
             'year_graduated' => 'required|digits:4|integer',
             'contact_number' => 'required|string|max:15',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'parent_contact' => 'required|string|max:15',
+            'father_name' => 'nullable|string|max:255',
+            'mother_name' => 'nullable|string|max:255',
+            'parent_contact' => 'nullable|string|max:15',
             'password' => 'nullable|string|min:8|confirmed',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $alumni->update($request->only([
+        $updateData = $request->only([
             'full_name',
             'year_graduated',
             'contact_number',
@@ -122,7 +124,21 @@ public function edit()
             'current_workplace',
             'job_position',
             'address'
-        ]));
+        ]);
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($alumni->photo && \Storage::disk('public')->exists($alumni->photo)) {
+                \Storage::disk('public')->delete($alumni->photo);
+            }
+
+            // Store new photo
+            $photoPath = $request->file('photo')->store('alumni_photos', 'public');
+            $updateData['photo'] = $photoPath;
+        }
+
+        $alumni->update($updateData);
 
         // Update user name if changed
         if ($user->name !== $request->full_name) {

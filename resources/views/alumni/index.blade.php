@@ -101,10 +101,17 @@
                                 <td>
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
+                                            @if($item->photo)
+                                            <img src="{{ asset('storage/' . $item->photo) }}"
+                                                alt="Profile Photo"
+                                                class="rounded-circle"
+                                                style="width: 50px; height: 50px; object-fit: cover;">
+                                            @else
                                             <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
                                                 style="width: 50px; height: 50px;">
                                                 <i class="fas fa-user-graduate text-primary"></i>
                                             </div>
+                                            @endif
                                         </div>
                                         <div>
                                             <strong>{{ $item->full_name }}</strong>
@@ -170,10 +177,17 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-md-4 text-center">
+                                                    @if($item->photo)
+                                                    <img src="{{ asset('storage/' . $item->photo) }}"
+                                                        alt="Profile Photo"
+                                                        class="rounded-circle mb-3"
+                                                        style="width: 100px; height: 100px; object-fit: cover;">
+                                                    @else
                                                     <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                                                         style="width: 100px; height: 100px;">
                                                         <i class="fas fa-user-graduate fa-3x text-primary"></i>
                                                     </div>
+                                                    @endif
                                                     <h5>{{ $item->full_name }}</h5>
                                                     <p class="text-muted">{{ $item->job_position ?? 'Alumni' }}</p>
 
