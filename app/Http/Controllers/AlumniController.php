@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Alumni;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AlumniController extends Controller
 {
@@ -48,17 +50,35 @@ class AlumniController extends Controller
     // Store new alumni
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('alumni_surveys'),
+                Rule::unique('users'),
+            ],
             'password' => 'required|string|min:8|confirmed',
             'full_name' => 'required|string|max:255',
-            'year_graduated' => 'required|digits:4|integer',
-            'contact_number' => 'required|string|max:15',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'parent_contact' => 'required|string|max:15',
+            'ic_number' => 'required|numeric|digits:12',
+            'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
+            'contact_number' => 'required|digits_between:10,15',
+            'current_workplace' => 'required|string|max:255',
+            'job_position' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
+            'father_name' => 'nullable|string|max:255',
+            'mother_name' => 'nullable|string|max:255',
+            'parent_contact' => 'nullable|digits_between:10,15',
+        ], [
+            'email.unique' => 'This email is already registered in our system.',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         // Create user
         $user = User::create([
@@ -101,47 +121,67 @@ class AlumniController extends Controller
 
     // Update alumni
     public function update(Request $request, Alumni $alumni)
-{
-    $request->validate([
-        'full_name' => 'required|string|max:255',
-        'year_graduated' => 'required|digits:4|integer',
-        'contact_number' => 'required|string|max:15',
-        'email' => 'required|email|unique:users,email,' . $alumni->user_id,
-        // Validation for the password
-        'password' => 'nullable|confirmed|min:8', 
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|string|max:255',
+            'ic_number' => 'required|numeric|digits:12',
+            'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('alumni_surveys')->ignore($alumni->id, 'id'), // Assuming alumni_surveys has id, but wait, alumni is not survey
+                Rule::unique('users')->ignore($alumni->user_id),
+            ],
+            'contact_number' => 'required|digits_between:10,15',
+            'current_workplace' => 'required|string|max:255',
+            'job_position' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
+            'father_name' => 'nullable|string|max:255',
+            'mother_name' => 'nullable|string|max:255',
+            'parent_contact' => 'nullable|digits_between:10,15',
+            'password' => 'nullable|string|min:8|confirmed',
+        ], [
+            'email.unique' => 'This email is already registered in our system.',
+        ]);
 
-    // 1. Update the profile details in the 'alumnis' table
-    $alumni->update([
-        'full_name' => $request->full_name,
-        'year_graduated' => $request->year_graduated,
-        'contact_number' => $request->contact_number,
-        'father_name' => $request->father_name,
-        'mother_name' => $request->mother_name,
-        'parent_contact' => $request->parent_contact,
-        'email' => $request->email,
-        'ic_number' => $request->ic_number,
-        'current_workplace' => $request->current_workplace,
-        'job_position' => $request->job_position,
-        'address' => $request->address,
-    ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-    // 2. Prepare the data for the 'users' table (Login table)
-    $userUpdates = [
-        'email' => $request->email,
-        'name' => $request->full_name,
-    ];
+        // 1. Update the profile details in the 'alumnis' table
+        $alumni->update([
+            'full_name' => $request->full_name,
+            'ic_number' => $request->ic_number,
+            'year_graduated' => $request->year_graduated,
+            'current_workplace' => $request->current_workplace,
+            'job_position' => $request->job_position,
+            'contact_number' => $request->contact_number,
+            'address' => $request->address,
+            'father_name' => $request->father_name,
+            'mother_name' => $request->mother_name,
+            'parent_contact' => $request->parent_contact,
+            'email' => $request->email,
+        ]);
 
-    // 3. ONLY update password if the user actually typed one
-    if ($request->filled('password')) {
-        $userUpdates['password'] = $request->password;
+        // 2. Prepare the data for the 'users' table (Login table)
+        $userUpdates = [
+            'email' => $request->email,
+            'name' => $request->full_name,
+        ];
+
+        // 3. ONLY update password if the user actually typed one
+        if ($request->filled('password')) {
+            $userUpdates['password'] = $request->password;
+        }
+
+        // 4. Update the actual User account linked to this alumni
+        $alumni->user->update($userUpdates);
+
+        return redirect()->route('alumni.index')->with('success', 'Alumni and Login credentials updated successfully.');
     }
-
-    // 4. Update the actual User account linked to this alumni
-    $alumni->user->update($userUpdates);
-
-    return redirect()->route('alumni.index')->with('success', 'Alumni and Login credentials updated successfully.');
-}
 
     // Delete alumni
     public function destroy(Alumni $alumni)
