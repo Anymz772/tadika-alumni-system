@@ -6,6 +6,7 @@ use App\Models\Alumni;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class AlumniController extends Controller
@@ -70,6 +71,7 @@ class AlumniController extends Controller
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|digits_between:10,15',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'email.unique' => 'This email is already registered in our system.',
         ]);
@@ -88,8 +90,8 @@ class AlumniController extends Controller
             'role' => 'alumni'
         ]);
 
-        // Create alumni profile
-        Alumni::create([
+        // Prepare alumni data
+        $alumniData = [
             'user_id' => $user->id,
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
@@ -102,9 +104,18 @@ class AlumniController extends Controller
             'mother_name' => $request->mother_name,
             'parent_contact' => $request->parent_contact,
             'email' => $request->email
-        ]);
+        ];
 
-        return redirect()->route('alumni.index')->with('success', 'Alumni created successfully.');
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('alumni_photos', 'public');
+            $alumniData['photo'] = $photoPath;
+        }
+
+        // Create alumni profile
+        $alumni = Alumni::create($alumniData);
+
+        return redirect()->route('alumni.show', $alumni->id)->with('success', 'Alumni account created successfully!');
     }
 
     // Show single alumni (admin view)
@@ -140,6 +151,7 @@ class AlumniController extends Controller
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|digits_between:10,15',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'nullable|string|min:8|confirmed',
         ], [
             'email.unique' => 'This email is already registered in our system.',
@@ -151,8 +163,8 @@ class AlumniController extends Controller
                 ->withInput();
         }
 
-        // 1. Update the profile details in the 'alumnis' table
-        $alumni->update([
+        // Handle photo upload
+        $updateData = [
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
             'year_graduated' => $request->year_graduated,
@@ -164,7 +176,21 @@ class AlumniController extends Controller
             'mother_name' => $request->mother_name,
             'parent_contact' => $request->parent_contact,
             'email' => $request->email,
-        ]);
+        ];
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($alumni->photo && \Storage::disk('public')->exists($alumni->photo)) {
+                \Storage::disk('public')->delete($alumni->photo);
+            }
+
+            // Store new photo
+            $photoPath = $request->file('photo')->store('alumni_photos', 'public');
+            $updateData['photo'] = $photoPath;
+        }
+
+        // 1. Update the profile details in the 'alumnis' table
+        $alumni->update($updateData);
 
         // 2. Prepare the data for the 'users' table (Login table)
         $userUpdates = [

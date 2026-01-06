@@ -12,31 +12,38 @@
                         </h4>
                     </div>
                 </div>
-                
+
                 <div class="card-body">
                     @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                     @endif
-                    
+
                     @if(session('info'))
-                        <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <i class="fas fa-info-circle me-2"></i> {{ session('info') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="fas fa-info-circle me-2"></i> {{ session('info') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                     @endif
-                    
+
                     <div class="row">
                         <!-- Profile Header -->
                         <div class="col-md-12 mb-4">
                             <div class="d-flex align-items-center">
                                 <div class="me-3">
-                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 
-                                         style="width: 80px; height: 80px;">
+                                    @if($alumni->photo)
+                                    <img src="{{ asset('storage/' . $alumni->photo) }}"
+                                        alt="Profile Photo"
+                                        class="rounded-circle"
+                                        style="width: 80px; height: 80px; object-fit: cover;">
+                                    @else
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 80px; height: 80px;">
                                         <i class="fas fa-user-graduate fa-2x text-primary"></i>
                                     </div>
+                                    @endif
                                 </div>
                                 <div>
                                     <h3 class="mb-1">{{ $alumni->full_name }}</h3>
@@ -51,7 +58,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Personal Information -->
                         <div class="col-md-6">
                             <div class="card mb-3">
@@ -65,7 +72,7 @@
                                     <p><strong>Address:</strong><br>{{ $alumni->address ?? 'Not specified' }}</p>
                                 </div>
                             </div>
-                            
+
                             <div class="card">
                                 <div class="card-header bg-light">
                                     <h6 class="mb-0"><i class="fas fa-users me-2"></i>Parents Information</h6>
@@ -77,7 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Professional Information -->
                         <div class="col-md-6">
                             <div class="card mb-3">
@@ -91,7 +98,7 @@
                                     <p><strong>Email:</strong><br>{{ $alumni->email }}</p>
                                 </div>
                             </div>
-                            
+
                             <div class="card">
                                 <div class="card-header bg-light">
                                     <h6 class="mb-0"><i class="fas fa-history me-2"></i>Profile Information</h6>
@@ -104,7 +111,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card-footer">
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('profile.edit') }}" class="btn btn-warning">

@@ -18,20 +18,27 @@
 
 @section('content')
 @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
 @endif
 
 <div class="row">
     <div class="col-md-4">
         <div class="card">
             <div class="card-body text-center">
-                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                     style="width: 100px; height: 100px;">
+                @if($alumni->photo)
+                <img src="{{ asset('storage/' . $alumni->photo) }}"
+                    alt="Profile Photo"
+                    class="rounded-circle mb-3"
+                    style="width: 100px; height: 100px; object-fit: cover;">
+                @else
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 100px; height: 100px;">
                     <i class="fas fa-user-graduate fa-3x text-primary"></i>
                 </div>
+                @endif
                 <h4>{{ $alumni->full_name }}</h4>
                 <p class="text-muted">{{ $alumni->job_position ?? 'Alumni' }}</p>
                 <div class="mt-2">
@@ -39,7 +46,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="card mt-3">
             <div class="card-header">
                 <h6 class="mb-0"><i class="fas fa-users me-2"></i>Parents</h6>
@@ -51,7 +58,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
@@ -72,7 +79,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="card mt-3">
             <div class="card-header">
                 <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Actions</h6>
@@ -84,13 +91,13 @@
                             <div class="card-body">
                                 <h6 class="text-warning">Reset Password</h6>
                                 @if($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul class="mb-0">
-                                            @foreach($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                                 @endif
                                 <form action="{{ route('alumni.reset-password', $alumni->id) }}" method="POST">
                                     @csrf
@@ -105,13 +112,13 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6">
                         <div class="card border-danger">
                             <div class="card-body">
                                 <h6 class="text-danger">Delete Account</h6>
                                 <form action="{{ route('alumni.destroy', $alumni->id) }}" method="POST"
-                                      onsubmit="return confirm('Delete this alumni?')">
+                                    onsubmit="return confirm('Delete this alumni?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger w-100">

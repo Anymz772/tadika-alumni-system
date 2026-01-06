@@ -26,7 +26,7 @@
         <h5 class="mb-0"><i class="fas fa-user-edit me-2"></i>Edit Alumni</h5>
     </div>
 
-    <form method="POST" action="{{ route('alumni.update', $alumni->id) }}">
+    <form method="POST" action="{{ route('alumni.update', $alumni->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -75,6 +75,17 @@
                         <label class="form-label">IC Number *</label>
                         <input type="text" class="form-control" name="ic_number"
                             value="{{ old('ic_number', $alumni->ic_number) }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Profile Photo</label>
+                        @if($alumni->photo)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $alumni->photo) }}" alt="Current Photo" class="img-thumbnail" style="max-width: 150px;">
+                        </div>
+                        @endif
+                        <input type="file" class="form-control" name="photo" accept="image/*">
+                        <div class="form-text">Accepted formats: JPEG, PNG, JPG, GIF. Max size: 2MB</div>
                     </div>
 
                     <div class="mb-3">
