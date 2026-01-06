@@ -6,78 +6,120 @@ A Laravel web application for managing Tadika alumni data, surveys, and administ
 
 Install the following before starting:
 
-XAMPP (PHP 8.2+, Apache, MySQL)
+### Prerequisites
 
-Composer
+-   **XAMPP** (includes Apache, MySQL, PHP) - Download and install from [apachefriends.org](https://www.apachefriends.org/)
+-   **Composer** - PHP dependency manager, download from [getcomposer.org](https://getcomposer.org/)
+-   **Node.js and npm** - JavaScript runtime and package manager, download from [nodejs.org](https://nodejs.org/)
+-   **Git** - For cloning the repository
 
-Node.js & npm
+### Step-by-Step Setup Guide
 
-Git
+1. **Clone the Repository**
 
-🚀 Quick Setup (Windows + XAMPP)
+    ```
+    git clone https://github.com/Anymz772/tadika-alumni-system.git
+    cd tadika-alumni-system
+    ```
 
-1. Clone the Project
-   git clone https://github.com/Anymz772/tadika-alumni-system.git
-   cd tadika-alumni-system
+2. **Start XAMPP Services**
 
-2. Start XAMPP
+    - Open XAMPP Control Panel
+    - Start Apache and MySQL modules
 
-Open XAMPP Control Panel and start:
+3. **Install PHP Dependencies**
 
-Apache
+    ```
+    composer install
+    ```
 
-MySQL
+4. **Install Node.js Dependencies**
 
-3. Install Dependencies
-   composer install
-   npm install
+    ```
+    npm install
+    ```
 
-4. Environment Setup
-   cp .env.example .env
-   php artisan key:generate
+5. **Configure Environment**
 
-Update .env database config:
+    ```
+    cp .env.example .env
+    ```
 
-DB_DATABASE=tadika_alumni_system
-DB_USERNAME=root
-DB_PASSWORD=
+    Edit the `.env` file and update the database configuration:
 
-5. Create Database
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=tadika_alumni_system
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
 
-Open http://localhost/phpmyadmin
+6. **Generate Application Key**
 
-Create database: tadika_alumni_system
+    ```
+    php artisan key:generate
+    ```
 
-6. Run Migrations & Seed Data
-   php artisan migrate
-   php artisan db:seed
+7. **Create the Database**
 
-7. Run the Application
-   npm run dev
-   php artisan serve
+    - Open phpMyAdmin (usually at http://localhost/phpmyadmin)
+    - Create a new database named `tadika_alumni_system`
 
-Open in browser:
-👉 http://localhost:8000
+8. **Run Database Migrations**
 
-🔐 Default Login (After Seeding)
+    ```
+    php artisan migrate
+    ```
 
-Admin:
-Check database/seeders/AdminUserSeeder.php
+9. **Seed the Database (Optional - Adds sample data)**
 
-Alumni Users:
-Check database/seeders/AlumniSeeder.php
+    ```
+    php artisan db:seed
+    ```
 
-🧯 Common Issues
+10. **Build Frontend Assets**
 
-PHP version must be 8.2+
+    ```
+    npm run build
+    ```
 
-Make sure MySQL is running
+    Or for development with hot reloading:
 
-Clear cache if error:
+    ```
+    npm run dev
+    ```
 
-php artisan optimize:clear
+11. **Start the Application**
 
-👨‍💻 Author
+    ```
+    php artisan serve
+    ```
 
-Aiman Hakim
-https://github.com/Anymz772
+    The application will be accessible at http://localhost:8000
+
+    **Alternative: Use the built-in development script** (runs server, queue worker, logs, and Vite concurrently):
+
+    ```
+    composer run dev
+    ```
+
+### Accessing the Application
+
+-   Main application: http://localhost:8000 (when using `php artisan serve`)
+-   If running via XAMPP Apache directly: http://localhost/tadika-alumni-system
+
+### Default Login Credentials (after seeding)
+
+-   **Admin User**: Check the `AdminUserSeeder.php` for details (likely email: admin@example.com, password: password)
+-   **Alumni Users**: Check the `AlumniSeeder.php` for sample alumni accounts
+
+### Troubleshooting
+
+-   Ensure PHP version is 8.2 or higher
+-   Make sure MySQL is running and accessible
+-   If port 8000 is in use, specify a different port: `php artisan serve --port=8001`
+-   Clear cache if issues occur: `php artisan config:clear && php artisan cache:clear`
+
+This should get the application running locally for development and testing.
