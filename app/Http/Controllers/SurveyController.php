@@ -33,15 +33,41 @@ class SurveyController extends Controller
                 Rule::unique('users'),
             ],
             'contact_number' => 'required|digits_between:10,15',
-            'current_workplace' => 'required|string|max:255',
-            'job_position' => 'required|string|max:255',
+            'current_status' => 'required|in:studying,working',
             'address' => 'required|string|max:500',
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|digits_between:10,15',
         ], [
             'email.unique' => 'This email is already registered in our system.',
+            'current_status.required' => 'Please select whether you are currently studying or working.',
         ]);
+
+        // Add conditional validation based on current_status
+        $validator->sometimes('institution_name', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'studying';
+        });
+
+        $validator->sometimes('company_name', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'working';
+        });
+
+        $validator->sometimes('job_position', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'working';
+        });
+
+        // Add custom error messages for conditional fields
+        if ($request->current_status === 'studying' && empty($request->institution_name)) {
+            $validator->errors()->add('institution_name', 'Institution Name is required when studying.');
+        }
+
+        if ($request->current_status === 'working' && empty($request->company_name)) {
+            $validator->errors()->add('company_name', 'Company Name is required when working.');
+        }
+
+        if ($request->current_status === 'working' && empty($request->job_position)) {
+            $validator->errors()->add('job_position', 'Job Title is required when working.');
+        }
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -56,8 +82,10 @@ class SurveyController extends Controller
             'year_graduated' => $request->year_graduated,
             'email' => $request->email,
             'contact_number' => $request->contact_number,
-            'current_workplace' => $request->current_workplace,
-            'job_position' => $request->job_position,
+            'current_status' => $request->current_status,
+            'institution_name' => $request->current_status === 'studying' ? $request->institution_name : null,
+            'company_name' => $request->current_status === 'working' ? $request->company_name : null,
+            'job_position' => $request->current_status === 'working' ? $request->job_position : null,
             'address' => $request->address,
             'father_name' => $request->father_name,
             'mother_name' => $request->mother_name,
@@ -136,8 +164,8 @@ class SurveyController extends Controller
             'full_name' => $survey->full_name,
             'ic_number' => $survey->ic_number,
             'year_graduated' => $survey->year_graduated,
-            'current_workplace' => $survey->current_workplace,
-            'job_position' => $survey->job_position,
+            'current_workplace' => $survey->current_status === 'studying' ? $survey->institution_name : $survey->company_name,
+            'job_position' => $survey->current_status === 'working' ? $survey->job_position : null,
             'contact_number' => $survey->contact_number,
             'address' => $survey->address,
             'father_name' => $survey->father_name,
