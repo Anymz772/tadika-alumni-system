@@ -73,13 +73,21 @@ Install the following before starting:
     php artisan migrate
     ```
 
-9. **Seed the Database (Optional - Adds sample data)**
+9. **Create Storage Link (Important for file uploads)**
+
+    ```
+    php artisan storage:link
+    ```
+
+    **Note for cPanel/Shared Hosting**: If the above command doesn't work (symlinks disabled), manually copy the contents of `storage/app/public/` to `public/storage/` using your hosting file manager or FTP.
+
+10. **Seed the Database (Optional - Adds sample data)**
 
     ```
     php artisan db:seed
     ```
 
-10. **Build Frontend Assets**
+11. **Build Frontend Assets**
 
     ```
     npm run build
@@ -91,7 +99,7 @@ Install the following before starting:
     npm run dev
     ```
 
-11. **Start the Application**
+12. **Start the Application**
 
     ```
     php artisan serve
