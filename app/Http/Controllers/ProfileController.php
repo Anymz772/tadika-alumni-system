@@ -50,14 +50,43 @@ class ProfileController extends Controller
             return redirect()->route('profile.show');
         }
 
-        $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'year_graduated' => 'required|digits:4|integer',
             'contact_number' => 'required|string|max:15',
+            'current_status' => 'required|in:studying,working',
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|string|max:15',
         ]);
+
+        // Add conditional validation based on current_status
+        $validator->sometimes('institution_name', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'studying';
+        });
+
+        $validator->sometimes('company_name', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'working';
+        });
+
+        $validator->sometimes('job_position', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'working';
+        });
+
+        // Add custom error messages for conditional fields
+        if ($request->current_status === 'studying' && empty($request->institution_name)) {
+            $validator->errors()->add('institution_name', 'Institution Name is required when studying.');
+        }
+
+        if ($request->current_status === 'working' && empty($request->company_name)) {
+            $validator->errors()->add('company_name', 'Company Name is required when working.');
+        }
+
+        if ($request->current_status === 'working' && empty($request->job_position)) {
+            $validator->errors()->add('job_position', 'Job Title is required when working.');
+        }
+
+        $validator->validate();
 
         // Create alumni profile
         Alumni::create([
@@ -65,8 +94,10 @@ class ProfileController extends Controller
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
             'year_graduated' => $request->year_graduated,
-            'current_workplace' => $request->current_workplace,
-            'job_position' => $request->job_position,
+            'current_status' => $request->current_status,
+            'institution_name' => $request->current_status === 'studying' ? $request->institution_name : null,
+            'company_name' => $request->current_status === 'working' ? $request->company_name : null,
+            'job_position' => $request->current_status === 'working' ? $request->job_position : null,
             'contact_number' => $request->contact_number,
             'address' => $request->address,
             'father_name' => $request->father_name,
@@ -102,10 +133,11 @@ class ProfileController extends Controller
             return redirect()->route('profile.create');
         }
 
-        $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'year_graduated' => 'required|digits:4|integer',
             'contact_number' => 'required|string|max:15',
+            'current_status' => 'required|in:studying,working',
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|string|max:15',
@@ -113,18 +145,48 @@ class ProfileController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $updateData = $request->only([
-            'full_name',
-            'year_graduated',
-            'contact_number',
-            'father_name',
-            'mother_name',
-            'parent_contact',
-            'ic_number',
-            'current_workplace',
-            'job_position',
-            'address'
-        ]);
+        // Add conditional validation based on current_status
+        $validator->sometimes('institution_name', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'studying';
+        });
+
+        $validator->sometimes('company_name', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'working';
+        });
+
+        $validator->sometimes('job_position', 'required|string|max:255', function ($input) {
+            return $input->current_status === 'working';
+        });
+
+        // Add custom error messages for conditional fields
+        if ($request->current_status === 'studying' && empty($request->institution_name)) {
+            $validator->errors()->add('institution_name', 'Institution Name is required when studying.');
+        }
+
+        if ($request->current_status === 'working' && empty($request->company_name)) {
+            $validator->errors()->add('company_name', 'Company Name is required when working.');
+        }
+
+        if ($request->current_status === 'working' && empty($request->job_position)) {
+            $validator->errors()->add('job_position', 'Job Title is required when working.');
+        }
+
+        $validator->validate();
+
+        $updateData = [
+            'full_name' => $request->full_name,
+            'year_graduated' => $request->year_graduated,
+            'contact_number' => $request->contact_number,
+            'current_status' => $request->current_status,
+            'institution_name' => $request->current_status === 'studying' ? $request->institution_name : null,
+            'company_name' => $request->current_status === 'working' ? $request->company_name : null,
+            'job_position' => $request->current_status === 'working' ? $request->job_position : null,
+            'father_name' => $request->father_name,
+            'mother_name' => $request->mother_name,
+            'parent_contact' => $request->parent_contact,
+            'ic_number' => $request->ic_number,
+            'address' => $request->address
+        ];
 
         // Handle photo upload
         if ($request->hasFile('photo')) {

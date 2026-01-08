@@ -132,9 +132,13 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($item->current_workplace)
-                                    <div><strong>{{ $item->current_workplace }}</strong></div>
+                                    @if($item->current_status === 'studying')
+                                    <div><strong>{{ $item->institution_name ?? 'Institution not specified' }}</strong></div>
+                                    <div class="small text-muted"><span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span></div>
+                                    @elseif($item->current_status === 'working')
+                                    <div><strong>{{ $item->company_name ?? 'Company not specified' }}</strong></div>
                                     <div class="small text-muted">{{ $item->job_position ?? 'Position not specified' }}</div>
+                                    <div class="small text-muted"><span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span></div>
                                     @else
                                     <span class="text-muted">Not specified</span>
                                     @endif
@@ -207,8 +211,21 @@
 
                                                         <div class="col-md-6">
                                                             <h6 class="text-primary">Professional Information</h6>
-                                                            <p><i class="fas fa-briefcase me-2 text-muted"></i>{{ $item->current_workplace ?? 'Not specified' }}</p>
-                                                            <p><i class="fas fa-user-tie me-2 text-muted"></i>{{ $item->job_position ?? 'Not specified' }}</p>
+                                                            <p><i class="fas fa-info-circle me-2 text-muted"></i>
+                                                                @if($item->current_status === 'studying')
+                                                                <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span>
+                                                                @elseif($item->current_status === 'working')
+                                                                <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span>
+                                                                @else
+                                                                Not specified
+                                                                @endif
+                                                            </p>
+                                                            @if($item->current_status === 'studying')
+                                                            <p><i class="fas fa-graduation-cap me-2 text-muted"></i>{{ $item->institution_name ?? 'Institution not specified' }}</p>
+                                                            @elseif($item->current_status === 'working')
+                                                            <p><i class="fas fa-building me-2 text-muted"></i>{{ $item->company_name ?? 'Company not specified' }}</p>
+                                                            <p><i class="fas fa-user-tie me-2 text-muted"></i>{{ $item->job_position ?? 'Position not specified' }}</p>
+                                                            @endif
                                                             <p><i class="fas fa-id-card me-2 text-muted"></i>{{ $item->ic_number ?? 'IC not provided' }}</p>
                                                         </div>
                                                     </div>
