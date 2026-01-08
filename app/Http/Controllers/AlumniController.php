@@ -64,7 +64,7 @@ class AlumniController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'full_name' => 'required|string|max:255',
             'ic_number' => 'required|numeric|digits:12',
-            'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
+            'year_graduated' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
             'contact_number' => 'required|digits_between:10,15',
             'current_status' => 'required|in:studying,working',
             'institution_name' => 'nullable|string|max:255',
@@ -141,7 +141,7 @@ class AlumniController extends Controller
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'ic_number' => 'required|numeric|digits:12',
-            'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
+            'year_graduated' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
             'email' => [
                 'required',
                 'email',

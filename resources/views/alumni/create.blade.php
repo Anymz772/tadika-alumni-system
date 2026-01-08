@@ -128,7 +128,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Year Graduated *</label>
-                        <input type="number" class="form-control @error('year_graduated') is-invalid @enderror" name="year_graduated" min="1980" max="{{ date('Y') }}" required>
+                        <input type="number" class="form-control @error('year_graduated') is-invalid @enderror" name="year_graduated" min="2000" max="{{ date('Y') }}" required>
                         @error('year_graduated')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
