@@ -114,6 +114,7 @@
                 </a>
             </li>
 
+            @if(!Request::is('profile*'))
             <li class="nav-item mb-2">
                 <a href="{{ route('alumni.index') }}"
                     class="nav-link text-white {{ Request::is('admin/alumni') ? 'active' : '' }}">
@@ -134,6 +135,7 @@
                     <i class="bi bi-clipboard-data me-2"></i> Survey Submission
                 </a>
             </li>
+            @endif
 
         </ul>
 
