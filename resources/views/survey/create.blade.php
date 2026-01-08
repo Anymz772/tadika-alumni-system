@@ -7,8 +7,8 @@
     <div class="col-md-10">
         <div class="survey-container">
             <div class="text-center mb-5">
-                <h2 class="mb-3"><i class="fas fa-user-plus me-2"></i>Alumni Registration Form</h2>
-                <p class="text-muted">Please fill in your details to join the Tadika Alumni Network</p>
+                <h2 class="mb-3"><i class="fas fa-user-plus me-2"></i>Alumni Registration</h2>
+                <p class="text-muted">Create your account to join the Tadika Alumni Network</p>
             </div>
 
             @if($errors->any())
@@ -61,6 +61,26 @@
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
                                 id="email" name="email" value="{{ old('email') }}" required>
                             @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label required">Password</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="password" name="password" required>
+                            @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="password_confirmation" class="form-label required">Confirm Password</label>
+                            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
+                                id="password_confirmation" name="password_confirmation" required>
+                            @error('password_confirmation')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -180,7 +200,7 @@
                 <div class="form-section">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        You will receive login credentials via email once approved.
+                        Your account will be created immediately. You can log in right after registration.
                     </div>
 
                     <div class="form-check mb-4">
@@ -193,7 +213,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-tadika-primary btn-lg">
-                            <i class="fas fa-paper-plane me-2"></i> Submit Registration
+                            <i class="fas fa-user-plus me-2"></i> Register Now
                         </button>
                         <a href="{{ url('/') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-times me-2"></i> Cancel

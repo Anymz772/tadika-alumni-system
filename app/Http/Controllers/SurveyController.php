@@ -18,7 +18,7 @@ class SurveyController extends Controller
         return view('survey.create');
     }
 
-    // Store survey submission (public)
+    // Store direct registration (public)
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -29,9 +29,9 @@ class SurveyController extends Controller
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('alumni_surveys'),
                 Rule::unique('users'),
             ],
+            'password' => 'required|string|min:8|confirmed',
             'contact_number' => 'required|digits_between:10,15',
             'current_status' => 'required|in:studying,working',
             'address' => 'required|string|max:500',
@@ -41,6 +41,7 @@ class SurveyController extends Controller
         ], [
             'email.unique' => 'This email is already registered in our system.',
             'current_status.required' => 'Please select whether you are currently studying or working.',
+            'password.confirmed' => 'Password confirmation does not match.',
         ]);
 
         // Add conditional validation based on current_status
@@ -75,26 +76,35 @@ class SurveyController extends Controller
                 ->withInput();
         }
 
-        // Create survey submission
-        $survey = AlumniSurvey::create([
+        // Create user account directly
+        $user = User::create([
+            'name' => $request->full_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'alumni',
+            'email_verified_at' => now(),
+        ]);
+
+        // Create alumni profile directly
+        Alumni::create([
+            'user_id' => $user->id,
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
             'year_graduated' => $request->year_graduated,
-            'email' => $request->email,
-            'contact_number' => $request->contact_number,
             'current_status' => $request->current_status,
             'institution_name' => $request->current_status === 'studying' ? $request->institution_name : null,
             'company_name' => $request->current_status === 'working' ? $request->company_name : null,
             'job_position' => $request->current_status === 'working' ? $request->job_position : null,
+            'contact_number' => $request->contact_number,
             'address' => $request->address,
             'father_name' => $request->father_name,
             'mother_name' => $request->mother_name,
             'parent_contact' => $request->parent_contact,
-            'status' => 'pending',
+            'email' => $request->email,
         ]);
 
-        return redirect()->route('survey.thankyou')
-            ->with('success', 'Thank you for submitting your information! We will review and approve your submission soon.');
+        return redirect()->route('login')
+            ->with('status', 'Registration successful! You can now log in with your email and password.');
     }
 
     // Thank you page
