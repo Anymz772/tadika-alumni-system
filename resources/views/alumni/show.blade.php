@@ -72,8 +72,21 @@
                         <p><strong>IC Number:</strong><br>{{ $alumni->ic_number ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Workplace:</strong><br>{{ $alumni->current_workplace ?? 'N/A' }}</p>
+                        <p><strong>Current Status:</strong><br>
+                            @if($alumni->current_status === 'studying')
+                            <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span>
+                            @elseif($alumni->current_status === 'working')
+                            <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span>
+                            @else
+                            N/A
+                            @endif
+                        </p>
+                        @if($alumni->current_status === 'studying')
+                        <p><strong>Institution:</strong><br>{{ $alumni->institution_name ?? 'N/A' }}</p>
+                        @elseif($alumni->current_status === 'working')
+                        <p><strong>Company:</strong><br>{{ $alumni->company_name ?? 'N/A' }}</p>
                         <p><strong>Position:</strong><br>{{ $alumni->job_position ?? 'N/A' }}</p>
+                        @endif
                         <p><strong>Address:</strong><br>{{ $alumni->address ?? 'N/A' }}</p>
                     </div>
                 </div>

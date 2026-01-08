@@ -60,21 +60,59 @@
 
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">Current Workplace *</label>
-                        <input type="text" class="form-control" name="current_workplace"
-                            value="{{ old('current_workplace', $alumni->current_workplace) }}" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Job Position *</label>
-                        <input type="text" class="form-control" name="job_position"
-                            value="{{ old('job_position', $alumni->job_position) }}" required>
-                    </div>
-
-                    <div class="mb-3">
                         <label class="form-label">IC Number *</label>
                         <input type="text" class="form-control" name="ic_number"
                             value="{{ old('ic_number', $alumni->ic_number) }}" required>
+                    </div>
+
+                    <!-- Current Status Selection -->
+                    <div class="mb-4">
+                        <label class="form-label">Current Status *</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="current_status" id="studying" value="studying"
+                                        {{ old('current_status', $alumni->current_status) === 'studying' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="studying">
+                                        <i class="fas fa-graduation-cap me-2"></i>Studying
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="current_status" id="working" value="working"
+                                        {{ old('current_status', $alumni->current_status) === 'working' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="working">
+                                        <i class="fas fa-briefcase me-2"></i>Working
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Institution and Employment Fields (Conditional for admin) -->
+                    <div id="studying-fields" class="conditional-fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="institution_name" class="form-label">Institution Name</label>
+                            <input type="text" class="form-control"
+                                id="institution_name" name="institution_name" value="{{ old('institution_name', $alumni->institution_name) }}">
+                        </div>
+                    </div>
+
+                    <div id="working-fields" class="conditional-fields" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="company_name" class="form-label">Company Name</label>
+                                <input type="text" class="form-control"
+                                    id="company_name" name="company_name" value="{{ old('company_name', $alumni->company_name) }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="job_position" class="form-label">Job Title</label>
+                                <input type="text" class="form-control"
+                                    id="job_position" name="job_position" value="{{ old('job_position', $alumni->job_position) }}">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -133,3 +171,70 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const studyingRadio = document.getElementById('studying');
+        const workingRadio = document.getElementById('working');
+        const studyingFields = document.getElementById('studying-fields');
+        const workingFields = document.getElementById('working-fields');
+
+        function toggleFields() {
+            if (studyingRadio && studyingRadio.checked) {
+                studyingFields.style.display = 'block';
+                workingFields.style.display = 'none';
+            } else if (workingRadio && workingRadio.checked) {
+                workingFields.style.display = 'block';
+                studyingFields.style.display = 'none';
+            } else {
+                studyingFields.style.display = 'none';
+                workingFields.style.display = 'none';
+            }
+        }
+
+        // Initial check on page load (for form validation errors and existing data)
+        toggleFields();
+
+        // Show fields based on existing alumni data if no radio is selected
+        if (!studyingRadio.checked && !workingRadio.checked) {
+            const currentStatus = '{{ $alumni->current_status }}';
+            if (currentStatus === 'studying') {
+                studyingRadio.checked = true;
+                studyingFields.style.display = 'block';
+            } else if (currentStatus === 'working') {
+                workingRadio.checked = true;
+                workingFields.style.display = 'block';
+            }
+        }
+
+        // Add event listeners if elements exist
+        if (studyingRadio) {
+            studyingRadio.addEventListener('change', toggleFields);
+        }
+        if (workingRadio) {
+            workingRadio.addEventListener('change', toggleFields);
+        }
+
+        // Force show fields if there are validation errors for conditional fields
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('errors') || document.querySelector('.is-invalid')) {
+            // Check if we have old input values
+            const currentStatus = document.querySelector('input[name="current_status"]:checked');
+            if (!currentStatus) {
+                // If no radio is checked but we have validation errors, check the appropriate radio based on old input
+                const oldInstitution = document.getElementById('institution_name').value;
+                const oldCompany = document.getElementById('company_name').value;
+
+                if (oldInstitution) {
+                    studyingRadio.checked = true;
+                    toggleFields();
+                } else if (oldCompany) {
+                    workingRadio.checked = true;
+                    toggleFields();
+                }
+            }
+        }
+    });
+</script>
+@endpush

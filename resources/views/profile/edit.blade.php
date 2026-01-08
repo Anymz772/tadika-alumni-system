@@ -117,18 +117,55 @@
                         </div>
 
                         <h5 class="mb-3 text-primary mt-4">Professional Information</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="current_workplace" class="form-label">Current Workplace</label>
-                                <input type="text" class="form-control"
-                                    id="current_workplace" name="current_workplace"
-                                    value="{{ old('current_workplace', $alumni->current_workplace) }}">
+
+                        <!-- Current Status Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">Current Status *</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="current_status" id="studying" value="studying"
+                                            {{ old('current_status', $alumni->current_status) === 'studying' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="studying">
+                                            <i class="fas fa-graduation-cap me-2"></i>Studying
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="current_status" id="working" value="working"
+                                            {{ old('current_status', $alumni->current_status) === 'working' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="working">
+                                            <i class="fas fa-briefcase me-2"></i>Working
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="job_position" class="form-label">Job Position</label>
+                        </div>
+
+                        <!-- Conditional Fields for Studying -->
+                        <div id="studying-fields" class="conditional-fields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="institution_name" class="form-label">Institution Name *</label>
                                 <input type="text" class="form-control"
-                                    id="job_position" name="job_position"
-                                    value="{{ old('job_position', $alumni->job_position) }}">
+                                    id="institution_name" name="institution_name" value="{{ old('institution_name', $alumni->institution_name) }}">
+                            </div>
+                        </div>
+
+                        <!-- Conditional Fields for Working -->
+                        <div id="working-fields" class="conditional-fields" style="display: none;">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="company_name" class="form-label">Company Name *</label>
+                                    <input type="text" class="form-control"
+                                        id="company_name" name="company_name" value="{{ old('company_name', $alumni->company_name) }}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="job_position" class="form-label">Job Title *</label>
+                                    <input type="text" class="form-control"
+                                        id="job_position" name="job_position" value="{{ old('job_position', $alumni->job_position) }}">
+                                </div>
                             </div>
                         </div>
 
@@ -205,3 +242,58 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const studyingRadio = document.getElementById('studying');
+        const workingRadio = document.getElementById('working');
+        const studyingFields = document.getElementById('studying-fields');
+        const workingFields = document.getElementById('working-fields');
+
+        function toggleFields() {
+            if (studyingRadio && studyingRadio.checked) {
+                studyingFields.style.display = 'block';
+                workingFields.style.display = 'none';
+            } else if (workingRadio && workingRadio.checked) {
+                workingFields.style.display = 'block';
+                studyingFields.style.display = 'none';
+            } else {
+                studyingFields.style.display = 'none';
+                workingFields.style.display = 'none';
+            }
+        }
+
+        // Initial check on page load (for form validation errors)
+        toggleFields();
+
+        // Add event listeners if elements exist
+        if (studyingRadio) {
+            studyingRadio.addEventListener('change', toggleFields);
+        }
+        if (workingRadio) {
+            workingRadio.addEventListener('change', toggleFields);
+        }
+
+        // Force show fields if there are validation errors for conditional fields
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('errors') || document.querySelector('.is-invalid')) {
+            // Check if we have old input values
+            const currentStatus = document.querySelector('input[name="current_status"]:checked');
+            if (!currentStatus) {
+                // If no radio is checked but we have validation errors, check the appropriate radio based on old input
+                const oldInstitution = document.getElementById('institution_name').value;
+                const oldCompany = document.getElementById('company_name').value;
+
+                if (oldInstitution) {
+                    studyingRadio.checked = true;
+                    toggleFields();
+                } else if (oldCompany) {
+                    workingRadio.checked = true;
+                    toggleFields();
+                }
+            }
+        }
+    });
+</script>
+@endpush

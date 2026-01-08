@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class AlumniController extends Controller
@@ -65,8 +66,10 @@ class AlumniController extends Controller
             'ic_number' => 'required|numeric|digits:12',
             'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
             'contact_number' => 'required|digits_between:10,15',
-            'current_workplace' => 'required|string|max:255',
-            'job_position' => 'required|string|max:255',
+            'current_status' => 'required|in:studying,working',
+            'institution_name' => 'nullable|string|max:255',
+            'company_name' => 'nullable|string|max:255',
+            'job_position' => 'nullable|string|max:255',
             'address' => 'required|string|max:500',
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
@@ -96,7 +99,9 @@ class AlumniController extends Controller
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
             'year_graduated' => $request->year_graduated,
-            'current_workplace' => $request->current_workplace,
+            'current_status' => $request->current_status,
+            'institution_name' => $request->institution_name,
+            'company_name' => $request->company_name,
             'job_position' => $request->job_position,
             'contact_number' => $request->contact_number,
             'address' => $request->address,
@@ -141,12 +146,13 @@ class AlumniController extends Controller
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('alumni_surveys')->ignore($alumni->id, 'id'), // Assuming alumni_surveys has id, but wait, alumni is not survey
                 Rule::unique('users')->ignore($alumni->user_id),
             ],
             'contact_number' => 'required|digits_between:10,15',
-            'current_workplace' => 'required|string|max:255',
-            'job_position' => 'required|string|max:255',
+            'current_status' => 'required|in:studying,working',
+            'institution_name' => 'nullable|string|max:255',
+            'company_name' => 'nullable|string|max:255',
+            'job_position' => 'nullable|string|max:255',
             'address' => 'required|string|max:500',
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
@@ -168,7 +174,9 @@ class AlumniController extends Controller
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
             'year_graduated' => $request->year_graduated,
-            'current_workplace' => $request->current_workplace,
+            'current_status' => $request->current_status,
+            'institution_name' => $request->institution_name,
+            'company_name' => $request->company_name,
             'job_position' => $request->job_position,
             'contact_number' => $request->contact_number,
             'address' => $request->address,

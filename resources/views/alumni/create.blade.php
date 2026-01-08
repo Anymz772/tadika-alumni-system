@@ -10,6 +10,86 @@
 </a>
 @endsection
 
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Conditional fields JavaScript loaded');
+
+        const studyingRadio = document.getElementById('studying');
+        const workingRadio = document.getElementById('working');
+        const studyingFields = document.getElementById('studying-fields');
+        const workingFields = document.getElementById('working-fields');
+
+        console.log('Elements found:', {
+            studyingRadio: !!studyingRadio,
+            workingRadio: !!workingRadio,
+            studyingFields: !!studyingFields,
+            workingFields: !!workingFields
+        });
+
+        function toggleFields() {
+            console.log('toggleFields called');
+            console.log('studyingRadio.checked:', studyingRadio ? studyingRadio.checked : 'N/A');
+            console.log('workingRadio.checked:', workingRadio ? workingRadio.checked : 'N/A');
+
+            if (studyingRadio && studyingRadio.checked) {
+                studyingFields.style.display = 'block';
+                workingFields.style.display = 'none';
+                console.log('Showing studying fields');
+            } else if (workingRadio && workingRadio.checked) {
+                workingFields.style.display = 'block';
+                studyingFields.style.display = 'none';
+                console.log('Showing working fields');
+            } else {
+                studyingFields.style.display = 'none';
+                workingFields.style.display = 'none';
+                console.log('Hiding all fields');
+            }
+        }
+
+        // Initial check on page load (for form validation errors)
+        toggleFields();
+
+        // Add event listeners if elements exist
+        if (studyingRadio) {
+            studyingRadio.addEventListener('change', function() {
+                console.log('Studying radio changed');
+                toggleFields();
+            });
+        }
+        if (workingRadio) {
+            workingRadio.addEventListener('change', function() {
+                console.log('Working radio changed');
+                toggleFields();
+            });
+        }
+
+        // Force show fields if there are validation errors for conditional fields
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('errors') || document.querySelector('.is-invalid')) {
+            console.log('Validation errors detected');
+            // Check if we have old input values
+            const currentStatus = document.querySelector('input[name="current_status"]:checked');
+            if (!currentStatus) {
+                // If no radio is checked but we have validation errors, check the appropriate radio based on old input
+                const oldInstitution = document.getElementById('institution_name').value;
+                const oldCompany = document.getElementById('company_name').value;
+
+                if (oldInstitution) {
+                    console.log('Setting studying radio based on old input');
+                    studyingRadio.checked = true;
+                    toggleFields();
+                } else if (oldCompany) {
+                    console.log('Setting working radio based on old input');
+                    workingRadio.checked = true;
+                    toggleFields();
+                }
+            }
+        }
+    });
+</script>
+@endpush
+
 @section('content')
 <div class="card">
     <div class="card-header">
@@ -99,21 +179,61 @@
                 @enderror
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">Current Workplace *</label>
-                        <input type="text" class="form-control @error('current_workplace') is-invalid @enderror" name="current_workplace" required>
-                        @error('current_workplace')
+            <!-- Current Status Selection -->
+            <div class="mb-4">
+                <label class="form-label">Current Status *</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="current_status" id="studying" value="studying"
+                                {{ old('current_status') === 'studying' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="studying">
+                                <i class="fas fa-graduation-cap me-2"></i>Studying
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="current_status" id="working" value="working"
+                                {{ old('current_status') === 'working' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="working">
+                                <i class="fas fa-briefcase me-2"></i>Working
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                @error('current_status')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Institution and Employment Fields (Conditional for admin) -->
+            <div id="studying-fields" class="conditional-fields" style="display: none;">
+                <div class="mb-3">
+                    <label for="institution_name" class="form-label">Institution Name</label>
+                    <input type="text" class="form-control @error('institution_name') is-invalid @enderror"
+                        id="institution_name" name="institution_name" value="{{ old('institution_name') }}">
+                    @error('institution_name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div id="working-fields" class="conditional-fields" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="company_name" class="form-label">Company Name</label>
+                        <input type="text" class="form-control @error('company_name') is-invalid @enderror"
+                            id="company_name" name="company_name" value="{{ old('company_name') }}">
+                        @error('company_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">Job Position *</label>
-                        <input type="text" class="form-control @error('job_position') is-invalid @enderror" name="job_position" required>
+                    <div class="col-md-6 mb-3">
+                        <label for="job_position" class="form-label">Job Title</label>
+                        <input type="text" class="form-control @error('job_position') is-invalid @enderror"
+                            id="job_position" name="job_position" value="{{ old('job_position') }}">
                         @error('job_position')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
