@@ -58,6 +58,7 @@ class ProfileController extends Controller
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|string|max:15',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Add conditional validation based on current_status
@@ -88,8 +89,7 @@ class ProfileController extends Controller
 
         $validator->validate();
 
-        // Create alumni profile
-        Alumni::create([
+        $createData = [
             'user_id' => $user->id,
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
@@ -104,7 +104,17 @@ class ProfileController extends Controller
             'mother_name' => $request->mother_name,
             'parent_contact' => $request->parent_contact,
             'email' => $user->email
-        ]);
+        ];
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path('storage/alumni_photos'), $filename);
+            $createData['photo'] = 'alumni_photos/' . $filename;
+        }
+
+        // Create alumni profile
+        Alumni::create($createData);
 
         return redirect()->route('profile.show')->with('success', 'Alumni profile created successfully!');
     }
@@ -191,13 +201,14 @@ class ProfileController extends Controller
         // Handle photo upload
         if ($request->hasFile('photo')) {
             // Delete old photo if exists
-            if ($alumni->photo && \Storage::disk('public')->exists($alumni->photo)) {
-                \Storage::disk('public')->delete($alumni->photo);
+            if ($alumni->photo && file_exists(public_path('storage/' . $alumni->photo))) {
+                unlink(public_path('storage/' . $alumni->photo));
             }
 
             // Store new photo
-            $photoPath = $request->file('photo')->store('alumni_photos', 'public');
-            $updateData['photo'] = $photoPath;
+            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path('storage/alumni_photos'), $filename);
+            $updateData['photo'] = 'alumni_photos/' . $filename;
         }
 
         $alumni->update($updateData);

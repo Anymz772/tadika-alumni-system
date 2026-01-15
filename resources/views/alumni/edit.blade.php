@@ -54,7 +54,7 @@
                     <div class="mb-3">
                         <label class="form-label">Year Graduated *</label>
                         <input type="number" class="form-control" name="year_graduated"
-                            value="{{ old('year_graduated', $alumni->year_graduated) }}" min="1980" max="{{ date('Y') }}" required>
+                            value="{{ old('year_graduated', $alumni->year_graduated) }}" min="2000" max="{{ date('Y') }}" required>
                     </div>
                 </div>
 

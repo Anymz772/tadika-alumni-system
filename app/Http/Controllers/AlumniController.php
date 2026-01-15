@@ -15,7 +15,7 @@ class AlumniController extends Controller
     // Display alumni list with search
     public function index(Request $request)
     {
-        $query = Alumni::with('user')->latest();
+        $query = Alumni::with('user')->orderBy('id', 'desc');
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
@@ -35,7 +35,11 @@ class AlumniController extends Controller
         }
 
         if ($request->has('workplace') && !empty($request->workplace)) {
-            $query->where('current_workplace', 'like', "%{$request->workplace}%");
+            $query->where(function ($q) use ($request) {
+                $q->where('current_workplace', 'like', "%{$request->workplace}%")
+                    ->orWhere('company_name', 'like', "%{$request->workplace}%")
+                    ->orWhere('institution_name', 'like', "%{$request->workplace}%");
+            });
         }
 
         $alumni = $query->paginate(10)->withQueryString();
@@ -64,7 +68,7 @@ class AlumniController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'full_name' => 'required|string|max:255',
             'ic_number' => 'required|numeric|digits:12',
-            'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
+            'year_graduated' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
             'contact_number' => 'required|digits_between:10,15',
             'current_status' => 'required|in:studying,working',
             'institution_name' => 'nullable|string|max:255',
@@ -113,8 +117,9 @@ class AlumniController extends Controller
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('alumni_photos', 'public');
-            $alumniData['photo'] = $photoPath;
+            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path('storage/alumni_photos'), $filename);
+            $alumniData['photo'] = 'alumni_photos/' . $filename;
         }
 
         // Create alumni profile
@@ -141,7 +146,7 @@ class AlumniController extends Controller
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'ic_number' => 'required|numeric|digits:12',
-            'year_graduated' => 'required|digits:4|integer|min:1980|max:' . date('Y'),
+            'year_graduated' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
             'email' => [
                 'required',
                 'email',
@@ -188,13 +193,14 @@ class AlumniController extends Controller
 
         if ($request->hasFile('photo')) {
             // Delete old photo if exists
-            if ($alumni->photo && \Storage::disk('public')->exists($alumni->photo)) {
-                \Storage::disk('public')->delete($alumni->photo);
+            if ($alumni->photo && file_exists(public_path('storage/' . $alumni->photo))) {
+                unlink(public_path('storage/' . $alumni->photo));
             }
 
             // Store new photo
-            $photoPath = $request->file('photo')->store('alumni_photos', 'public');
-            $updateData['photo'] = $photoPath;
+            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path('storage/alumni_photos'), $filename);
+            $updateData['photo'] = 'alumni_photos/' . $filename;
         }
 
         // 1. Update the profile details in the 'alumnis' table
