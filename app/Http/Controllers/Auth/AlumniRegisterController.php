@@ -23,15 +23,15 @@ class AlumniRegisterController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'full_name' => ['required', 'string', 'max:255'],
-            'year_graduated' => ['required', 'digits:4', 'integer', 'min:2000', 'max:' . date('Y')],
-            'contact_number' => ['required', 'string', 'max:15'],
-            'current_status' => ['required', 'in:studying,working'],
+            'year_graduated' => ['nullable', 'digits:4', 'integer', 'min:2000', 'max:' . date('Y')],
+            'contact_number' => ['nullable', 'string', 'max:15'],
+            'current_status' => ['nullable', 'in:studying,working,not_specified'],
             'institution_name' => ['nullable', 'string', 'max:255'],
             'company_name' => ['nullable', 'string', 'max:255'],
             'job_position' => ['nullable', 'string', 'max:255'],
-            'father_name' => ['required', 'string', 'max:255'],
-            'mother_name' => ['required', 'string', 'max:255'],
-            'parent_contact' => ['required', 'string', 'max:15'],
+            'father_name' => ['nullable', 'string', 'max:255'],
+            'mother_name' => ['nullable', 'string', 'max:255'],
+            'parent_contact' => ['nullable', 'string', 'max:15'],
         ]);
 
         // Create user

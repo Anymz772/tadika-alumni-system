@@ -23,8 +23,6 @@ class SurveyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
-            'ic_number' => 'required|numeric|digits:12',
-            'year_graduated' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
             'email' => [
                 'required',
                 'email',
@@ -32,43 +30,31 @@ class SurveyController extends Controller
                 Rule::unique('users'),
             ],
             'password' => 'required|string|min:8|confirmed',
-            'contact_number' => 'required|digits_between:10,15',
-            'current_status' => 'required|in:studying,working',
-            'address' => 'required|string|max:500',
+            'ic_number' => 'nullable|numeric|digits:12',
+            'year_graduated' => 'nullable|digits:4|integer|min:2000|max:' . date('Y'),
+            'contact_number' => 'nullable|digits_between:10,15',
+            'current_status' => 'nullable|in:studying,working,not_specified',
+            'address' => 'nullable|string|max:500',
             'father_name' => 'nullable|string|max:255',
             'mother_name' => 'nullable|string|max:255',
             'parent_contact' => 'nullable|digits_between:10,15',
         ], [
             'email.unique' => 'This email is already registered in our system.',
-            'current_status.required' => 'Please select whether you are currently studying or working.',
             'password.confirmed' => 'Password confirmation does not match.',
         ]);
 
-        // Add conditional validation based on current_status
-        $validator->sometimes('institution_name', 'required|string|max:255', function ($input) {
+        // Add conditional validation based on current_status (only if status is provided)
+        $validator->sometimes('institution_name', 'nullable|string|max:255', function ($input) {
             return $input->current_status === 'studying';
         });
 
-        $validator->sometimes('company_name', 'required|string|max:255', function ($input) {
+        $validator->sometimes('company_name', 'nullable|string|max:255', function ($input) {
             return $input->current_status === 'working';
         });
 
-        $validator->sometimes('job_position', 'required|string|max:255', function ($input) {
+        $validator->sometimes('job_position', 'nullable|string|max:255', function ($input) {
             return $input->current_status === 'working';
         });
-
-        // Add custom error messages for conditional fields
-        if ($request->current_status === 'studying' && empty($request->institution_name)) {
-            $validator->errors()->add('institution_name', 'Institution Name is required when studying.');
-        }
-
-        if ($request->current_status === 'working' && empty($request->company_name)) {
-            $validator->errors()->add('company_name', 'Company Name is required when working.');
-        }
-
-        if ($request->current_status === 'working' && empty($request->job_position)) {
-            $validator->errors()->add('job_position', 'Job Title is required when working.');
-        }
 
         if ($validator->fails()) {
             return redirect()->back()
