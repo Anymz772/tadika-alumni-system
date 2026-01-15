@@ -269,14 +269,19 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
+                @if($alumni->hasPages())
+                <div class="d-flex justify-content-between align-items-center mt-3 small">
                     <div class="text-muted">
-                        Showing {{ $alumni->firstItem() }} to {{ $alumni->lastItem() }} of {{ $alumni->total() }} entries
+                        Showing {{ $alumni->firstItem() }}–{{ $alumni->lastItem() }}
+                        of {{ $alumni->total() }}
                     </div>
+
                     <div>
-                        {{ $alumni->links() }}
+                        {{ $alumni->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
+                @endif
+
 
                 @else
                 <div class="text-center py-5">
