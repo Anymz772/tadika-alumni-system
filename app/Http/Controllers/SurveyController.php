@@ -30,7 +30,11 @@ class SurveyController extends Controller
                 Rule::unique('users'),
             ],
             'password' => 'required|string|min:8|confirmed',
-            'ic_number' => 'nullable|numeric|digits:12',
+            'ic_number' => ['nullable', 'string', 'regex:/^\d{6}-\d{2}-\d{4}$/', 'max:14'],
+            'state' => 'nullable|string|max:255',
+            'tadika_name' => 'nullable|string|max:255',
+            'gender' => 'nullable|in:male,female',
+            'age' => 'nullable|integer|min:1|max:100',
             'year_graduated' => 'nullable|digits:4|integer|min:2000|max:' . date('Y'),
             'contact_number' => 'nullable|digits_between:10,15',
             'current_status' => 'nullable|in:studying,working,not_specified',
@@ -76,6 +80,10 @@ class SurveyController extends Controller
             'user_id' => $user->id,
             'full_name' => $request->full_name,
             'ic_number' => $request->ic_number,
+            'state' => $request->state,
+            'tadika_name' => $request->tadika_name,
+            'gender' => $request->gender,
+            'age' => $request->age,
             'year_graduated' => $request->year_graduated,
             'current_status' => $request->current_status,
             'institution_name' => $request->current_status === 'studying' ? $request->institution_name : null,
@@ -159,6 +167,10 @@ class SurveyController extends Controller
             'user_id' => $user->id,
             'full_name' => $survey->full_name,
             'ic_number' => $survey->ic_number,
+            'state' => null, // New field, not available in old surveys
+            'tadika_name' => null, // New field, not available in old surveys
+            'gender' => null, // New field, not available in old surveys
+            'age' => null, // New field, not available in old surveys
             'year_graduated' => $survey->year_graduated,
             'current_status' => $survey->current_status,
             'institution_name' => $survey->current_status === 'studying' ? $survey->institution_name : null,

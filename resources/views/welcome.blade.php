@@ -39,13 +39,11 @@
                         </a>
 
                         @if (Route::has('register'))
-                           <!--
                              <a
                                 href="{{ route('register') }}"
                                 class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
                                 Register
                             </a>
-                            -->
                         @endif
                     @endauth
                 </nav>
@@ -61,10 +59,21 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Become an Alumni Member</h5>
-                    <p class="card-text">Fill our alumni registration form to join the network. Your account will be activated after admin approval.</p>
-                    <a href="{{ route('survey.create') }}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-user-plus me-2"></i> Register as Alumni
-                    </a>
+                    <p class="card-text">Choose your preferred registration method to join the alumni network.</p>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('alumni.register') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i> Quick Registration
+                        </a>
+                        <a href="{{ route('survey.create') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-clipboard-list me-2"></i> Survey Registration
+                        </a>
+                    </div>
+
+                    <small class="text-muted mt-2 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Both options create your alumni account with optional additional information fields.
+                    </small>
                 </div>
             </div>
             
