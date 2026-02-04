@@ -18,7 +18,7 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('survey.store') }}">
+            <form method="POST" action="{{ route('alumni.register') }}">
                 @csrf
 
                 <!-- Account Information -->

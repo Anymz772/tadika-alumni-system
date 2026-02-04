@@ -143,52 +143,6 @@
         </div>
     </header>
 
-    <!-- Navigation -->
-     <!--
-    <nav class="main-nav">
-        <div class="container">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">
-                        <i class="fas fa-home me-1"></i> Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('survey*') ? 'active' : '' }}" href="{{ route('survey.create') }}">
-                        <i class="fas fa-user-plus me-1"></i> Alumni Registration
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-users me-1"></i> Alumni Directory
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-calendar-alt me-1"></i> Events
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-newspaper me-1"></i> News
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-info-circle me-1"></i> About
-                    </a>
-                </li>
-                @if(auth()->check() && auth()->user()->isAdmin())
-                <li class="nav-item ms-auto">
-                    <a class="nav-link text-warning" href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-cog me-1"></i> Admin Panel
-                    </a>
-                </li>
-                @endif
-            </ul>
-        </div>
-    </nav>
-    -->
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
@@ -240,7 +194,7 @@
                     <h5>Quick Links</h5>
                     <div class="footer-links mt-3">
                         <a href="{{ url('/') }}"><i class="fas fa-home me-1"></i> Home</a><br>
-                        <a href="{{ route('survey.create') }}"><i class="fas fa-user-plus me-1"></i> Register</a><br>
+                        <a href="{{ route('alumni.register') }}"><i class="fas fa-user-plus me-1"></i> Register</a><br>
                         <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> Login</a><br>
                         <a href="#"><i class="fas fa-question-circle me-1"></i> FAQ</a>
                     </div>

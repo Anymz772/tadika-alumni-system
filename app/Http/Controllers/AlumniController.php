@@ -62,7 +62,6 @@ class AlumniController extends Controller
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('alumni_surveys'),
                 Rule::unique('users'),
             ],
             'password' => 'required|string|min:8|confirmed',
