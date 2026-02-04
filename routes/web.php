@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\AlumniRegisterController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
@@ -64,16 +64,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
-
-
-// ... other routes ...
-
-// Public Survey Routes (no auth required)
-Route::get('/survey', [SurveyController::class, 'create'])->name('survey.create');
-Route::post('/survey', [SurveyController::class, 'store'])->name('survey.store');
-Route::get('/survey/thankyou', [SurveyController::class, 'thankyou'])->name('survey.thankyou');
-
-
 
 // Simple public homepage
 Route::get('/', function () {

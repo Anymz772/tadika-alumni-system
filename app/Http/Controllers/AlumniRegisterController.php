@@ -15,7 +15,7 @@ class SurveyController extends Controller
     // Show survey form (public)
     public function create()
     {
-        return view('survey.create');
+        return view('auth.alumni-register');
     }
 
     // Store direct registration (public)
@@ -104,115 +104,19 @@ class SurveyController extends Controller
     // Thank you page
     public function thankyou()
     {
-        return view('survey.thankyou');
+        return view('auth.register-success');
+
     }
 
     // ================= ADMIN FUNCTIONS =================
 
     // List all survey submissions (admin only)
-    public function index(Request $request)
-    {
-        $query = AlumniSurvey::latest();
-
-        if ($request->has('status') && in_array($request->status, ['pending', 'approved', 'rejected'])) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('contact_number', 'like', "%{$search}%");
-            });
-        }
-
-        $surveys = $query->paginate(20);
-
-        return view('survey.index', compact('surveys'));
-    }
 
     // Show single survey (admin only)
-    public function show(AlumniSurvey $survey)
-    {
-        return view('survey.show', compact('survey'));
-    }
 
     // Approve survey and create alumni account (admin only)
-    public function approve(Request $request, AlumniSurvey $survey)
-    {
-        $request->validate([
-            'notes' => 'nullable|string|max:500',
-        ]);
-
-        // Check if email already exists in users table
-        if (User::where('email', $survey->email)->exists()) {
-            return back()->with('error', 'A user with this email already exists in the system.');
-        }
-
-        // Generate random password
-        $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
-
-        // Create user account
-        $user = User::create([
-            'name' => $survey->full_name,
-            'email' => $survey->email,
-            'password' => Hash::make($password),
-            'role' => 'alumni',
-            'email_verified_at' => now(),
-        ]);
-
-        // Create alumni profile
-        Alumni::create([
-            'user_id' => $user->id,
-            'full_name' => $survey->full_name,
-            'ic_number' => $survey->ic_number,
-            'state' => null, // New field, not available in old surveys
-            'tadika_name' => null, // New field, not available in old surveys
-            'gender' => null, // New field, not available in old surveys
-            'age' => null, // New field, not available in old surveys
-            'year_graduated' => $survey->year_graduated,
-            'current_status' => $survey->current_status,
-            'institution_name' => $survey->current_status === 'studying' ? $survey->institution_name : null,
-            'company_name' => $survey->current_status === 'working' ? $survey->company_name : null,
-            'job_position' => $survey->current_status === 'working' ? $survey->job_position : null,
-            'contact_number' => $survey->contact_number,
-            'address' => $survey->address,
-            'father_name' => $survey->father_name,
-            'mother_name' => $survey->mother_name,
-            'parent_contact' => $survey->parent_contact,
-            'email' => $survey->email,
-        ]);
-
-        // Update survey status
-        $survey->update([
-            'status' => 'approved',
-            'admin_notes' => $request->notes ?? 'Approved and account created. Password: ' . $password,
-        ]);
-
-        // Send welcome email with credentials (optional)
-        // $this->sendWelcomeEmail($user, $password);
-
-        return back()->with('success', 'Survey approved! Alumni account created. Password: ' . $password);
-    }
 
     // Reject survey (admin only)
-    public function reject(Request $request, AlumniSurvey $survey)
-    {
-        $request->validate([
-            'notes' => 'required|string|max:500',
-        ]);
-
-        $survey->update([
-            'status' => 'rejected',
-            'admin_notes' => $request->notes,
-        ]);
-
-        // Send rejection email (optional)
-        // $this->sendRejectionEmail($survey, $request->notes);
-
-        return back()->with('success', 'Survey rejected successfully.');
-    }
 
     // Delete survey (admin only)
     public function destroy(AlumniSurvey $survey)
