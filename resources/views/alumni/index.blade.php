@@ -119,6 +119,9 @@
                                             @if($item->ic_number)
                                             <div class="text-muted small">IC: {{ $item->ic_number }}</div>
                                             @endif
+                                            @if($item->tadika_name)
+                                            <div class="text-muted small"><i class="fas fa-school me-1"></i> {{ $item->tadika_name }}</div>
+                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -129,6 +132,9 @@
                                     <div><i class="fas fa-phone text-muted me-2"></i>{{ $item->contact_number }}</div>
                                     @if($item->parent_contact)
                                     <div class="small text-muted">Parent: {{ $item->parent_contact }}</div>
+                                    @endif
+                                    @if($item->state)
+                                    <div class="small text-muted"><i class="fas fa-map-marker-alt me-1"></i> {{ $item->state }}</div>
                                     @endif
                                 </td>
                                 <td>
@@ -206,6 +212,7 @@
                                                             <h6 class="text-primary">Contact Information</h6>
                                                             <p><i class="fas fa-envelope me-2 text-muted"></i>{{ $item->email }}</p>
                                                             <p><i class="fas fa-phone me-2 text-muted"></i>{{ $item->contact_number }}</p>
+                                                            <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->state ?? 'State not specified' }}</p>
                                                             <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->address ?? 'Address not specified' }}</p>
                                                         </div>
 
@@ -226,6 +233,8 @@
                                                             <p><i class="fas fa-building me-2 text-muted"></i>{{ $item->company_name ?? 'Company not specified' }}</p>
                                                             <p><i class="fas fa-user-tie me-2 text-muted"></i>{{ $item->job_position ?? 'Position not specified' }}</p>
                                                             @endif
+                                                            <p><i class="fas fa-school me-2 text-muted"></i>{{ $item->tadika_name ?? 'Tadika not specified' }}</p>
+                                                            <p><i class="fas fa-birthday-cake me-2 text-muted"></i>{{ $item->age ? $item->age . ' years old' : 'Age not specified' }}</p>
                                                             <p><i class="fas fa-id-card me-2 text-muted"></i>{{ $item->ic_number ?? 'IC not provided' }}</p>
                                                         </div>
                                                     </div>
