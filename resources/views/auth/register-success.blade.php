@@ -70,7 +70,7 @@
             
             <div class="row mt-4">
                 <div class="col-md-6 mb-2">
-                    <a href="{{ route('survey.create') }}" class="btn btn-outline-primary w-100">
+                    <a href="{{ route('alumni.register') }}" class="btn btn-outline-primary w-100">
                         <i class="fas fa-plus me-2"></i> Submit Another
                     </a>
                 </div>

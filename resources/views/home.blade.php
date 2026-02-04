@@ -10,7 +10,7 @@
             and be part of our growing alumni community. Your journey continues here.
         </p>
         <div class="d-flex gap-3">
-            <a href="{{ route('survey.create') }}" class="btn btn-tadika-primary btn-lg">
+            <a href="{{ route('alumni.register') }}" class="btn btn-tadika-primary btn-lg">
                 <i class="fas fa-user-plus me-2"></i> Join as Alumni
             </a>
             <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
@@ -84,7 +84,7 @@
                 </div>
                 
                 <div class="text-center mt-4">
-                   <!-- <a href="{{ route('survey.create') }}" class="btn btn-tadika-primary btn-lg">
+                   <!-- <a href="{{ route('alumni.register') }}" class="btn btn-tadika-primary btn-lg">
                         <i class="fas fa-play-circle me-2"></i> Start Registration Process 
                         -->
                     </a>
@@ -114,12 +114,6 @@
                             {{ \App\Models\Alumni::whereYear('year_graduated', '>=', date('Y') - 5)->count() }}
                         </div>
                         <p class="text-muted">Recent Graduates (5 years)</p>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="display-4 fw-bold text-warning">
-                            {{ \App\Models\AlumniSurvey::where('status', 'pending')->count() }}
-                        </div>
-                        <p class="text-muted">Pending Registrations</p>
                     </div>
                     <div class="col-md-3 mb-3">
                         <div class="display-4 fw-bold text-info">

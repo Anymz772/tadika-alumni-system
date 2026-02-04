@@ -4,19 +4,21 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AlumniRegisterController;
-use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+// ================= PUBLIC REGISTRATION ROUTES =================
+Route::get('/', function () {
+    return view('home');
+});
 
 // Public Registration (for alumni)
 Route::middleware('guest')->group(function () {
     Route::get('/register/alumni', [AlumniRegisterController::class, 'create'])->name('alumni.register');
     Route::post('/register/alumni', [AlumniRegisterController::class, 'store']);
+    Route::get('/register/alumni/thankyou', [AlumniRegisterController::class, 'thankyou'])->name('alumni.register.thankyou');
 });
+
 // ================= LOGIN/DASHBOARD =================
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -42,15 +44,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/alumni/{alumni}', [AlumniController::class, 'update'])->name('alumni.update');
     Route::delete('/alumni/{alumni}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
 
-    // Admin Survey Management Routes
-    Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/admin/surveys', [SurveyController::class, 'index'])->name('survey.index');
-        Route::get('/admin/surveys/{survey}', [SurveyController::class, 'show'])->name('survey.show');
-        Route::post('/admin/surveys/{survey}/approve', [SurveyController::class, 'approve'])->name('survey.approve');
-        Route::post('/admin/surveys/{survey}/reject', [SurveyController::class, 'reject'])->name('survey.reject');
-        Route::delete('/admin/surveys/{survey}', [SurveyController::class, 'destroy'])->name('survey.destroy');
-    });
-
     // Password Reset
     Route::post('/alumni/{alumni}/reset-password', [AlumniController::class, 'resetPassword'])
         ->name('alumni.reset-password');
@@ -66,24 +59,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// ... other routes ...
-
-// Public Survey Routes (no auth required)
-Route::get('/survey', [SurveyController::class, 'create'])->name('survey.create');
-Route::post('/survey', [SurveyController::class, 'store'])->name('survey.store');
-Route::get('/survey/thankyou', [SurveyController::class, 'thankyou'])->name('survey.thankyou');
-
-
-
-// Simple public homepage
-Route::get('/', function () {
-    return view('home');
-});
-
-// Public Survey Routes (ONLY registration method)
-Route::get('/survey', [SurveyController::class, 'create'])->name('survey.create');
-Route::post('/survey', [SurveyController::class, 'store'])->name('survey.store');
-Route::get('/survey/thankyou', [SurveyController::class, 'thankyou'])->name('survey.thankyou');
 
 // Authentication routes (from Laravel Breeze)
 require __DIR__ . '/auth.php';

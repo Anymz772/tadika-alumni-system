@@ -128,14 +128,6 @@
                     <i class="bi bi-person-plus-fill me-2"></i> Add New Alumni
                 </a>
             </li>
-            <!--
-            <li class="nav-item mb-2">
-                <a href="{{ url('admin/surveys') }}"
-                    class="nav-link text-white {{ Request::is('admin/surveys*') ? 'active bg-primary' : '' }}">
-                    <i class="bi bi-clipboard-data me-2"></i> Survey Submission
-                </a>
-            </li>
-            -->
             @endif
 
         </ul>

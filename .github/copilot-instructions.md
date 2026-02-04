@@ -6,7 +6,7 @@ This is a Laravel-based alumni management system for a kindergarten (tadika). Th
 
 ## Architecture & Data Flow
 
--   **Public Survey Flow**: Alumni submit details via `survey.create` → stored in `alumni_surveys` table with 'pending' status → admin reviews via `survey.index` → approval creates User + Alumni records with random password
+-   **Public Survey Flow**: Alumni submit details via `alumni.register` → stored in `alumni_surveys` table with 'pending' status → admin reviews via `survey.index` → approval creates User + Alumni records with random password
 -   **Admin Management**: CRUD operations on alumni via `AlumniController` with search/filter/pagination
 -   **Authentication**: Role-based with 'admin' and 'alumni' roles; uses Laravel Breeze
 -   **Frontend**: Blade templates with Tailwind CSS + Alpine.js; layouts: `app.blade.php` (authenticated), `public.blade.php` (survey), `cms.blade.php` (admin)

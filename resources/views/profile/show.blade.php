@@ -68,6 +68,8 @@
                         <p><strong>Email:</strong><br>{{ $alumni->email }}</p>
                         <p><strong>Contact Number:</strong><br>{{ $alumni->contact_number }}</p>
                         <p><strong>IC Number:</strong><br>{{ $alumni->ic_number ?? 'N/A' }}</p>
+                        <p><strong>Age:</strong><br>{{ $alumni->age ?? 'N/A' }}</p>
+                        <p><strong>Gender:</strong><br>{{ ucfirst($alumni->gender) ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Current Status:</strong><br>
@@ -85,6 +87,8 @@
                         <p><strong>Company:</strong><br>{{ $alumni->company_name ?? 'N/A' }}</p>
                         <p><strong>Position:</strong><br>{{ $alumni->job_position ?? 'N/A' }}</p>
                         @endif
+                        <p><strong>Tadika Name:</strong><br>{{ $alumni->tadika_name ?? 'N/A' }}</p>
+                        <p><strong>State:</strong><br>{{ $alumni->state ?? 'N/A' }}</p>
                         <p><strong>Address:</strong><br>{{ $alumni->address ?? 'N/A' }}</p>
                     </div>
                 </div>
