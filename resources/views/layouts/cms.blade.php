@@ -1,202 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Tadika Alumni CMS')</title>
+    <title>@yield('title', 'Admin - Tadika Alumni')</title>
 
-    <!-- Bootstrap 5 CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
     <link rel="icon" href="{{ asset('images/tadika-logo.png') }}" type="image/png">
 
     <style>
+        :root {
+            --primary-blue: #0ea5e9;
+            /* Sky Blue */
+            --dark-blue: #0369a1;
+            /* Ocean Blue */
+            --sidebar-width: 260px;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Nunito', sans-serif;
+            /* Menggunakan warna biru muda yang rata (Solid Light Blue) tanpa corak */
+            background-color: #f0f9ff;
+            color: #334155;
+            /* Warna teks slate grey untuk mudah baca */
+            margin: 0;
+            overflow-x: hidden;
+            /* Elak scrollbar melintang */
         }
 
+        /* --- SIDEBAR STYLING --- */
         .sidebar {
-            min-height: 100vh;
-            background: linear-gradient(180deg, #4361ee 0%, #3a0ca3 100%);
-            color: white;
-            width: 250px;
+            width: var(--sidebar-width);
+            height: 100vh;
             position: fixed;
-        }
-
-        .sidebar .logo {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 12px 20px;
-            margin: 2px 0;
-        }
-
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
+            top: 0;
+            left: 0;
+            /* Gradient biru yang lembut untuk sidebar */
+            background: linear-gradient(180deg, #0ea5e9 0%, #2563eb 100%);
             color: white;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left: 4px solid white;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(14, 165, 233, 0.15);
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Group Label (e.g., MENU UTAMA) */
+        .nav-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 25px 25px 10px;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 12px 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            border-radius: 0 50px 50px 0;
+            /* Lengkung di sebelah kanan butang */
+            margin-right: 15px;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding-left: 30px;
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-left-color: #fbbf24;
+            /* Garis kuning */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link i {
+            width: 24px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* --- MAIN CONTENT STYLING --- */
         .main-content {
-            margin-left: 250px;
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .top-navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            /* Effect kaca */
+            padding: 15px 30px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.02);
+            border-bottom: 1px solid #e0f2fe;
+            position: sticky;
+            top: 0;
+            z-index: 900;
         }
 
         .content-wrapper {
-            padding: 20px;
-            min-height: calc(100vh - 70px);
+            padding: 30px;
+            flex-grow: 1;
         }
 
+        /* Card Styling */
         .card {
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            /* Shadow yang sangat lembut */
+            background-color: #fff;
+            transition: transform 0.2s;
+            border: 1px solid #f1f5f9;
         }
 
-        .btn-primary {
-            background-color: #4361ee;
-            border-color: #4361ee;
+        /* Titles */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--dark-blue);
         }
 
-        .btn-primary:hover {
-            background-color: #3a0ca3;
-            border-color: #3a0ca3;
-        }
-
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                margin-left: -250px;
+                margin-left: calc(-1 * var(--sidebar-width));
             }
 
             .sidebar.active {
                 margin-left: 0;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
             }
 
             .main-content {
                 margin-left: 0;
             }
 
-            .main-content.active {
-                margin-left: 250px;
+            .overlay {
+                display: none;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .overlay.active {
+                display: block;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- In the sidebar -->
-    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white">
-        <h4 class="text-center py-3 border-bottom border-secondary">
-            Tadika Admin
-        </h4>
 
-        <ul class="nav nav-pills flex-column mb-auto mt-3">
+    <div class="overlay" id="overlay"></div>
 
-            <li class="nav-item mb-2">
+    <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0">
+        <div class="sidebar-header d-flex align-items-center justify-content-center">
+            <i class="fas fa-shapes me-2 text-warning"></i>
+            <span>{{ auth()->user()->isAdmin() ? 'Tadika Admin' : 'Tadika' }}</span>
+        </div>
+
+        <div class="overflow-auto" style="height: calc(100vh - 80px);">
+            <div class="nav-label">Utama</div>
+
+            @if(auth()->user()->isAdmin())
                 <a href="{{ route('admin.dashboard') }}"
-                    class="nav-link text-white {{ Request::is('admin/dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-            </li>
-
-            @if(!Request::is('profile*'))
-            <li class="nav-item mb-2">
-                <a href="{{ route('alumni.index') }}"
-                    class="nav-link text-white {{ Request::is('admin/alumni') ? 'active' : '' }}">
-                    <i class="bi bi-people-fill me-2"></i> Manage Alumni
+            @else
+                <a href="{{ route('tadika.dashboard') }}"
+                    class="nav-link {{ Request::is('tadika/dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-            </li>
-
-            <li class="nav-item mb-2">
-                <a href="{{ route('alumni.create') }}"
-                    class="nav-link text-white {{ Request::is('admin/alumni/create') ? 'active' : '' }}">
-                    <i class="bi bi-person-plus-fill me-2"></i> Add New Alumni
-                </a>
-            </li>
             @endif
 
-        </ul>
+            @if(auth()->user()->isAdmin())
+                <div class="nav-label">Pengurusan</div>
 
-        <hr>
+                @if (!Request::is('profile*'))
+                    <a href="{{ route('alumni.index') }}"
+                        class="nav-link {{ Request::is('admin/alumni') || Request::is('admin/alumni/*') ? 'active' : '' }}">
+                        <i class="bi bi-people-fill"></i> Senarai Alumni
+                    </a>
 
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
-                <i class="bi bi-box-arrow-right me-2"></i> Logout
-            </button>
-        </form>
-    </div>
+                    <a href="{{ route('alumni.create') }}"
+                        class="nav-link {{ Request::is('admin/alumni/create') ? 'active' : '' }}">
+                        <i class="bi bi-person-plus-fill"></i> Tambah Alumni
+                    </a>
+                @endif
+            @else
+                <div class="nav-label">Tadika</div>
+                <a href="{{ route('tadika.edit') }}"
+                    class="nav-link {{ Request::is('tadika/profile/edit') ? 'active' : '' }}">
+                    <i class="bi bi-building"></i> Profil Tadika
+                </a>
+                <a href="{{ route('tadika.alumni') }}"
+                    class="nav-link {{ Request::is('tadika/alumni') ? 'active' : '' }}">
+                    <i class="bi bi-people-fill"></i> Alumni Tadika
+                </a>
+            @endif
 
-    <!-- Main Content -->
+            <div class="nav-label">Akaun</div>
+
+            <form action="{{ route('logout') }}" method="POST" class="mt-2 px-3">
+                @csrf
+                <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm">
+                    <i class="bi bi-box-arrow-right me-2"></i> Log Keluar
+                </button>
+            </form>
+
+            <div class="mt-auto p-4 text-center text-white-50 small">
+                &copy; {{ date('Y') }} Tadika System
+            </div>
+        </div>
+    </nav>
+
     <div class="main-content" id="mainContent">
-        <!-- Top Navbar -->
-        <nav class="top-navbar">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <button class="btn btn-outline-primary d-md-none" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h4 class="mb-0 d-none d-md-inline">@yield('page-title', 'Dashboard')</h4>
+
+        <nav class="top-navbar d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light text-primary d-md-none me-3 shadow-sm rounded-circle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="d-none d-md-block">
+                    <h5 class="mb-0 fw-bold text-primary">@yield('page-title', 'Dashboard')</h5>
+                    <small class="text-muted">Selamat datang, {{ Auth::user()->name }}</small>
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user-circle me-2"></i> {{ Auth::user()->name }}
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                </a>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+            </div>
+
+            <div class="dropdown">
+                <button
+                    class="btn btn-white border rounded-pill px-3 py-1 shadow-sm dropdown-toggle d-flex align-items-center gap-2"
+                    type="button" data-bs-toggle="dropdown">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 30px; height: 30px;">
+                        {{ substr(Auth::user()->name, 0, 1) }}
+                    </div>
+                    <span class="d-none d-sm-inline small fw-bold text-secondary">{{ Auth::user()->name }}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
+                    <li>
+                        <h6 class="dropdown-header">
+                            {{ auth()->user()->isAdmin() ? 'Akaun Admin' : 'Akaun Tadika' }}
+                        </h6>
+                    </li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-muted"></i> Tetapan</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="dropdown-item text-danger fw-bold" type="submit">
+                                <i class="fas fa-sign-out-alt me-2"></i> Log Keluar
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </nav>
 
-        <!-- Content Wrapper -->
         <div class="content-wrapper">
-            <!-- Page Header -->
-            <div class="page-header mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2 class="mb-1">@yield('header-title', 'Dashboard')</h2>
-                        <p class="text-muted mb-0">@yield('header-subtitle', 'Welcome to Tadika Alumni CMS')</p>
-                    </div>
-                    <div>@yield('header-buttons')</div>
+            <div class="row align-items-center mb-4">
+                <div class="col-md-8">
+                    <h2 class="mb-1 fw-bold">@yield('header-title', '')</h2>
+                    <p class="text-muted mb-0">@yield('header-subtitle', '')</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    @yield('header-buttons')
                 </div>
             </div>
 
-            <!-- Main Content -->
             @yield('content')
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('mainContent').classList.toggle('active');
-        });
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
     </script>
 
     @stack('scripts')
