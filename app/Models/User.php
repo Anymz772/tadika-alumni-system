@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->hasOne(Alumni::class);
     }
 
+    public function ownedTadika()
+    {
+        return $this->hasOne(Tadika::class, 'owner_user_id');
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin';
@@ -42,5 +47,15 @@ class User extends Authenticatable
     public function isAlumni()
     {
         return $this->role === 'alumni';
+    }
+
+    public function isTadika()
+    {
+        return $this->role === 'tadika';
+    }
+
+    public function isTadikaOwner()
+    {
+        return $this->isTadika();
     }
 }

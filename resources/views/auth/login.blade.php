@@ -73,4 +73,11 @@
         </x-primary-button>
         </div>
     </form>
+
+    <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400">Don't have an account?</p>
+        <a href="{{ route('tadika.register') }}" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">
+            Register Tadika
+        </a>
+    </div>
 </x-guest-layout>

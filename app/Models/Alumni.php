@@ -13,6 +13,7 @@ class Alumni extends Model
 
     protected $fillable = [
         'user_id',
+        'tadika_id',
         'full_name',
         'ic_number',
         'year_graduated',
@@ -36,5 +37,10 @@ class Alumni extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function tadika()
+    {
+        return $this->belongsTo(Tadika::class);
     }
 }

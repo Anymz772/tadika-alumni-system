@@ -3,7 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\TadikaOwnerController;
 use App\Http\Controllers\Auth\AlumniRegisterController;
+use App\Http\Controllers\Auth\TadikaRegisterController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -17,6 +19,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/register/alumni', [AlumniRegisterController::class, 'create'])->name('alumni.register');
     Route::post('/register/alumni', [AlumniRegisterController::class, 'store']);
     Route::get('/register/alumni/thankyou', [AlumniRegisterController::class, 'thankyou'])->name('alumni.register.thankyou');
+
+    Route::get('/register/tadika', [TadikaRegisterController::class, 'create'])->name('tadika.register');
+    Route::post('/register/tadika', [TadikaRegisterController::class, 'store']);
+    Route::get('/register/tadika/success', function () {
+        return view('auth.tadika-register-success');
+    })->name('tadika.register.success');
 });
 
 // ================= LOGIN/DASHBOARD =================
@@ -25,6 +33,10 @@ Route::get('/dashboard', function () {
 
     if ($user->isAdmin()) {
         return redirect()->route('admin.dashboard');
+    }
+
+    if ($user->isTadika()) {
+        return redirect()->route('tadika.dashboard');
     }
 
     return redirect()->route('profile.show');
@@ -47,6 +59,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Password Reset
     Route::post('/alumni/{alumni}/reset-password', [AlumniController::class, 'resetPassword'])
         ->name('alumni.reset-password');
+});
+
+// ================= TADIKA OWNER ROUTES =================
+Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
+    Route::get('/dashboard', [TadikaOwnerController::class, 'dashboard'])->name('tadika.dashboard');
+    Route::get('/profile/edit', [TadikaOwnerController::class, 'editProfile'])->name('tadika.edit');
+    Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.update');
+    Route::get('/alumni', [TadikaOwnerController::class, 'viewAlumniList'])->name('tadika.alumni');
 });
 
 // ================= ALUMNI PROFILE ROUTES =================
