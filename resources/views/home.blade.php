@@ -13,6 +13,9 @@
             <a href="{{ route('alumni.register') }}" class="btn btn-tadika-primary btn-lg">
                 <i class="fas fa-user-plus me-2"></i> Join as Alumni
             </a>
+            <a href="{{ route('tadika.register') }}" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-school me-2"></i> Register Tadika
+            </a>
             <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
                 <i class="fas fa-sign-in-alt me-2"></i> Member Login
             </a>
