@@ -205,10 +205,15 @@
                     class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-            @else
+            @elseif(auth()->user()->isTadika())
                 <a href="{{ route('tadika.dashboard') }}"
                     class="nav-link {{ Request::is('tadika/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            @elseif(auth()->user()->isAlumni())
+                <a href="{{ route('profile.show') }}"
+                    class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
+                    <i class="bi bi-person-circle"></i> Dashboard
                 </a>
             @endif
 
@@ -226,7 +231,7 @@
                         <i class="bi bi-person-plus-fill"></i> Tambah Alumni
                     </a>
                 @endif
-            @else
+            @elseif(auth()->user()->isTadika())
                 <div class="nav-label">Tadika</div>
                 <a href="{{ route('tadika.edit') }}"
                     class="nav-link {{ Request::is('tadika/profile/edit') ? 'active' : '' }}">
@@ -235,6 +240,12 @@
                 <a href="{{ route('tadika.alumni') }}"
                     class="nav-link {{ Request::is('tadika/alumni') ? 'active' : '' }}">
                     <i class="bi bi-people-fill"></i> Alumni Tadika
+                </a>
+            @elseif(auth()->user()->isAlumni())
+                <div class="nav-label">Alumni</div>
+                <a href="{{ route('profile.edit') }}"
+                    class="nav-link {{ Request::is('profile/edit') ? 'active' : '' }}">
+                    <i class="bi bi-pencil-square"></i> Kemaskini Profil
                 </a>
             @endif
 
@@ -280,7 +291,13 @@
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
                     <li>
                         <h6 class="dropdown-header">
-                            {{ auth()->user()->isAdmin() ? 'Akaun Admin' : 'Akaun Tadika' }}
+                            @if(auth()->user()->isAdmin())
+                                Akaun Admin
+                            @elseif(auth()->user()->isTadika())
+                                Akaun Tadika
+                            @else
+                                Akaun Alumni
+                            @endif
                         </h6>
                     </li>
                     <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-muted"></i> Tetapan</a>

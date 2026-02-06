@@ -98,57 +98,6 @@
                 </div>
 
                 <div class="form-section">
-                    <h5><i class="fas fa-info-circle me-2"></i>Additional Optional Details</h5>
-
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <textarea class="form-control @error('address') is-invalid @enderror"
-                                id="address" name="address" rows="3">{{ old('address') }}</textarea>
-                            @error('address')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="phone" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                id="phone" name="phone" value="{{ old('phone') }}">
-                            @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="owner_name" class="form-label">Owner / Pengetua Name</label>
-                            <input type="text" class="form-control @error('owner_name') is-invalid @enderror"
-                                id="owner_name" name="owner_name" value="{{ old('owner_name') }}">
-                            @error('owner_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="location" class="form-label">Location</label>
-                            <input type="text" class="form-control @error('location') is-invalid @enderror"
-                                id="location" name="location" value="{{ old('location') }}" placeholder="e.g., latitude/longitude or address">
-                            @error('location')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="logo" class="form-label">Tadika Picture / Logo</label>
-                            <input type="file" class="form-control @error('logo') is-invalid @enderror"
-                                id="logo" name="logo" accept="image/*">
-                            @error('logo')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle me-2"></i>
                         Your Tadika account will be created immediately. You can add more details after login.
