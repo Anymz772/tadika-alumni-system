@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="text-center mt-4 text-muted small">
-                        &copy; {{ date('Y') }} Sistem Alumni Tadika
+                        &copy; {{ date('Y') }} e-Tadika Portal
                     </div>
                 </div>
             </div>

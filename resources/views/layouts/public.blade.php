@@ -119,7 +119,7 @@
     <img src="{{ asset('images/tadika-logo.png') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
 </div>
                         <div class="logo-text">
-                            <h3>ALUMNI TADIKA MINDA INVOSI</h3>
+                            <h3>TADIKA ALUMNI NETWORK</h3>
                             <p>Connecting Graduates Since 2000</p>
                         </div>
                     </div>
@@ -181,7 +181,7 @@
     <img src="{{ asset('images/tadika-logo.png') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
 </div>
                         <div class="logo-text">
-                            <h5>ALUMNI TADIKA MINDA INOVASI</h5>
+                            <h5>TADIKA ALUMNI NETWORK</h5>
                             <p>Building lasting connections</p>
                         </div>
                     </div>
@@ -204,15 +204,15 @@
                     <div class="mt-3">
                         <p style="color: #bdc3c7;">
                             <i class="fas fa-map-marker-alt me-2"></i> 
-                            32, Hala Klebang Restu 3, 31200 Chemor, Perak
+                            NO 14 &14 A, Tawas Idaman 3, Taman Tawas Idaman, 30010 Ipoh, Perak
                         </p>
                         <p style="color: #bdc3c7;">
                             <i class="fas fa-phone me-2"></i> 
-                            +019-570 9402
+                            05 2925956
                         </p>
                         <p style="color: #bdc3c7;">
                             <i class="fas fa-envelope me-2"></i> 
-                            alumni@tadika.edu.my
+                            budi@madani.com.my
                         </p>
                     </div>
                 </div>
@@ -221,7 +221,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <p class="mb-0" style="color: #bdc3c7;">
-                        &copy; {{ date('Y') }} Alumni Tadika Minda Inovasi. All rights reserved.
+                        &copy; {{ date('Y') }} E-Tadika. All rights reserved.
                     </p>
                 </div>
                 <div class="col-md-6 text-end">
