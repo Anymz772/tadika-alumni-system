@@ -9,103 +9,84 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 
 class AlumniRegisterController extends Controller
 {
-    /**
-     * Show public alumni registration form
-     */
     public function create()
     {
-        return view('auth.alumni-register'); // your registration form
+        return view('auth.alumni-register');
     }
 
-    /**
-     * Handle public alumni registration submission
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('users'),
+            'user_name' => ['required', 'string', 'max:255'],
+            'user_email' => [
+                'required', 'string', 'lowercase', 'email', 'max:255',
+                Rule::unique('users', 'user_email')
             ],
-            'password' => 'required|string|min:8|confirmed',
-            'ic_number' => ['nullable', 'string', 'regex:/^\d{6}-\d{2}-\d{4}$/', 'max:14'],
-            'state' => 'nullable|string|max:255',
-            'tadika_name' => 'nullable|string|max:255',
-            'gender' => 'nullable|in:male,female',
-            'age' => 'nullable|integer|min:1|max:100',
-            'year_graduated' => 'nullable|digits:4|integer|min:2000|max:' . date('Y'),
-            'contact_number' => 'nullable|digits_between:10,15',
-            'current_status' => 'nullable|in:studying,working,not_specified',
-            'address' => 'nullable|string|max:500',
-            'father_name' => 'nullable|string|max:255',
-            'mother_name' => 'nullable|string|max:255',
-            'parent_contact' => 'nullable|digits_between:10,15',
-            'institution_name' => 'nullable|string|max:255',
-            'company_name' => 'nullable|string|max:255',
-            'job_position' => 'nullable|string|max:255',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'alumni_name' => ['required', 'string', 'max:255'],
+            'alumni_ic' => ['nullable', 'string', 'regex:/^\d{6}-\d{2}-\d{4}$/', 'max:14'],
+            'alumni_state' => ['nullable', 'string', 'max:255'],
+            'tadika_name' => ['nullable', 'string', 'max:255'],
+            'gender' => ['nullable', 'in:male,female'],
+            'age' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'grad_year' => ['nullable', 'digits:4', 'integer', 'min:2000', 'max:' . date('Y')],
+            'alumni_phone' => ['nullable', 'string', 'max:15'],
+            'alumni_status' => ['nullable', 'in:studying,working,not_specified'],
+            'alumni_address' => ['nullable', 'string', 'max:500'],
+            'father_name' => ['nullable', 'string', 'max:255'],
+            'mother_name' => ['nullable', 'string', 'max:255'],
+            'parent_phone' => ['nullable', 'string', 'max:15'],
         ], [
-            'email.unique' => 'This email is already registered in our system.',
-            'password.confirmed' => 'Password confirmation does not match.',
+            'user_email.unique' => 'This email is already registered in our system.',
         ]);
 
-        // Conditional validation based on current_status
-        $validator->sometimes('institution_name', 'required|string|max:255', function ($input) {
-            return $input->current_status === 'studying';
+        $validator->sometimes('institution', 'required|string|max:255', function ($input) {
+            return $input->alumni_status === 'studying';
         });
 
-        $validator->sometimes(['company_name','job_position'], 'required|string|max:255', function ($input) {
-            return $input->current_status === 'working';
+        $validator->sometimes(['company', 'job_position'], 'required|string|max:255', function ($input) {
+            return $input->alumni_status === 'working';
         });
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Create User account
         $user = User::create([
-            'name' => $request->full_name,
-            'email' => $request->email,
+            'user_name' => $request->user_name,
+            'user_email' => $request->user_email,
             'password' => Hash::make($request->password),
-            'role' => 'alumni',
-            'email_verified_at' => now(),
+            'user_role' => 'alumni',
         ]);
 
-        // Create Alumni profile
         Alumni::create([
-            'user_id' => $user->id,
-            'full_name' => $request->full_name,
-            'ic_number' => $request->ic_number,
-            'state' => $request->state,
+            'user_id' => $user->user_id,
+            'alumni_name' => $request->alumni_name,
+            'alumni_ic' => $request->alumni_ic,
+            'alumni_state' => $request->alumni_state,
             'tadika_name' => $request->tadika_name,
             'gender' => $request->gender,
             'age' => $request->age,
-            'year_graduated' => $request->year_graduated,
-            'current_status' => $request->current_status,
-            'institution_name' => $request->current_status === 'studying' ? $request->institution_name : null,
-            'company_name' => $request->current_status === 'working' ? $request->company_name : null,
-            'job_position' => $request->current_status === 'working' ? $request->job_position : null,
-            'contact_number' => $request->contact_number,
-            'address' => $request->address,
+            'grad_year' => $request->grad_year,
+            'alumni_status' => $request->alumni_status,
+            'institution' => $request->alumni_status === 'studying' ? $request->institution : null,
+            'company' => $request->alumni_status === 'working' ? $request->company : null,
+            'job_position' => $request->alumni_status === 'working' ? $request->job_position : null,
+            'alumni_phone' => $request->alumni_phone,
+            'alumni_address' => $request->alumni_address,
             'father_name' => $request->father_name,
             'mother_name' => $request->mother_name,
-            'parent_contact' => $request->parent_contact,
-            'email' => $request->email,
+            'parent_phone' => $request->parent_phone,
+            'alumni_email' => $request->user_email,
         ]);
 
-        return redirect()->route('alumni.register.thankyou');
-    }
+        auth()->login($user);
 
-    /**
-     * Show registration success page
-     */
-    public function thankyou()
-    {
-        return view('auth.register-success'); // thank-you page
+        // Adjust this redirect as needed based on your application flow
+        return redirect()->route('profile.show')->with('success', 'Registration successful!');
     }
 }

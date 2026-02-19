@@ -22,16 +22,19 @@
                         @csrf
 
                         <div class="mb-4">
-                            <label for="email" class="form-label fw-bold small text-secondary">Alamat Emel</label>
+                            <label for="user_email" class="form-label fw-bold small text-secondary">Alamat Emel</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
                                     <i class="fas fa-envelope text-muted"></i>
                                 </span>
-                                <input id="email"
-                                    class="form-control border-start-0 rounded-end-pill py-2 bg-light @error('email') is-invalid @enderror"
-                                    type="email" name="email" value="{{ old('email') }}" required autofocus
+                                <input id="user_email"
+                                    class="form-control border-start-0 rounded-end-pill py-2 bg-light @error('user_email') is-invalid @enderror"
+                                    type="email" name="user_email" value="{{ old('user_email') }}" required autofocus
                                     autocomplete="username" placeholder="nama@contoh.com" style="box-shadow: none;">
                             </div>
+                            @error('user_email')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
@@ -45,6 +48,9 @@
                                     type="password" name="password" required autocomplete="current-password"
                                     placeholder="••••••••" style="box-shadow: none;">
                             </div>
+                            @error('password')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-4 small">
@@ -71,17 +77,14 @@
                         <p class="text-muted small mb-2">Belum mempunyai akaun?</p>
 
                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-
                             <a href="{{ route('alumni.register') }}"
                                 class="btn btn-outline-warning text-dark fw-bold rounded-pill px-3 btn-sm shadow-sm transition-hover">
                                 <i class="fas fa-user-graduate me-1"></i> Daftar Alumni
                             </a>
-
                             <a href="{{ route('tadika.register') }}"
                                 class="btn btn-outline-info text-dark fw-bold rounded-pill px-3 btn-sm shadow-sm transition-hover">
                                 <i class="fas fa-school me-1"></i> Daftar Tadika
                             </a>
-
                         </div>
                     </div>
 
@@ -111,4 +114,5 @@
                 border-color: #0ea5e9;
             }
         </style>
-    @endsection
+    </div>
+@endsection

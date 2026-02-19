@@ -53,13 +53,13 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <div class="display-4 fw-bold text-success">
-                            {{ \App\Models\Alumni::whereYear('year_graduated', '>=', date('Y') - 5)->count() }}
+                            {{ \App\Models\Alumni::whereYear('grad_year', '>=', date('Y') - 5)->count() }}
                         </div>
                         <p class="text-muted">Recent Graduates (5 years)</p>
                     </div>
                     <div class="col-md-3 mb-3">
                         <div class="display-4 fw-bold text-info">
-                            {{ \App\Models\Alumni::distinct('year_graduated')->count('year_graduated') }}
+                            {{ \App\Models\Alumni::distinct('grad_year')->count('grad_year') }}
                         </div>
                         <p class="text-muted">Graduation Batches</p>
                     </div>

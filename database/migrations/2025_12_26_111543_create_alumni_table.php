@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('full_name');
             $table->string('ic_number')->nullable();
-            $table->year('year_graduated');
+            $table->year('grad_year');
             $table->string('current_workplace')->nullable();
             $table->string('job_position')->nullable();
             $table->string('contact_number');

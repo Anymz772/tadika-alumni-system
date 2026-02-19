@@ -3,7 +3,7 @@
 @section('title', 'Dashboard - Tadika Alumni CMS')
 @section('page-title', 'Dashboard')
 @section('header-title', 'CMS Dashboard')
-@section('header-subtitle', 'Welcome back, ' . Auth::user()->name)
+@section('header-subtitle', 'Welcome back, ' . Auth::user()->user_name)
 
 @section('content')
 <div class="row">
@@ -68,15 +68,14 @@
                         <tbody>
                             @foreach($recentAlumni as $alumni)
                             <tr>
-                                <td><strong>{{ $alumni->full_name }}</strong><br><small>{{ $alumni->email }}</small></td>
-                                <td>{{ $alumni->year_graduated }}</td>
-                                <td>{{ $alumni->current_workplace ?? 'N/A' }}</td>
+                                <td><strong>{{ $alumni->alumni_name }}</strong><br><small>{{ $alumni->alumni_email }}</small></td>
+                                <td>{{ $alumni->grad_year }}</td>
+                                <td>{{ $alumni->workplace ?? 'N/A' }}</td>
                                 <td>
-                                    <!-- FIXED: Using correct route names -->
-                                    <a href="{{ route('alumni.show', $alumni->id) }}" class="btn btn-sm btn-info">
+                                    <a href="{{ route('alumni.show', $alumni->alumni_id) }}" class="btn btn-sm btn-info">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('alumni.edit', $alumni->id) }}" class="btn btn-sm btn-warning">
+                                    <a href="{{ route('alumni.edit', $alumni->alumni_id) }}" class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
@@ -98,7 +97,7 @@
                 <ul class="list-group">
                     @foreach($stats['alumni_by_year'] as $year)
                     <li class="list-group-item d-flex justify-content-between">
-                        {{ $year->year_graduated }}
+                        {{ $year->grad_year }}
                         <span class="badge bg-primary">{{ $year->count }}</span>
                     </li>
                     @endforeach
@@ -111,7 +110,6 @@
                 <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
             </div>
             <div class="card-body">
-                <!-- FIXED: Using correct route names -->
                 <a href="{{ route('alumni.create') }}" class="btn btn-primary w-100 mb-2">
                     <i class="fas fa-user-plus me-2"></i> Add New Alumni
                 </a>

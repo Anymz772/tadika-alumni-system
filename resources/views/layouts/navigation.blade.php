@@ -25,7 +25,7 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border-2 border-orange-100 text-sm leading-4 font-bold rounded-full text-orange-600 bg-orange-50 hover:bg-orange-100 hover:text-orange-700 focus:outline-none transition ease-in-out duration-150 shadow-sm">
                             <i class="fas fa-user-circle me-2 text-lg"></i>
-                            <div class="me-1">{{ Auth::user()->name }}</div>
+                            <div class="me-1">{{ Auth::user()->user_name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -83,8 +83,8 @@
                     <i class="fas fa-user text-orange-500"></i>
                 </div>
                 <div>
-                    <div class="font-bold text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    <div class="font-bold text-base text-gray-800">{{ Auth::user()->user_name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->user_email }}</div>
                 </div>
             </div>
 

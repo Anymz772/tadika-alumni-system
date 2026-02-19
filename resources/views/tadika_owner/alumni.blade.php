@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <h2 class="mb-1">Alumni List</h2>
             <p class="text-muted mb-0">
-                Tadika: {{ $tadika->name }}
+                Tadika: {{ $tadika->tadika_name }}
             </p>
         </div>
         <div class="col-md-4 text-md-end">
@@ -34,10 +34,10 @@
                         <tbody>
                             @foreach($alumni as $item)
                                 <tr>
-                                    <td>{{ $item->full_name }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>{{ $item->year_graduated ?? '-' }}</td>
-                                    <td>{{ $item->contact_number ?? '-' }}</td>
+                                    <td>{{ $item->alumni_name }}</td>
+                                    <td>{{ $item->alumni_email }}</td>
+                                    <td>{{ $item->grad_year ?? '-' }}</td>
+                                    <td>{{ $item->alumni_phone ?? '-' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

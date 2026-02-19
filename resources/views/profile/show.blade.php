@@ -5,15 +5,13 @@
 @section('header-title', 'My Alumni Profile')
 @section('header-subtitle', 'View and manage your alumni information')
 
-
-
 @section('content')
 <div class="row">
     <div class="col-md-4">
         <div class="card">
             <div class="card-body text-center">
-                @if($alumni->photo)
-                <img src="{{ asset('storage/' . $alumni->photo) }}"
+                @if($alumni->alumni_photo)
+                <img src="{{ asset('storage/' . $alumni->alumni_photo) }}"
                     alt="Profile Photo"
                     class="rounded-circle mb-3"
                     style="width: 100px; height: 100px; object-fit: cover;">
@@ -23,10 +21,10 @@
                     <i class="fas fa-user-graduate fa-3x text-primary"></i>
                 </div>
                 @endif
-                <h4>{{ $alumni->full_name }}</h4>
+                <h4>{{ $alumni->alumni_name }}</h4>
                 <p class="text-muted">{{ $alumni->job_position ?? 'Alumni' }}</p>
                 <div class="mt-2">
-                    <span class="badge bg-primary">{{ $alumni->year_graduated }} Graduate</span>
+                    <span class="badge bg-primary">{{ $alumni->grad_year }} Graduate</span>
                 </div>
             </div>
         </div>
@@ -38,7 +36,7 @@
             <div class="card-body">
                 <p><strong>Father:</strong> {{ $alumni->father_name }}</p>
                 <p><strong>Mother:</strong> {{ $alumni->mother_name }}</p>
-                <p><strong>Contact:</strong> {{ $alumni->parent_contact }}</p>
+                <p><strong>Contact:</strong> {{ $alumni->parent_phone }}</p>
             </div>
         </div>
     </div>
@@ -56,40 +54,33 @@
                 </div>
                 @endif
 
-                @if(session('info'))
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <i class="fas fa-info-circle me-2"></i> {{ session('info') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                @endif
-
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Email:</strong><br>{{ $alumni->email }}</p>
-                        <p><strong>Contact Number:</strong><br>{{ $alumni->contact_number }}</p>
-                        <p><strong>IC Number:</strong><br>{{ $alumni->ic_number ?? 'N/A' }}</p>
+                        <p><strong>Email:</strong><br>{{ $alumni->alumni_email }}</p>
+                        <p><strong>Contact Number:</strong><br>{{ $alumni->alumni_phone }}</p>
+                        <p><strong>IC Number:</strong><br>{{ $alumni->alumni_ic ?? 'N/A' }}</p>
                         <p><strong>Age:</strong><br>{{ $alumni->age ?? 'N/A' }}</p>
                         <p><strong>Gender:</strong><br>{{ ucfirst($alumni->gender) ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Current Status:</strong><br>
-                            @if($alumni->current_status === 'studying')
+                            @if($alumni->alumni_status === 'studying')
                             <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span>
-                            @elseif($alumni->current_status === 'working')
+                            @elseif($alumni->alumni_status === 'working')
                             <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span>
                             @else
                             N/A
                             @endif
                         </p>
-                        @if($alumni->current_status === 'studying')
-                        <p><strong>Institution:</strong><br>{{ $alumni->institution_name ?? 'N/A' }}</p>
-                        @elseif($alumni->current_status === 'working')
-                        <p><strong>Company:</strong><br>{{ $alumni->company_name ?? 'N/A' }}</p>
+                        @if($alumni->alumni_status === 'studying')
+                        <p><strong>Institution:</strong><br>{{ $alumni->institution ?? 'N/A' }}</p>
+                        @elseif($alumni->alumni_status === 'working')
+                        <p><strong>Company:</strong><br>{{ $alumni->company ?? 'N/A' }}</p>
                         <p><strong>Position:</strong><br>{{ $alumni->job_position ?? 'N/A' }}</p>
                         @endif
                         <p><strong>Tadika Name:</strong><br>{{ $alumni->tadika_name ?? 'N/A' }}</p>
-                        <p><strong>State:</strong><br>{{ $alumni->state ?? 'N/A' }}</p>
-                        <p><strong>Address:</strong><br>{{ $alumni->address ?? 'N/A' }}</p>
+                        <p><strong>State:</strong><br>{{ $alumni->alumni_state ?? 'N/A' }}</p>
+                        <p><strong>Address:</strong><br>{{ $alumni->alumni_address ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>

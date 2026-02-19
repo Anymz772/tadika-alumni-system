@@ -1,13 +1,13 @@
 @extends('layouts.cms')
 
-@section('title', 'Alumni Details - ' . $alumni->full_name)
+@section('title', 'Alumni Details - ' . $alumni->alumni_name)
 @section('page-title', 'Alumni Details')
-@section('header-title', $alumni->full_name)
-@section('header-subtitle', 'Graduated: ' . $alumni->year_graduated)
+@section('header-title', $alumni->alumni_name)
+@section('header-subtitle', 'Graduated: ' . $alumni->grad_year)
 
 @section('header-buttons')
 <div class="btn-group">
-    <a href="{{ route('alumni.edit', $alumni->id) }}" class="btn btn-warning">
+    <a href="{{ route('alumni.edit', $alumni->alumni_id) }}" class="btn btn-warning">
         <i class="fas fa-edit me-2"></i> Edit
     </a>
     <a href="{{ route('alumni.index') }}" class="btn btn-secondary">
@@ -28,8 +28,8 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body text-center">
-                @if($alumni->photo)
-                <img src="{{ asset('storage/' . $alumni->photo) }}"
+                @if($alumni->alumni_photo)
+                <img src="{{ asset('storage/' . $alumni->alumni_photo) }}"
                     alt="Profile Photo"
                     class="rounded-circle mb-3"
                     style="width: 100px; height: 100px; object-fit: cover;">
@@ -39,10 +39,10 @@
                     <i class="fas fa-user-graduate fa-3x text-primary"></i>
                 </div>
                 @endif
-                <h4>{{ $alumni->full_name }}</h4>
+                <h4>{{ $alumni->alumni_name }}</h4>
                 <p class="text-muted">{{ $alumni->job_position ?? 'Alumni' }}</p>
                 <div class="mt-2">
-                    <span class="badge bg-primary">{{ $alumni->year_graduated }} Graduate</span>
+                    <span class="badge bg-primary">{{ $alumni->grad_year }} Graduate</span>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
             <div class="card-body">
                 <p><strong>Father:</strong> {{ $alumni->father_name }}</p>
                 <p><strong>Mother:</strong> {{ $alumni->mother_name }}</p>
-                <p><strong>Contact:</strong> {{ $alumni->parent_contact }}</p>
+                <p><strong>Contact:</strong> {{ $alumni->parent_phone }}</p>
             </div>
         </div>
     </div>
@@ -67,27 +67,27 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Email:</strong><br>{{ $alumni->email }}</p>
-                        <p><strong>Contact Number:</strong><br>{{ $alumni->contact_number }}</p>
-                        <p><strong>IC Number:</strong><br>{{ $alumni->ic_number ?? 'N/A' }}</p>
+                        <p><strong>Email:</strong><br>{{ $alumni->user_email }}</p>
+                        <p><strong>Contact Number:</strong><br>{{ $alumni->alumni_phone }}</p>
+                        <p><strong>IC Number:</strong><br>{{ $alumni->alumni_ic ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Current Status:</strong><br>
-                            @if($alumni->current_status === 'studying')
+                            @if($alumni->alumni_status === 'studying')
                             <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span>
-                            @elseif($alumni->current_status === 'working')
+                            @elseif($alumni->alumni_status === 'working')
                             <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span>
                             @else
                             N/A
                             @endif
                         </p>
-                        @if($alumni->current_status === 'studying')
-                        <p><strong>Institution:</strong><br>{{ $alumni->institution_name ?? 'N/A' }}</p>
-                        @elseif($alumni->current_status === 'working')
-                        <p><strong>Company:</strong><br>{{ $alumni->company_name ?? 'N/A' }}</p>
+                        @if($alumni->alumni_status === 'studying')
+                        <p><strong>Institution:</strong><br>{{ $alumni->institution ?? 'N/A' }}</p>
+                        @elseif($alumni->alumni_status === 'working')
+                        <p><strong>Company:</strong><br>{{ $alumni->company ?? 'N/A' }}</p>
                         <p><strong>Position:</strong><br>{{ $alumni->job_position ?? 'N/A' }}</p>
                         @endif
-                        <p><strong>Address:</strong><br>{{ $alumni->address ?? 'N/A' }}</p>
+                        <p><strong>Address:</strong><br>{{ $alumni->alumni_address ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                                     </ul>
                                 </div>
                                 @endif
-                                <form action="{{ route('alumni.reset-password', $alumni->id) }}" method="POST">
+                                <form action="{{ route('alumni.reset-password', $alumni->alumni_id) }}" method="POST">
                                     @csrf
                                     <div class="mb-2">
                                         <input type="password" name="password" class="form-control" placeholder="New password" required>
@@ -130,7 +130,7 @@
                         <div class="card border-danger">
                             <div class="card-body">
                                 <h6 class="text-danger">Delete Account</h6>
-                                <form action="{{ route('alumni.destroy', $alumni->id) }}" method="POST"
+                                <form action="{{ route('alumni.destroy', $alumni->alumni_id) }}" method="POST"
                                     onsubmit="return confirm('Delete this alumni?')">
                                     @csrf
                                     @method('DELETE')

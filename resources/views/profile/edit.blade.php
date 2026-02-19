@@ -22,7 +22,6 @@
         @method('PUT')
 
         <div class="card-body">
-            {{-- Alert Messages --}}
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i> Please fix the errors below.
@@ -37,42 +36,31 @@
                 </div>
             @endif
 
-            @if (session('info'))
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <i class="fas fa-info-circle me-2"></i> {{ session('info') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            {{-- SECTION 1: Personal Information --}}
             <h6 class="fw-bold text-uppercase text-secondary mb-3 small border-bottom pb-2">Personal Information</h6>
             
             <div class="row">
-                {{-- Full Name --}}
                 <div class="col-md-6 mb-3">
-                    <label for="full_name" class="form-label">Full Name *</label>
-                    <input type="text" class="form-control @error('full_name') is-invalid @enderror" 
-                           id="full_name" name="full_name" 
-                           value="{{ old('full_name', $alumni->full_name) }}" required>
-                    @error('full_name')
+                    <label for="alumni_name" class="form-label">Full Name *</label>
+                    <input type="text" class="form-control @error('alumni_name') is-invalid @enderror" 
+                           id="alumni_name" name="alumni_name" 
+                           value="{{ old('alumni_name', $alumni->alumni_name) }}" required>
+                    @error('alumni_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                {{-- IC Number --}}
                 <div class="col-md-6 mb-3">
-                    <label for="ic_number" class="form-label">IC Number</label>
-                    <input type="text" class="form-control @error('ic_number') is-invalid @enderror" 
-                           id="ic_number" name="ic_number" 
-                           value="{{ old('ic_number', $alumni->ic_number) }}">
-                    @error('ic_number')
+                    <label for="alumni_ic" class="form-label">IC Number</label>
+                    <input type="text" class="form-control @error('alumni_ic') is-invalid @enderror" 
+                           id="alumni_ic" name="alumni_ic" 
+                           value="{{ old('alumni_ic', $alumni->alumni_ic) }}">
+                    @error('alumni_ic')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="row">
-                {{-- Gender --}}
                 <div class="col-md-4 mb-3">
                     <label for="gender" class="form-label">Gender</label>
                     <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror">
@@ -85,7 +73,6 @@
                     @enderror
                 </div>
 
-                {{-- Age --}}
                 <div class="col-md-4 mb-3">
                     <label for="age" class="form-label">Age</label>
                     <input type="number" class="form-control @error('age') is-invalid @enderror" 
@@ -96,58 +83,56 @@
                     @enderror
                 </div>
 
-                {{-- Contact Number --}}
                 <div class="col-md-4 mb-3">
-                    <label for="contact_number" class="form-label">Contact Number *</label>
-                    <input type="text" class="form-control @error('contact_number') is-invalid @enderror" 
-                           id="contact_number" name="contact_number" 
-                           value="{{ old('contact_number', $alumni->contact_number) }}" required>
-                    @error('contact_number')
+                    <label for="alumni_phone" class="form-label">Contact Number *</label>
+                    <input type="text" class="form-control @error('alumni_phone') is-invalid @enderror" 
+                           id="alumni_phone" name="alumni_phone" 
+                           value="{{ old('alumni_phone', $alumni->alumni_phone) }}" required>
+                    @error('alumni_phone')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="mb-4">
-                <label for="photo" class="form-label">Profile Photo</label>
+                <label for="alumni_photo" class="form-label">Profile Photo</label>
                 <div class="d-flex align-items-center gap-3">
-                    @if ($alumni->photo)
+                    @if ($alumni->alumni_photo)
                         <div>
-                            <img src="{{ asset('storage/' . $alumni->photo) }}" alt="Current Photo" 
+                            <img src="{{ asset('storage/' . $alumni->alumni_photo) }}" alt="Current Photo" 
                                  class="img-thumbnail rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
                         </div>
                     @endif
                     <div class="flex-grow-1">
-                        <input type="file" class="form-control @error('photo') is-invalid @enderror" 
-                               id="photo" name="photo" accept="image/*">
+                        <input type="file" class="form-control @error('alumni_photo') is-invalid @enderror" 
+                               id="alumni_photo" name="alumni_photo" accept="image/*">
                         <div class="form-text small">Accepted formats: JPEG, PNG, JPG. Max size: 2MB</div>
-                        @error('photo')
+                        @error('alumni_photo')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
             </div>
 
-            {{-- SECTION 2: Academic Background --}}
             <h6 class="fw-bold text-uppercase text-secondary mb-3 small border-bottom pb-2 mt-4">Academic Background</h6>
             
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label for="year_graduated" class="form-label">Year Graduated *</label>
-                    <input type="number" class="form-control @error('year_graduated') is-invalid @enderror" 
-                           id="year_graduated" name="year_graduated" min="2000" max="{{ date('Y') }}" 
-                           value="{{ old('year_graduated', $alumni->year_graduated) }}" required>
-                    @error('year_graduated')
+                    <label for="grad_year" class="form-label">Year Graduated *</label>
+                    <input type="number" class="form-control @error('grad_year') is-invalid @enderror" 
+                           id="grad_year" name="grad_year" min="2000" max="{{ date('Y') }}" 
+                           value="{{ old('grad_year', $alumni->grad_year) }}" required>
+                    @error('grad_year')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label for="state" class="form-label">State</label>
-                    <input type="text" class="form-control @error('state') is-invalid @enderror" 
-                           id="state" name="state" 
-                           value="{{ old('state', $alumni->state) }}" placeholder="e.g. Selangor">
-                    @error('state')
+                    <label for="alumni_state" class="form-label">State</label>
+                    <input type="text" class="form-control @error('alumni_state') is-invalid @enderror" 
+                           id="alumni_state" name="alumni_state" 
+                           value="{{ old('alumni_state', $alumni->alumni_state) }}" placeholder="e.g. Selangor">
+                    @error('alumni_state')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -163,21 +148,20 @@
                 </div>
             </div>
 
-            {{-- SECTION 3: Professional Status --}}
             <h6 class="fw-bold text-uppercase text-secondary mb-3 small border-bottom pb-2 mt-4">Professional Status</h6>
 
             <div class="mb-4">
                 <div class="d-flex gap-4">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="current_status" id="studying" value="studying" 
-                               {{ old('current_status', $alumni->current_status) === 'studying' ? 'checked' : '' }}>
+                        <input class="form-check-input" type="radio" name="alumni_status" id="studying" value="studying" 
+                               {{ old('alumni_status', $alumni->alumni_status) === 'studying' ? 'checked' : '' }}>
                         <label class="form-check-label fw-bold" for="studying">
                             <i class="fas fa-graduation-cap me-1 text-primary"></i> Studying
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="current_status" id="working" value="working" 
-                               {{ old('current_status', $alumni->current_status) === 'working' ? 'checked' : '' }}>
+                        <input class="form-check-input" type="radio" name="alumni_status" id="working" value="working" 
+                               {{ old('alumni_status', $alumni->alumni_status) === 'working' ? 'checked' : '' }}>
                         <label class="form-check-label fw-bold" for="working">
                             <i class="fas fa-briefcase me-1 text-primary"></i> Working
                         </label>
@@ -185,22 +169,20 @@
                 </div>
             </div>
 
-            {{-- Conditional: Studying --}}
             <div id="studying-fields" class="p-3 bg-light rounded border mb-3" style="display: none;">
                 <div class="mb-0">
-                    <label for="institution_name" class="form-label">Institution Name *</label>
-                    <input type="text" class="form-control" id="institution_name" name="institution_name" 
-                           value="{{ old('institution_name', $alumni->institution_name) }}">
+                    <label for="institution" class="form-label">Institution Name *</label>
+                    <input type="text" class="form-control" id="institution" name="institution" 
+                           value="{{ old('institution', $alumni->institution) }}">
                 </div>
             </div>
 
-            {{-- Conditional: Working --}}
             <div id="working-fields" class="p-3 bg-light rounded border mb-3" style="display: none;">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="company_name" class="form-label">Company Name *</label>
-                        <input type="text" class="form-control" id="company_name" name="company_name" 
-                               value="{{ old('company_name', $alumni->company_name) }}">
+                        <label for="company" class="form-label">Company Name *</label>
+                        <input type="text" class="form-control" id="company" name="company" 
+                               value="{{ old('company', $alumni->company) }}">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="job_position" class="form-label">Job Title *</label>
@@ -211,11 +193,10 @@
             </div>
 
             <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <textarea class="form-control" id="address" name="address" rows="3">{{ old('address', $alumni->address) }}</textarea>
+                <label for="alumni_address" class="form-label">Address</label>
+                <textarea class="form-control" id="alumni_address" name="alumni_address" rows="3">{{ old('alumni_address', $alumni->alumni_address) }}</textarea>
             </div>
 
-            {{-- SECTION 4: Family Information --}}
             <h6 class="fw-bold text-uppercase text-secondary mb-3 small border-bottom pb-2 mt-4">Family Information</h6>
             
             <div class="row">
@@ -224,31 +205,21 @@
                     <input type="text" class="form-control @error('father_name') is-invalid @enderror" 
                            id="father_name" name="father_name" 
                            value="{{ old('father_name', $alumni->father_name) }}">
-                    @error('father_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="mother_name" class="form-label">Mother's Name</label>
                     <input type="text" class="form-control @error('mother_name') is-invalid @enderror" 
                            id="mother_name" name="mother_name" 
                            value="{{ old('mother_name', $alumni->mother_name) }}">
-                    @error('mother_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label for="parent_contact" class="form-label">Parent Contact Number</label>
-                    <input type="text" class="form-control @error('parent_contact') is-invalid @enderror" 
-                           id="parent_contact" name="parent_contact" 
-                           value="{{ old('parent_contact', $alumni->parent_contact) }}">
-                    @error('parent_contact')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <label for="parent_phone" class="form-label">Parent Contact Number</label>
+                    <input type="text" class="form-control @error('parent_phone') is-invalid @enderror" 
+                           id="parent_phone" name="parent_phone" 
+                           value="{{ old('parent_phone', $alumni->parent_phone) }}">
                 </div>
             </div>
 
-            {{-- SECTION 5: Security --}}
             <div class="alert alert-warning border-warning mt-4">
                 <h6 class="alert-heading fw-bold"><i class="fas fa-lock me-2"></i>Change Password</h6>
                 <p class="mb-3 small">Leave these fields blank if you do not wish to change your password.</p>
@@ -265,7 +236,7 @@
                 </div>
             </div>
 
-        </div> {{-- End Card Body --}}
+        </div>
 
         <div class="card-footer bg-light d-flex justify-content-end gap-2 p-3">
             <a href="{{ route('profile.show') }}" class="btn btn-secondary">
@@ -300,10 +271,8 @@
             }
         }
 
-        // Initialize on load
         toggleFields();
 
-        // Listen for changes
         if (studyingRadio) studyingRadio.addEventListener('change', toggleFields);
         if (workingRadio) workingRadio.addEventListener('change', toggleFields);
     });

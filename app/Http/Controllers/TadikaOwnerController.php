@@ -25,29 +25,29 @@ class TadikaOwnerController extends Controller
     public function updateProfile(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'registration_number' => [
+            'tadika_name' => ['required', 'string', 'max:255'],
+            'tadika_reg_no' => [
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('tadikas', 'registration_number')->ignore(optional($request->user()->ownedTadika)->id),
+                Rule::unique('tadikas', 'tadika_reg_no')->ignore(optional($request->user()->ownedTadika)->tadika_id, 'tadika_id'),
             ],
-            'address' => ['nullable', 'string'],
-            'district' => ['required', 'string', 'max:255'],
-            'state' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:30'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'owner_name' => ['nullable', 'string', 'max:255'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'max:2048'], // Validate image upload
+            'tadika_address' => ['nullable', 'string'],
+            'tadika_district' => ['required', 'string', 'max:255'],
+            'tadika_state' => ['required', 'string', 'max:255'],
+            'tadika_phone' => ['nullable', 'string', 'max:30'],
+            'tadika_email' => ['nullable', 'email', 'max:255'],
+            'tadika_owner' => ['nullable', 'string', 'max:255'],
+            'tadika_location' => ['nullable', 'string', 'max:255'],
+            'tadika_logo' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $user = $request->user();
         $tadika = $user->ownedTadika;
 
-        if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('tadika_photos', 'public');
-            $data['logo'] = $path;
+        if ($request->hasFile('tadika_logo')) {
+            $path = $request->file('tadika_logo')->store('tadika_photos', 'public');
+            $data['tadika_logo'] = $path;
         }
 
         if ($tadika) {

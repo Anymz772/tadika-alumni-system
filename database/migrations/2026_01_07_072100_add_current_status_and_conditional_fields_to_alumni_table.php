@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('alumni', function (Blueprint $table) {
-            $table->enum('current_status', ['studying', 'working', 'not_specified'])->nullable()->after('year_graduated');
+            $table->enum('current_status', ['studying', 'working', 'not_specified'])->nullable()->after('grad_year');
             $table->string('institution_name')->nullable()->after('current_status');
             $table->string('company_name')->nullable()->after('institution_name');
         });

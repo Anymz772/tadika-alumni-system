@@ -126,7 +126,7 @@
                 </div>
                 <div class="col-md-6 text-end">
                     @if(auth()->check())
-                        <span class="me-3">Welcome, {{ auth()->user()->name }}</span>
+                        <span class="me-3">Welcome, {{ auth()->user()->user_name }}</span>
                         <form method="POST" action="{{ route('logout') }}" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-light btn-sm">
@@ -147,21 +147,21 @@
     <main class="main-content">
         <div class="container">
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success alert-dismissible fade show" user_role="alert">
                     <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
             
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" user_role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i> {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
             
             @if(session('info'))
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="alert alert-info alert-dismissible fade show" user_role="alert">
                     <i class="fas fa-info-circle me-2"></i> {{ session('info') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>

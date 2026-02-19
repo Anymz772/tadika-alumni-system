@@ -35,10 +35,10 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="registration_number" class="form-label required">Registration Number</label>
-                            <input type="text" class="form-control @error('registration_number') is-invalid @enderror"
-                                id="registration_number" name="registration_number" value="{{ old('registration_number') }}" required>
-                            @error('registration_number')
+                            <label for="tadika_reg_no" class="form-label required">Registration Number</label>
+                            <input type="text" class="form-control @error('tadika_reg_no') is-invalid @enderror"
+                                id="tadika_reg_no" name="tadika_reg_no" value="{{ old('tadika_reg_no') }}" required>
+                            @error('tadika_reg_no')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -46,19 +46,19 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="district" class="form-label required">District</label>
-                            <input type="text" class="form-control @error('district') is-invalid @enderror"
-                                id="district" name="district" value="{{ old('district') }}" required>
-                            @error('district')
+                            <label for="tadika_district" class="form-label required">District</label>
+                            <input type="text" class="form-control @error('tadika_district') is-invalid @enderror"
+                                id="tadika_district" name="tadika_district" value="{{ old('tadika_district') }}" required>
+                            @error('tadika_district')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="state" class="form-label required">State</label>
-                            <input type="text" class="form-control @error('state') is-invalid @enderror"
-                                id="state" name="state" value="{{ old('state') }}" required>
-                            @error('state')
+                            <label for="tadika_state" class="form-label required">State</label>
+                            <input type="text" class="form-control @error('tadika_state') is-invalid @enderror"
+                                id="tadika_state" name="tadika_state" value="{{ old('tadika_state') }}" required>
+                            @error('tadika_state')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -66,11 +66,11 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label required">Email Address</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                id="email" name="email" value="{{ old('email') }}" required>
+                            <label for="tadika_email" class="form-label required">Tadika Email</label>
+                            <input type="email" class="form-control @error('tadika_email') is-invalid @enderror"
+                                id="tadika_email" name="tadika_email" value="{{ old('tadika_email') }}" required>
                             <small class="form-text text-muted">This email will be used for login</small>
-                            @error('email')
+                            @error('tadika_email')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -133,21 +133,18 @@
         padding: 30px;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
-
     .form-section {
         background: #f8f9fa;
         padding: 25px;
         border-radius: 8px;
         margin-bottom: 25px;
     }
-
     .form-section h5 {
         color: #2c3e50;
         border-bottom: 2px solid #3498db;
         padding-bottom: 10px;
         margin-bottom: 20px;
     }
-
     .required::after {
         content: " *";
         color: #e74c3c;

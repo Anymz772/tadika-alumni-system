@@ -14,9 +14,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
         <style>
@@ -99,7 +97,7 @@
                 @if(auth()->user()->alumni)
                 <div class="container mb-3">
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('profile.edit', auth()->user()->alumni->id) }}" class="btn btn-warning shadow-sm">
+                        <a href="{{ route('profile.edit') }}" class="btn btn-warning shadow-sm">
                             <i class="fas fa-pencil-alt me-2"></i> Kemaskini Profil
                         </a>
                     </div>

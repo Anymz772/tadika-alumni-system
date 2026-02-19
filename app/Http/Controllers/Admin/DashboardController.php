@@ -15,9 +15,9 @@ class DashboardController extends Controller
             'total_alumni' => Alumni::count(),
             'total_users' => User::count(),
             'recent_alumni' => Alumni::whereYear('created_at', date('Y'))->count(),
-            'alumni_by_year' => Alumni::selectRaw('year_graduated, COUNT(*) as count')
-                ->groupBy('year_graduated')
-                ->orderBy('year_graduated', 'desc')
+            'alumni_by_year' => Alumni::selectRaw('grad_year, COUNT(*) as count')
+                ->groupBy('grad_year')
+                ->orderBy('grad_year', 'desc')
                 ->limit(5)
                 ->get()
         ];

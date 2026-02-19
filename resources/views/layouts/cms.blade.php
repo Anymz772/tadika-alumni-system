@@ -30,13 +30,10 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            /* Menggunakan warna biru muda yang rata (Solid Light Blue) tanpa corak */
             background-color: #f0f9ff;
             color: #334155;
-            /* Warna teks slate grey untuk mudah baca */
             margin: 0;
             overflow-x: hidden;
-            /* Elak scrollbar melintang */
         }
 
         /* --- SIDEBAR STYLING --- */
@@ -46,7 +43,6 @@
             position: fixed;
             top: 0;
             left: 0;
-            /* Gradient biru yang lembut untuk sidebar */
             background: linear-gradient(180deg, #0ea5e9 0%, #2563eb 100%);
             color: white;
             transition: all 0.3s ease;
@@ -64,7 +60,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Group Label (e.g., MENU UTAMA) */
         .nav-label {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -83,7 +78,6 @@
             border-left: 4px solid transparent;
             transition: all 0.2s;
             border-radius: 0 50px 50px 0;
-            /* Lengkung di sebelah kanan butang */
             margin-right: 15px;
         }
 
@@ -97,7 +91,6 @@
             background-color: rgba(255, 255, 255, 0.2);
             color: #fff;
             border-left-color: #fbbf24;
-            /* Garis kuning */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -120,7 +113,6 @@
         .top-navbar {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
-            /* Effect kaca */
             padding: 15px 30px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.02);
             border-bottom: 1px solid #e0f2fe;
@@ -134,27 +126,20 @@
             flex-grow: 1;
         }
 
-        /* Card Styling */
         .card {
             border: none;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            /* Shadow yang sangat lembut */
             background-color: #fff;
             transition: transform 0.2s;
             border: 1px solid #f1f5f9;
         }
 
-        /* Titles */
-        h1,
-        h2,
-        h3,
-        h4 {
+        h1, h2, h3, h4 {
             font-family: 'Fredoka', sans-serif;
             color: var(--dark-blue);
         }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 margin-left: calc(-1 * var(--sidebar-width));
@@ -274,7 +259,7 @@
 
                 <div class="d-none d-md-block">
                     <h5 class="mb-0 fw-bold text-primary">@yield('page-title', 'Dashboard')</h5>
-                    <small class="text-muted">Selamat datang, {{ Auth::user()->name }}</small>
+                    <small class="text-muted">Selamat datang, {{ Auth::user()->user_name }}</small>
                 </div>
             </div>
 
@@ -284,9 +269,9 @@
                     type="button" data-bs-toggle="dropdown">
                     <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                         style="width: 30px; height: 30px;">
-                        {{ substr(Auth::user()->name, 0, 1) }}
+                        {{ substr(Auth::user()->user_name, 0, 1) }}
                     </div>
-                    <span class="d-none d-sm-inline small fw-bold text-secondary">{{ Auth::user()->name }}</span>
+                    <span class="d-none d-sm-inline small fw-bold text-secondary">{{ Auth::user()->user_name }}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
                     <li>

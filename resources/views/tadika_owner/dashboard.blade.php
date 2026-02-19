@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <h2 class="mb-1">Tadika Dashboard</h2>
             <p class="text-muted mb-0">
-                Welcome, {{ auth()->user()->name }}.
+                Welcome, {{ auth()->user()->user_name }}.
             </p>
         </div>
         <div class="col-md-4 text-md-end">
@@ -30,10 +30,10 @@
                 <div class="card-body">
                     <h5 class="mb-2">Tadika Profile</h5>
                     @if($tadika)
-                        <div><strong>Name:</strong> {{ $tadika->name }}</div>
-                        <div><strong>Registration No:</strong> {{ $tadika->registration_number }}</div>
-                        <div><strong>District:</strong> {{ $tadika->district }}</div>
-                        <div><strong>State:</strong> {{ $tadika->state }}</div>
+                        <div><strong>Name:</strong> {{ $tadika->tadika_name }}</div>
+                        <div><strong>Registration No:</strong> {{ $tadika->tadika_reg_no }}</div>
+                        <div><strong>District:</strong> {{ $tadika->tadika_district }}</div>
+                        <div><strong>State:</strong> {{ $tadika->tadika_state }}</div>
                     @else
                         <p class="text-muted mb-0">No Tadika profile found yet.</p>
                     @endif

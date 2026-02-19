@@ -22,7 +22,7 @@
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
                                        name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                                 @error('name')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback" user_role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -32,7 +32,7 @@
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
                                        name="email" value="{{ old('email') }}" required autocomplete="email">
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback" user_role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -45,7 +45,7 @@
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
                                        name="password" required autocomplete="new-password">
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback" user_role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -79,11 +79,11 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="year_graduated" class="form-label">Year Graduated *</label>
-                                <input type="number" class="form-control @error('year_graduated') is-invalid @enderror" 
-                                       id="year_graduated" name="year_graduated" 
-                                       min="2000" max="{{ date('Y') }}" value="{{ old('year_graduated') }}" required>
-                                @error('year_graduated')
+                                <label for="grad_year" class="form-label">Year Graduated *</label>
+                                <input type="number" class="form-control @error('grad_year') is-invalid @enderror" 
+                                       id="grad_year" name="grad_year" 
+                                       min="2000" max="{{ date('Y') }}" value="{{ old('grad_year') }}" required>
+                                @error('grad_year')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

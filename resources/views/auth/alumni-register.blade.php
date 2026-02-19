@@ -21,7 +21,6 @@
             <form method="POST" action="{{ route('alumni.register') }}">
                 @csrf
 
-                <!-- Account Information -->
                 <div class="form-section">
                     <h5><i class="fas fa-user me-2"></i>Account Information</h5>
 
@@ -30,21 +29,30 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="full_name" class="form-label required">Full Name</label>
-                            <input type="text" class="form-control @error('full_name') is-invalid @enderror"
-                                id="full_name" name="full_name" value="{{ old('full_name') }}" required>
-                            @error('full_name')
+                        <div class="col-md-4 mb-3">
+                            <label for="user_name" class="form-label required">Username</label>
+                            <input type="text" class="form-control @error('user_name') is-invalid @enderror"
+                                id="user_name" name="user_name" value="{{ old('user_name') }}" required>
+                            @error('user_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label required">Email Address</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                id="email" name="email" value="{{ old('email') }}" required>
+                        <div class="col-md-4 mb-3">
+                            <label for="alumni_name" class="form-label required">Full Name</label>
+                            <input type="text" class="form-control @error('alumni_name') is-invalid @enderror"
+                                id="alumni_name" name="alumni_name" value="{{ old('alumni_name') }}" required>
+                            @error('alumni_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="user_email" class="form-label required">Email Address</label>
+                            <input type="email" class="form-control @error('user_email') is-invalid @enderror"
+                                id="user_email" name="user_email" value="{{ old('user_email') }}" required>
                             <small class="form-text text-muted">Email address will be used for login</small>
-                            @error('email')
+                            @error('user_email')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -71,17 +79,16 @@
                     </div>
                 </div>
 
-                <!-- Additional Information (Optional) -->
                 <div class="form-section">
                     <h5><i class="fas fa-info-circle me-2"></i>Additional Information (Optional)</h5>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="ic_number" class="form-label">IC Number</label>
-                            <input type="text" class="form-control @error('ic_number') is-invalid @enderror"
-                                id="ic_number" name="ic_number" value="{{ old('ic_number') }}" maxlength="14">  
+                            <label for="alumni_ic" class="form-label">IC Number</label>
+                            <input type="text" class="form-control @error('alumni_ic') is-invalid @enderror"
+                                id="alumni_ic" name="alumni_ic" value="{{ old('alumni_ic') }}" maxlength="14">  
                             <small class="form-text text-muted">Format: YYMMDD-SS-XXXX</small>
-                            @error('ic_number')
+                            @error('alumni_ic')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -110,10 +117,10 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="state" class="form-label">State</label>
-                            <input type="text" class="form-control @error('state') is-invalid @enderror"
-                                id="state" name="state" value="{{ old('state') }}">
-                            @error('state')
+                            <label for="alumni_state" class="form-label">State</label>
+                            <input type="text" class="form-control @error('alumni_state') is-invalid @enderror"
+                                id="alumni_state" name="alumni_state" value="{{ old('alumni_state') }}">
+                            @error('alumni_state')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -131,7 +138,6 @@
                     </div>
                 </div>
 
-                <!-- Terms and Submit -->
                 <div class="form-section">
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle me-2"></i>
@@ -141,8 +147,7 @@
                     <div class="form-check mb-4">
                         <input class="form-check-input" type="checkbox" id="terms" required>
                         <label class="form-check-label" for="terms">
-                            I agree that the information provided is accurate and I consent to
-                            join the Tadika Alumni Network.
+                            I agree that the information provided is accurate and I consent to join the Tadika Alumni Network.
                         </label>
                     </div>
 
@@ -169,26 +174,22 @@
         padding: 30px;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
-
     .form-section {
         background: #f8f9fa;
         padding: 25px;
         border-radius: 8px;
         margin-bottom: 25px;
     }
-
     .form-section h5 {
         color: #2c3e50;
         border-bottom: 2px solid #3498db;
         padding-bottom: 10px;
         margin-bottom: 20px;
     }
-
     .required::after {
         content: " *";
         color: #e74c3c;
     }
-
     .conditional-fields {
         transition: all 0.3s ease;
     }
@@ -198,44 +199,44 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const icNumberInput = document.getElementById('ic_number');
+        const icNumberInput = document.getElementById('alumni_ic');
         const ageInput = document.getElementById('age');
 
         // Auto-format IC number input
-        icNumberInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+        if(icNumberInput) {
+            icNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/[^\d]/g, ''); 
 
-            if (value.length >= 6) {
-                value = value.substring(0, 6) + '-' + value.substring(6);
-            }
-            if (value.length >= 9) {
-                value = value.substring(0, 9) + '-' + value.substring(9);
-            }
-            if (value.length > 14) {
-                value = value.substring(0, 14);
-            }
+                if (value.length >= 6) {
+                    value = value.substring(0, 6) + '-' + value.substring(6);
+                }
+                if (value.length >= 9) {
+                    value = value.substring(0, 9) + '-' + value.substring(9);
+                }
+                if (value.length > 14) {
+                    value = value.substring(0, 14);
+                }
 
-            e.target.value = value;
+                e.target.value = value;
 
-            // Auto-calculate age from IC number
-            if (value.length >= 6) {
-                const birthDateStr = value.substring(0, 6);
-                if (birthDateStr.length === 6) {
-                    const age = calculateAgeFromIC(birthDateStr);
-                    if (age !== null) {
-                        ageInput.value = age;
+                // Auto-calculate age from IC number
+                if (value.length >= 6) {
+                    const birthDateStr = value.substring(0, 6);
+                    if (birthDateStr.length === 6) {
+                        const age = calculateAgeFromIC(birthDateStr);
+                        if (age !== null) {
+                            ageInput.value = age;
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
-        // Function to calculate age from IC number birth date
         function calculateAgeFromIC(birthDateStr) {
             const year = parseInt(birthDateStr.substring(0, 2));
-            const month = parseInt(birthDateStr.substring(2, 4)) - 1; // JS months are 0-indexed
+            const month = parseInt(birthDateStr.substring(2, 4)) - 1; 
             const day = parseInt(birthDateStr.substring(4, 6));
 
-            // Determine full year (assuming 1900s for YY >= 50, 2000s for YY < 50)
             const fullYear = year >= 50 ? 1900 + year : 2000 + year;
 
             const birthDate = new Date(fullYear, month, day);

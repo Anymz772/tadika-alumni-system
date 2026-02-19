@@ -16,7 +16,7 @@ class AdminUserSeeder extends Seeder
                 'name' => 'Admin Tadika',
                 'email' => 'admin@tadika.edu',
                 'password' => Hash::make('admin123'),
-                'role' => 'admin',
+                'user_role' => 'admin',
                 'email_verified_at' => now(),
             ]);
             
