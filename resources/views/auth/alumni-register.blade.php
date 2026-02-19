@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="age" class="form-label">Age</label>
                             <input type="number" class="form-control @error('age') is-invalid @enderror"
                                 id="age" name="age" value="{{ old('age') }}" min="1" max="100">
@@ -116,26 +116,64 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="alumni_state" class="form-label">State</label>
                             <input type="text" class="form-control @error('alumni_state') is-invalid @enderror"
-                                id="alumni_state" name="alumni_state" value="{{ old('alumni_state') }}">
+                                id="alumni_state" name="alumni_state" list="alumni-state-list" value="{{ old('alumni_state') }}">
                             @error('alumni_state')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="alumni_district" class="form-label">District</label>
+                            <input type="text" class="form-control @error('alumni_district') is-invalid @enderror"
+                                id="alumni_district" name="alumni_district" list="alumni-district-list" value="{{ old('alumni_district') }}">
+                            @error('alumni_district')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="alumni_postcode" class="form-label">Postcode</label>
+                            <input type="text" class="form-control @error('alumni_postcode') is-invalid @enderror"
+                                id="alumni_postcode" name="alumni_postcode" list="alumni-postcode-list" value="{{ old('alumni_postcode') }}">
+                            @error('alumni_postcode')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
+                    <datalist id="alumni-state-list">
+                        @foreach($states as $state)
+                            <option value="{{ $state }}"></option>
+                        @endforeach
+                    </datalist>
+                    <datalist id="alumni-district-list">
+                        @foreach($districts as $district)
+                            <option value="{{ $district }}"></option>
+                        @endforeach
+                    </datalist>
+                    <datalist id="alumni-postcode-list">
+                        @foreach($postcodes as $postcode)
+                            <option value="{{ $postcode }}"></option>
+                        @endforeach
+                    </datalist>
 
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="tadika_name" class="form-label">Tadika Name</label>
                             <input type="text" class="form-control @error('tadika_name') is-invalid @enderror"
-                                id="tadika_name" name="tadika_name" value="{{ old('tadika_name') }}" placeholder="Search or enter tadika name">
+                                id="tadika_name" name="tadika_name" list="tadika-name-list" value="{{ old('tadika_name') }}" placeholder="Search or enter tadika name">
                             @error('tadika_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
+                    <datalist id="tadika-name-list">
+                        @foreach($tadikaNames as $tadikaName)
+                            <option value="{{ $tadikaName }}"></option>
+                        @endforeach
+                    </datalist>
                 </div>
 
                 <div class="form-section">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class TadikaOwnerController extends Controller
@@ -18,8 +19,21 @@ class TadikaOwnerController extends Controller
     public function editProfile()
     {
         $tadika = auth()->user()->ownedTadika;
+        $districts = DB::table('glo_bandar')
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+        $postcodes = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
 
-        return view('tadika_owner.edit', compact('tadika'));
+        return view('tadika_owner.edit', compact('tadika', 'districts', 'states', 'postcodes'));
     }
 
     public function updateProfile(Request $request)
@@ -33,8 +47,9 @@ class TadikaOwnerController extends Controller
                 Rule::unique('tadikas', 'tadika_reg_no')->ignore(optional($request->user()->ownedTadika)->tadika_id, 'tadika_id'),
             ],
             'tadika_address' => ['nullable', 'string'],
-            'tadika_district' => ['required', 'string', 'max:255'],
-            'tadika_state' => ['required', 'string', 'max:255'],
+            'tadika_district' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
+            'tadika_state' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
+            'tadika_postcode' => ['required', 'string', 'max:50', Rule::exists('glo_bandar', 'bandar_postcode')],
             'tadika_phone' => ['nullable', 'string', 'max:30'],
             'tadika_email' => ['nullable', 'email', 'max:255'],
             'tadika_owner' => ['nullable', 'string', 'max:255'],

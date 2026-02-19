@@ -18,6 +18,7 @@ class Tadika extends Model
         'tadika_address',
         'tadika_district',
         'tadika_state',
+        'tadika_postcode',
         'tadika_phone',
         'tadika_email',
         'tadika_logo',

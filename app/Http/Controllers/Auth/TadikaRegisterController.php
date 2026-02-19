@@ -5,16 +5,34 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Tadika;
 use App\Models\User;
+use App\Models\Alumni; // Import Alumni Model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 
 class TadikaRegisterController extends Controller
 {
     public function create()
     {
-        return view('auth.tadika-register');
+        $districts = DB::table('glo_bandar')
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+
+        $postcodes = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
+
+        return view('auth.tadika-register', compact('districts', 'states', 'postcodes'));
     }
 
     public function store(Request $request)
@@ -22,8 +40,9 @@ class TadikaRegisterController extends Controller
         $request->validate([
             'tadika_name' => ['required', 'string', 'max:255'],
             'tadika_reg_no' => ['required', 'string', 'max:100', 'unique:tadikas,tadika_reg_no'],
-            'tadika_district' => ['required', 'string', 'max:255'],
-            'tadika_state' => ['required', 'string', 'max:255'],
+            'tadika_district' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
+            'tadika_state' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
+            'tadika_postcode' => ['required', 'string', 'max:50', Rule::exists('glo_bandar', 'bandar_postcode')],
             // Validate against the correct `user_email` column in the `users` table
             'tadika_email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,user_email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -40,6 +59,7 @@ class TadikaRegisterController extends Controller
         }
 
         DB::transaction(function () use ($request, $tadika_logoPath) {
+            // 1. Create User Account
             $user = User::create([
                 'user_name' => $request->tadika_name,
                 'user_email' => $request->tadika_email, // Map login email here
@@ -47,11 +67,13 @@ class TadikaRegisterController extends Controller
                 'user_role' => 'tadika',
             ]);
 
-            Tadika::create([
+            // 2. Create Tadika Profile
+            $tadika = Tadika::create([
                 'tadika_name' => $request->tadika_name,
                 'tadika_reg_no' => $request->tadika_reg_no,
                 'tadika_district' => $request->tadika_district,
                 'tadika_state' => $request->tadika_state,
+                'tadika_postcode' => $request->tadika_postcode,
                 'tadika_email' => $request->tadika_email, // Store the tadika's business email here
                 'tadika_address' => $request->tadika_address,
                 'tadika_phone' => $request->tadika_phone,
@@ -60,9 +82,16 @@ class TadikaRegisterController extends Controller
                 'tadika_logo' => $tadika_logoPath,
                 'owner_user_id' => $user->user_id, // Linked to the new user_id column
             ]);
+
+            // 3. ADOPT ORPHANED ALUMNI
+            // Find any alumni who registered earlier and typed in this exact Tadika name, 
+            // but don't have a tadika_id assigned yet, and link them to this new Tadika.
+            Alumni::where('tadika_name', $request->tadika_name)
+                  ->whereNull('tadika_id')
+                  ->update(['tadika_id' => $tadika->tadika_id]);
         });
 
         return redirect()->route('tadika.register.success')
-            ->with('success', 'Registration successful! Your Tadika account has been created.');
+            ->with('success', 'Registration successful! Your Tadika account has been created, and any matching alumni have been automatically linked.');
     }
 }

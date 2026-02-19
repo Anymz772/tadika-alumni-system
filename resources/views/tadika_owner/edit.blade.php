@@ -36,20 +36,45 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">District</label>
                                 <input type="text" name="tadika_district" class="form-control @error('tadika_district') is-invalid @enderror"
+                                    list="district-list"
                                     value="{{ old('tadika_district', $tadika->tadika_district ?? '') }}" required>
                                 @error('tadika_district')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">State</label>
                                 <input type="text" name="tadika_state" class="form-control @error('tadika_state') is-invalid @enderror"
+                                    list="state-list"
                                     value="{{ old('tadika_state', $tadika->tadika_state ?? '') }}" required>
                                 @error('tadika_state')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Postcode</label>
+                                <input type="text" name="tadika_postcode" class="form-control @error('tadika_postcode') is-invalid @enderror"
+                                    list="postcode-list"
+                                    value="{{ old('tadika_postcode', $tadika->tadika_postcode ?? '') }}" required>
+                                @error('tadika_postcode')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
                         </div>
+                        <datalist id="district-list">
+                            @foreach($districts as $district)
+                                <option value="{{ $district }}"></option>
+                            @endforeach
+                        </datalist>
+                        <datalist id="state-list">
+                            @foreach($states as $state)
+                                <option value="{{ $state }}"></option>
+                            @endforeach
+                        </datalist>
+                        <datalist id="postcode-list">
+                            @foreach($postcodes as $postcode)
+                                <option value="{{ $postcode }}"></option>
+                            @endforeach
+                        </datalist>
 
                         <div class="mb-3">
                             <label class="form-label">Address</label>

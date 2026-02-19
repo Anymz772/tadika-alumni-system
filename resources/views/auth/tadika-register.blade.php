@@ -45,24 +45,48 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="tadika_district" class="form-label required">District</label>
                             <input type="text" class="form-control @error('tadika_district') is-invalid @enderror"
-                                id="tadika_district" name="tadika_district" value="{{ old('tadika_district') }}" required>
+                                id="tadika_district" name="tadika_district" list="district-list" value="{{ old('tadika_district') }}" required>
                             @error('tadika_district')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="tadika_state" class="form-label required">State</label>
                             <input type="text" class="form-control @error('tadika_state') is-invalid @enderror"
-                                id="tadika_state" name="tadika_state" value="{{ old('tadika_state') }}" required>
+                                id="tadika_state" name="tadika_state" list="state-list" value="{{ old('tadika_state') }}" required>
                             @error('tadika_state')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="tadika_postcode" class="form-label required">Postcode</label>
+                            <input type="text" class="form-control @error('tadika_postcode') is-invalid @enderror"
+                                id="tadika_postcode" name="tadika_postcode" list="postcode-list" value="{{ old('tadika_postcode') }}" required>
+                            @error('tadika_postcode')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
+                    <datalist id="district-list">
+                        @foreach($districts as $district)
+                            <option value="{{ $district }}"></option>
+                        @endforeach
+                    </datalist>
+                    <datalist id="state-list">
+                        @foreach($states as $state)
+                            <option value="{{ $state }}"></option>
+                        @endforeach
+                    </datalist>
+                    <datalist id="postcode-list">
+                        @foreach($postcodes as $postcode)
+                            <option value="{{ $postcode }}"></option>
+                        @endforeach
+                    </datalist>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">

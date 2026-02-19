@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Alumni;
+use App\Models\Tadika; // Import Tadika Model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,27 @@ class AlumniRegisterController extends Controller
 {
     public function create()
     {
-        return view('auth.alumni-register');
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+
+        $districts = DB::table('glo_bandar')
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        $postcodes = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
+
+        $tadikaNames = Tadika::query()
+            ->orderBy('tadika_name')
+            ->pluck('tadika_name');
+
+        return view('auth.alumni-register', compact('states', 'districts', 'postcodes', 'tadikaNames'));
     }
 
     public function store(Request $request)
@@ -30,7 +51,9 @@ class AlumniRegisterController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'alumni_name' => ['required', 'string', 'max:255'],
             'alumni_ic' => ['nullable', 'string', 'regex:/^\d{6}-\d{2}-\d{4}$/', 'max:14'],
-            'alumni_state' => ['nullable', 'string', 'max:255'],
+            'alumni_state' => ['nullable', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
+            'alumni_district' => ['nullable', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
+            'alumni_postcode' => ['nullable', 'string', 'max:50', Rule::exists('glo_bandar', 'bandar_postcode')],
             'tadika_name' => ['nullable', 'string', 'max:255'],
             'gender' => ['nullable', 'in:male,female'],
             'age' => ['nullable', 'integer', 'min:1', 'max:100'],
@@ -48,6 +71,7 @@ class AlumniRegisterController extends Controller
 
         try {
             $user = DB::transaction(function () use ($request) {
+                // 1. Create the User (Login Credentials)
                 $user = User::create([
                     'user_name' => $request->user_name,
                     'user_email' => $request->user_email,
@@ -55,12 +79,26 @@ class AlumniRegisterController extends Controller
                     'user_role' => 'alumni',
                 ]);
 
+                // 2. Check if the Tadika they typed already exists
+                $tadikaId = null;
+                if ($request->filled('tadika_name')) {
+                    // Try to find an exact match for the Tadika Name
+                    $existingTadika = Tadika::where('tadika_name', $request->tadika_name)->first();
+                    if ($existingTadika) {
+                        $tadikaId = $existingTadika->tadika_id;
+                    }
+                }
+
+                // 3. Create the Alumni Profile
                 Alumni::create([
                     'user_id' => $user->user_id,
+                    'tadika_id' => $tadikaId, // Link the ID if we found it (otherwise it remains null)
                     'alumni_name' => $request->alumni_name,
                     'alumni_ic' => $request->alumni_ic,
                     'alumni_state' => $request->alumni_state,
-                    'tadika_name' => $request->tadika_name,
+                    'alumni_district' => $request->alumni_district,
+                    'alumni_postcode' => $request->alumni_postcode,
+                    'tadika_name' => $request->tadika_name, // Always save the text name for reference
                     'gender' => $request->gender,
                     'age' => $request->age,
                     'grad_year' => $request->grad_year,

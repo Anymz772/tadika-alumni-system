@@ -24,6 +24,8 @@ class Alumni extends Model
         'job_position',                    // was 'job_position' (kept same)
         'alumni_phone',                     // was 'contact_number'
         'alumni_address',                   // was 'address'
+        'alumni_district',
+        'alumni_postcode',
         'father_name',                      // stays the same
         'mother_name',                      // stays the same
         'parent_phone',                     // was 'parent_contact'

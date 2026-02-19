@@ -34,6 +34,7 @@
                         <div><strong>Registration No:</strong> {{ $tadika->tadika_reg_no }}</div>
                         <div><strong>District:</strong> {{ $tadika->tadika_district }}</div>
                         <div><strong>State:</strong> {{ $tadika->tadika_state }}</div>
+                        <div><strong>Postcode:</strong> {{ $tadika->tadika_postcode }}</div>
                     @else
                         <p class="text-muted mb-0">No Tadika profile found yet.</p>
                     @endif
