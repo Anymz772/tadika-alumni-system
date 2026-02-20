@@ -96,9 +96,9 @@
             <h6 class="fw-bold mb-3 text-primary">Academic & Background</h6>
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Year Graduated *</label>
+                    <label class="form-label">Year Graduated</label>
                     <input type="number" class="form-control @error('grad_year') is-invalid @enderror" 
-                           name="grad_year" min="2000" max="{{ date('Y') }}" value="{{ old('grad_year') }}" required>
+                           name="grad_year" min="2000" max="{{ date('Y') }}" value="{{ old('grad_year') }}">
                     @error('grad_year')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

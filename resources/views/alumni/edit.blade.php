@@ -99,10 +99,10 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Year Graduated *</label>
+                        <label class="form-label">Year Graduated</label>
                         <input type="number" class="form-control" name="grad_year"
                             value="{{ old('grad_year', $alumni->grad_year) }}" min="2000"
-                            max="{{ date('Y') }}" required>
+                            max="{{ date('Y') }}">
                     </div>
 
                     <div class="col-md-6 mb-3">

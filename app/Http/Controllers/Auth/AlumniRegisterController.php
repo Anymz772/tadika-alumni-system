@@ -53,7 +53,7 @@ class AlumniRegisterController extends Controller
             'alumni_ic' => ['nullable', 'string', 'regex:/^\d{6}-\d{2}-\d{4}$/', 'max:14'],
             'alumni_state' => ['nullable', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
             'alumni_district' => ['nullable', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
-            'alumni_postcode' => ['nullable', 'string', 'max:50', Rule::exists('glo_bandar', 'bandar_postcode')],
+            'alumni_postcode' => ['nullable', 'string', 'max:10', Rule::exists('glo_bandar', 'bandar_postcode')],
             'tadika_name' => ['nullable', 'string', 'max:255'],
             'gender' => ['nullable', 'in:male,female'],
             'age' => ['nullable', 'integer', 'min:1', 'max:100'],

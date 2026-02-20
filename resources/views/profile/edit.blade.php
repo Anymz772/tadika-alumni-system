@@ -14,6 +14,19 @@
 @section('content')
 <div class="card shadow-sm">
     <div class="card-header bg-white">
+        @php
+            $districts = \Illuminate\Support\Facades\DB::table('glo_bandar')
+                ->whereNotNull('bandar_nama')
+                ->distinct()
+                ->orderBy('bandar_nama')
+                ->pluck('bandar_nama');
+
+            $postcodes = \Illuminate\Support\Facades\DB::table('glo_bandar')
+                ->whereNotNull('bandar_postcode')
+                ->distinct()
+                ->orderBy('bandar_postcode')
+                ->pluck('bandar_postcode');
+        @endphp
         <h5 class="mb-0 text-primary"><i class="fas fa-user-edit me-2"></i>Edit Profile</h5>
     </div>
 
@@ -118,10 +131,10 @@
             
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label for="grad_year" class="form-label">Year Graduated *</label>
+                    <label for="grad_year" class="form-label">Year Graduated</label>
                     <input type="number" class="form-control @error('grad_year') is-invalid @enderror" 
                            id="grad_year" name="grad_year" min="2000" max="{{ date('Y') }}" 
-                           value="{{ old('grad_year', $alumni->grad_year) }}" required>
+                           value="{{ old('grad_year', $alumni->grad_year) }}">
                     @error('grad_year')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -143,6 +156,38 @@
                            id="tadika_name" name="tadika_name" 
                            value="{{ old('tadika_name', $alumni->tadika_name) }}" placeholder="e.g. Tadika Kemas">
                     @error('tadika_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="alumni_district" class="form-label">District</label>
+                    <input type="text" class="form-control @error('alumni_district') is-invalid @enderror" 
+                           id="alumni_district" name="alumni_district" list="districtList"
+                           value="{{ old('alumni_district', $alumni->alumni_district) }}" placeholder="Select or type district">
+                    <datalist id="districtList">
+                        @foreach($districts as $district)
+                            <option value="{{ $district }}">
+                        @endforeach
+                    </datalist>
+                    @error('alumni_district')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="alumni_postcode" class="form-label">Postcode</label>
+                    <input type="text" class="form-control @error('alumni_postcode') is-invalid @enderror" 
+                           id="alumni_postcode" name="alumni_postcode" list="postcodeList"
+                           value="{{ old('alumni_postcode', $alumni->alumni_postcode) }}" placeholder="Select or type postcode">
+                    <datalist id="postcodeList">
+                        @foreach($postcodes as $postcode)
+                            <option value="{{ $postcode }}">
+                        @endforeach
+                    </datalist>
+                    @error('alumni_postcode')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

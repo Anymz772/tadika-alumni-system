@@ -47,6 +47,20 @@
             @endif
         </div>
 
+        @if($user->user_role === 'alumni')
+            <div>
+                <x-input-label for="alumni_district" :value="__('District')" />
+                <x-text-input id="alumni_district" name="alumni_district" type="text" class="mt-1 block w-full" :value="old('alumni_district', $user->alumni->alumni_district ?? '')" />
+                <x-input-error class="mt-2" :messages="$errors->get('alumni_district')" />
+            </div>
+
+            <div>
+                <x-input-label for="alumni_postcode" :value="__('Postcode')" />
+                <x-text-input id="alumni_postcode" name="alumni_postcode" type="text" class="mt-1 block w-full" :value="old('alumni_postcode', $user->alumni->alumni_postcode ?? '')" />
+                <x-input-error class="mt-2" :messages="$errors->get('alumni_postcode')" />
+            </div>
+        @endif
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

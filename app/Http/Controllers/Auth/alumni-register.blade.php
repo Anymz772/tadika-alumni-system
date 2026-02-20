@@ -79,10 +79,10 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="grad_year" class="form-label">Year Graduated *</label>
+                                <label for="grad_year" class="form-label">Year Graduated</label>
                                 <input type="number" class="form-control @error('grad_year') is-invalid @enderror" 
                                        id="grad_year" name="grad_year" 
-                                       min="2000" max="{{ date('Y') }}" value="{{ old('grad_year') }}" required>
+                                       min="2000" max="{{ date('Y') }}" value="{{ old('grad_year') }}">
                                 @error('grad_year')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
