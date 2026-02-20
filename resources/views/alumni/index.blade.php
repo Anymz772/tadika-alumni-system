@@ -39,9 +39,9 @@
                             value="{{ request('year_to') }}" placeholder="e.g., 2020" min="2000" max="{{ date('Y') }}">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Workplace</label>
-                        <input type="text" name="workplace" class="form-control"
-                            value="{{ request('workplace') }}" placeholder="Company name">
+                        <label class="form-label">CCompany</label>
+                        <input type="text" name="company" class="form-control"
+                            value="{{ request('company') }}" placeholder="Company name">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <div class="btn-group w-100">
@@ -90,7 +90,7 @@
                                 <th>Alumni Information</th>
                                 <th>Graduation</th>
                                 <th>Contact</th>
-                                <th>Workplace</th>
+                                <th>Company</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>

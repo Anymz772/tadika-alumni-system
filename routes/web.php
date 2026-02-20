@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AlumniController;
+use App\Http\Controllers\TadikaAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\TadikaOwnerController;
 use App\Http\Controllers\Auth\AlumniRegisterController;
@@ -59,13 +60,27 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Password Reset
     Route::post('/alumni/{alumni}/reset-password', [AlumniController::class, 'resetPassword'])
         ->name('alumni.reset-password');
+
+    // Tadika Management Routes (Standard RESTful routes)
+    Route::get('/tadika', [TadikaAdminController::class, 'index'])->name('tadika.index');
+    Route::get('/tadika/create', [TadikaAdminController::class, 'create'])->name('tadika.create');
+    Route::post('/tadika', [TadikaAdminController::class, 'store'])->name('tadika.store');
+    Route::get('/tadika/{tadika}', [TadikaAdminController::class, 'show'])->whereNumber('tadika')->name('tadika.show');
+    Route::get('/tadika/{tadika}/edit', [TadikaAdminController::class, 'edit'])->whereNumber('tadika')->name('tadika.edit');
+    Route::put('/tadika/{tadika}', [TadikaAdminController::class, 'update'])->whereNumber('tadika')->name('tadika.update');
+    Route::delete('/tadika/{tadika}', [TadikaAdminController::class, 'destroy'])->whereNumber('tadika')->name('tadika.destroy');
+
+    // Password Reset
+    Route::post('/tadika/{tadika}/reset-password', [TadikaAdminController::class, 'resetPassword'])
+        ->whereNumber('tadika')
+        ->name('tadika.reset-password');
 });
 
 // ================= TADIKA OWNER ROUTES =================
 Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
     Route::get('/dashboard', [TadikaOwnerController::class, 'dashboard'])->name('tadika.dashboard');
-    Route::get('/profile/edit', [TadikaOwnerController::class, 'editProfile'])->name('tadika.edit');
-    Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.update');
+    Route::get('/profile/edit', [TadikaOwnerController::class, 'editProfile'])->name('tadika.profile.edit');
+    Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.profile.update');
     Route::get('/alumni', [TadikaOwnerController::class, 'viewAlumniList'])->name('tadika.alumni');
 });
 

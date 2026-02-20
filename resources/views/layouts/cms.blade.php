@@ -207,18 +207,28 @@
 
                 @if (!Request::is('profile*'))
                     <a href="{{ route('alumni.index') }}"
-                        class="nav-link {{ Request::is('admin/alumni') || Request::is('admin/alumni/*') ? 'active' : '' }}">
+                        class="nav-link {{ Request::is('alumni') || Request::is('alumni/*') ? 'active' : '' }}">
                         <i class="bi bi-people-fill"></i> Senarai Alumni
                     </a>
 
                     <a href="{{ route('alumni.create') }}"
-                        class="nav-link {{ Request::is('admin/alumni/create') ? 'active' : '' }}">
+                        class="nav-link {{ Request::is('alumni/create') ? 'active' : '' }}">
                         <i class="bi bi-person-plus-fill"></i> Tambah Alumni
+                    </a>
+
+                    <a href="{{ route('tadika.index') }}"
+                        class="nav-link {{ Request::is('tadika') || Request::is('tadika/*') ? 'active' : '' }}">
+                        <i class="bi bi-building"></i> Senarai Tadika
+                    </a>
+
+                    <a href="{{ route('tadika.create') }}"
+                        class="nav-link {{ Request::is('tadika/create') ? 'active' : '' }}">
+                        <i class="bi bi-building-add"></i> Tambah Tadika
                     </a>
                 @endif
             @elseif(auth()->user()->isTadika())
                 <div class="nav-label">Tadika</div>
-                <a href="{{ route('tadika.edit') }}"
+                <a href="{{ route('tadika.profile.edit') }}"
                     class="nav-link {{ Request::is('tadika/profile/edit') ? 'active' : '' }}">
                     <i class="bi bi-building"></i> Profil Tadika
                 </a>

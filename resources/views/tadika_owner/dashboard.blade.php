@@ -10,7 +10,7 @@
             </p>
         </div>
         <div class="col-md-4 text-md-end">
-            <a href="{{ route('tadika.edit') }}" class="btn btn-tadika-primary">
+            <a href="{{ route('tadika.profile.edit') }}" class="btn btn-tadika-primary">
                 Edit Tadika Profile
             </a>
         </div>

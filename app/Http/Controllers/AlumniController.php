@@ -163,11 +163,12 @@ class AlumniController extends Controller
             'alumni_state' => 'nullable|string|max:255',
             'gender' => 'nullable|in:male,female',
             'age' => 'nullable|integer|min:1|max:100',
-            'alumni_email' => [
+            'user_email' => [
                 'required',
                 'email',
                 'max:255',
                 Rule::unique('users', 'user_email')->ignore($alumni->user_id, 'user_id'),
+                Rule::unique('alumni', 'alumni_email')->ignore($alumni->alumni_id, 'alumni_id'),
             ],
             'alumni_phone' => 'required|digits_between:10,15',
             'alumni_status' => 'required|in:studying,working',
@@ -204,7 +205,7 @@ class AlumniController extends Controller
             'father_name' => $request->father_name,
             'mother_name' => $request->mother_name,
             'parent_phone' => $request->parent_phone,
-            'alumni_email' => $request->alumni_email,
+            'alumni_email' => $request->user_email,
         ];
 
         if ($request->hasFile('alumni_photo')) {
@@ -216,18 +217,22 @@ class AlumniController extends Controller
             $updateData['alumni_photo'] = 'alumni_photos/' . $filename;
         }
 
-        $alumni->update($updateData);
+        DB::transaction(function () use ($alumni, $request, $updateData) {
+            $alumni->update($updateData);
 
-        $userUpdates = [
-            'user_email' => $request->alumni_email,
-            'user_name' => $request->alumni_name,
-        ];
+            if ($alumni->user) {
+                $userUpdates = [
+                    'user_email' => $request->user_email,
+                    'user_name' => $request->alumni_name,
+                ];
 
-        if ($request->filled('password')) {
-            $userUpdates['password'] = Hash::make($request->password);
-        }
+                if ($request->filled('password')) {
+                    $userUpdates['password'] = Hash::make($request->password);
+                }
 
-        $alumni->user->update($userUpdates);
+                $alumni->user->update($userUpdates);
+            }
+        });
 
         return redirect()->route('alumni.index')->with('success', 'Alumni and Login credentials updated successfully.');
     }

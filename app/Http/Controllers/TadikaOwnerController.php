@@ -61,8 +61,15 @@ class TadikaOwnerController extends Controller
         $tadika = $user->ownedTadika;
 
         if ($request->hasFile('tadika_logo')) {
-            $path = $request->file('tadika_logo')->store('tadika_photos', 'public');
-            $data['tadika_logo'] = $path;
+            $filename = time() . '_' . $request->file('tadika_logo')->getClientOriginalName();
+            $uploadPath = public_path('storage/tadika_photos');
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            $request->file('tadika_logo')->move($uploadPath, $filename);
+            $data['tadika_logo'] = 'tadika_photos/' . $filename;
         }
 
         if ($tadika) {
@@ -71,7 +78,7 @@ class TadikaOwnerController extends Controller
             $user->ownedTadika()->create($data);
         }
 
-        return redirect()->route('tadika.edit')->with('success', 'Tadika profile updated.');
+        return redirect()->route('tadika.profile.edit')->with('success', 'Tadika profile updated.');
     }
 
     public function viewAlumniList()
@@ -79,7 +86,7 @@ class TadikaOwnerController extends Controller
         $tadika = auth()->user()->ownedTadika;
 
         if (!$tadika) {
-            return redirect()->route('tadika.edit')->with('error', 'Please set up your Tadika profile first.');
+            return redirect()->route('tadika.profile.edit')->with('error', 'Please set up your Tadika profile first.');
         }
 
         $alumni = $tadika->alumni()->with('user')->paginate(20);

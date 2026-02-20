@@ -54,7 +54,7 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Email Address *</label>
                         <input type="email" class="form-control" name="user_email"
-                            value="{{ old('user_email', $alumni->user_email) }}" required>
+                            value="{{ old('user_email', $alumni->user->user_email ?? $alumni->alumni_email) }}" required>
                     </div>
                 </div>
 

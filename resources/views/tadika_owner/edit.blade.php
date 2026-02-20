@@ -15,7 +15,7 @@
                         <div class="alert alert-danger">Please fix the errors below.</div>
                     @endif
 
-                    <form method="POST" action="{{ route('tadika.update') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('tadika.profile.update') }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

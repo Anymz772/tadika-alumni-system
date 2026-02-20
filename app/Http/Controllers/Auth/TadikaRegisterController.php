@@ -55,7 +55,15 @@ class TadikaRegisterController extends Controller
 
         $tadika_logoPath = null;
         if ($request->hasFile('tadika_logo')) {
-            $tadika_logoPath = $request->file('tadika_logo')->store('tadika_photos', 'public');
+            $filename = time() . '_' . $request->file('tadika_logo')->getClientOriginalName();
+            $uploadPath = public_path('storage/tadika_photos');
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            $request->file('tadika_logo')->move($uploadPath, $filename);
+            $tadika_logoPath = 'tadika_photos/' . $filename;
         }
 
         DB::transaction(function () use ($request, $tadika_logoPath) {
