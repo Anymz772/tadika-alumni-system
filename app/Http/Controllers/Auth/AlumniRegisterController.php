@@ -79,15 +79,8 @@ class AlumniRegisterController extends Controller
                     'user_role' => 'alumni',
                 ]);
 
-                // 2. Check if the Tadika they typed already exists
-                $tadikaId = null;
-                if ($request->filled('tadika_name')) {
-                    // Try to find an exact match for the Tadika Name
-                    $existingTadika = Tadika::where('tadika_name', $request->tadika_name)->first();
-                    if ($existingTadika) {
-                        $tadikaId = $existingTadika->tadika_id;
-                    }
-                }
+                // 2. Resolve Tadika ID by name (if user typed a known Tadika)
+                $tadikaId = $this->resolveTadikaIdByName($request->tadika_name);
 
                 // 3. Create the Alumni Profile
                 Alumni::create([
@@ -128,5 +121,19 @@ class AlumniRegisterController extends Controller
 
         // Redirect to profile
         return redirect()->route('profile.show')->with('success', 'Registration successful! Welcome to Tadika Alumni System.');
+    }
+
+    private function resolveTadikaIdByName(?string $tadikaName): ?int
+    {
+        $name = trim((string) $tadikaName);
+        if ($name === '') {
+            return null;
+        }
+
+        $tadika = Tadika::query()
+            ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower($name)])
+            ->first();
+
+        return $tadika?->tadika_id;
     }
 }

@@ -86,8 +86,8 @@ class TadikaRegisterController extends Controller
             // 3. ADOPT ORPHANED ALUMNI
             // Find any alumni who registered earlier and typed in this exact Tadika name, 
             // but don't have a tadika_id assigned yet, and link them to this new Tadika.
-            Alumni::where('tadika_name', $request->tadika_name)
-                  ->whereNull('tadika_id')
+            Alumni::whereNull('tadika_id')
+                  ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower(trim((string) $request->tadika_name))])
                   ->update(['tadika_id' => $tadika->tadika_id]);
         });
 

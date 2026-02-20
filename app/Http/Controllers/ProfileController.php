@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumni;
+use App\Models\Tadika;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,6 +100,7 @@ class ProfileController extends Controller
 
         $createData = [
             'user_id' => $user->user_id,
+            'tadika_id' => $this->resolveTadikaIdByName($request->tadika_name),
             'alumni_name' => $request->alumni_name,
             'alumni_ic' => $request->alumni_ic,
             'alumni_state' => $request->alumni_state,
@@ -192,6 +194,7 @@ class ProfileController extends Controller
             'grad_year' => $request->grad_year,
             'alumni_state' => $request->alumni_state,
             'tadika_name' => $request->tadika_name,
+            'tadika_id' => $this->resolveTadikaIdByName($request->tadika_name),
             'gender' => $request->gender,
             'age' => $request->age,
             'alumni_phone' => $request->alumni_phone,
@@ -226,5 +229,19 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
+    }
+
+    private function resolveTadikaIdByName(?string $tadikaName): ?int
+    {
+        $name = trim((string) $tadikaName);
+        if ($name === '') {
+            return null;
+        }
+
+        $tadika = Tadika::query()
+            ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower($name)])
+            ->first();
+
+        return $tadika?->tadika_id;
     }
 }

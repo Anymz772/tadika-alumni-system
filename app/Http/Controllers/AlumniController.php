@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumni;
+use App\Models\Tadika;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -104,6 +105,7 @@ class AlumniController extends Controller
 
                 $alumniData = [
                     'user_id' => $user->user_id,
+                    'tadika_id' => $this->resolveTadikaIdByName($request->tadika_name),
                     'alumni_name' => $request->alumni_name,
                     'alumni_ic' => $request->alumni_ic,
                     'tadika_name' => $request->tadika_name,
@@ -189,6 +191,7 @@ class AlumniController extends Controller
             'alumni_ic' => $request->alumni_ic,
             'grad_year' => $request->grad_year,
             'tadika_name' => $request->tadika_name,
+            'tadika_id' => $this->resolveTadikaIdByName($request->tadika_name),
             'alumni_state' => $request->alumni_state,
             'gender' => $request->gender,
             'age' => $request->age,
@@ -229,9 +232,17 @@ class AlumniController extends Controller
         return redirect()->route('alumni.index')->with('success', 'Alumni and Login credentials updated successfully.');
     }
 
+    // Delete alumni
     public function destroy(Alumni $alumni)
     {
-        $alumni->user->delete();
+        // 1. Delete the associated User login account (IF it exists)
+        if ($alumni->user) {
+            $alumni->user->delete();
+        }
+
+        // 2. Delete the actual Alumni profile record
+        $alumni->delete();
+
         return redirect()->route('alumni.index')->with('success', 'Alumni deleted successfully.');
     }
 
@@ -246,5 +257,19 @@ class AlumniController extends Controller
         ]);
 
         return back()->with('success', 'Password reset successfully for ' . $alumni->alumni_name);
+    }
+
+    private function resolveTadikaIdByName(?string $tadikaName): ?int
+    {
+        $name = trim((string) $tadikaName);
+        if ($name === '') {
+            return null;
+        }
+
+        $tadika = Tadika::query()
+            ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower($name)])
+            ->first();
+
+        return $tadika?->tadika_id;
     }
 }
