@@ -179,13 +179,21 @@
     <nav id="sidebar" class="sidebar d-flex flex-column flex-shrink-0">
         <div class="sidebar-header d-flex align-items-center justify-content-center">
             <i class="fas fa-shapes me-2 text-warning"></i>
-            <span>{{ auth()->user()->isAdmin() ? 'Tadika Admin' : 'Tadika' }}</span>
+            <span>
+                    @if (auth()->user()->isAdmin())
+                            Admin
+                        @elseif(auth()->user()->isTadika())
+                            Tadika
+                        @elseif(auth()->user()->isAlumni())
+                            Alumni
+                    @endif
+            </span>
         </div>
 
         <div class="overflow-auto" style="height: calc(100vh - 80px);">
             <div class="nav-label">Utama</div>
 
-            @if(auth()->user()->isAdmin())
+            @if (auth()->user()->isAdmin())
                 <a href="{{ route('admin.dashboard') }}"
                     class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i> Dashboard
@@ -196,13 +204,12 @@
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
             @elseif(auth()->user()->isAlumni())
-                <a href="{{ route('profile.show') }}"
-                    class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
+                <a href="{{ route('profile.show') }}" class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Dashboard
                 </a>
             @endif
 
-            @if(auth()->user()->isAdmin())
+            @if (auth()->user()->isAdmin())
                 <div class="nav-label">Pengurusan</div>
 
                 @if (!Request::is('profile*'))
@@ -286,7 +293,7 @@
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
                     <li>
                         <h6 class="dropdown-header">
-                            @if(auth()->user()->isAdmin())
+                            @if (auth()->user()->isAdmin())
                                 Akaun Admin
                             @elseif(auth()->user()->isTadika())
                                 Akaun Tadika
