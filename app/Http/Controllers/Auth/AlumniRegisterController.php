@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 
 class AlumniRegisterController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
         $states = DB::table('glo_bandar')
             ->distinct()
@@ -36,7 +36,12 @@ class AlumniRegisterController extends Controller
             ->orderBy('tadika_name')
             ->pluck('tadika_name');
 
-        return view('auth.alumni-register', compact('states', 'districts', 'postcodes', 'tadikaNames'));
+        $prefilledTadika = null;
+        if ($request->has('ref')) {
+            $prefilledTadika = Tadika::find($request->query('ref'));
+        }
+
+        return view('auth.alumni-register', compact('states', 'districts', 'postcodes', 'tadikaNames', 'prefilledTadika'));
     }
 
     public function store(Request $request)

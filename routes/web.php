@@ -28,7 +28,7 @@ Route::middleware('guest')->group(function () {
     })->name('tadika.register.success');
 });
 
-// ================= LOGIN/DASHBOARD =================
+// ================= LOGIN/DASHBOARD =================f
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
