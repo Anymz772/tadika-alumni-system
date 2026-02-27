@@ -5,11 +5,11 @@
 @section('header-title', 'Edit: ' . $alumni->alumni_name)
 
 @section('header-buttons')
-    <a href="{{ route('alumni.show', $alumni->alumni_id) }}" class="btn btn-info me-2">
-        <i class="fas fa-eye me-2"></i> View
+    <a href="{{ route('tadika.alumni.message.form', $alumni->alumni_id) }}" class="btn btn-outline-secondary me-2">
+        <i class="fas fa-envelope me-2"></i> Message
     </a>
-    <a href="{{ route('alumni.index') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i> Back
+    <a href="{{ route('tadika.alumni') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i> Back to list
     </a>
 @endsection
 
@@ -19,7 +19,7 @@
             <h5 class="mb-0 text-primary"><i class="fas fa-user-edit me-2"></i>Update Alumni Details</h5>
         </div>
 
-        <form method="POST" action="{{ route('alumni.update', $alumni->alumni_id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('tadika.alumni.update', $alumni->alumni_id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -42,12 +42,13 @@
                     </div>
                 @endif
 
+                {{-- reuse the same form fields as general alumni.edit --}}
                 @include('alumni.partials.form-fields', ['alumni' => $alumni])
 
             </div>
 
             <div class="card-footer bg-light d-flex justify-content-end gap-2 p-3">
-                <a href="{{ route('alumni.show', $alumni->alumni_id) }}" class="btn btn-secondary">
+                <a href="{{ route('tadika.alumni') }}" class="btn btn-secondary">
                     <i class="fas fa-times me-2"></i> Cancel
                 </a>
                 <button type="submit" class="btn btn-primary px-4">

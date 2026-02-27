@@ -22,6 +22,9 @@
                 <div class="card-body">
                     <div class="text-muted">Total Alumni</div>
                     <div class="display-6 fw-bold">{{ $alumniCount }}</div>
+                    <a href="{{ route('tadika.alumni') }}" class="btn btn-sm btn-outline-primary mt-2">
+                        View List
+                    </a>
                 </div>
             </div>
         </div>
@@ -38,6 +41,11 @@
                     @else
                         <p class="text-muted mb-0">No Tadika profile found yet.</p>
                     @endif
+                    <div class="mt-3">
+                        <a href="{{ route('tadika.alumni.message_all.form') }}" class="btn btn-outline-secondary btn-sm">
+                            Message All Alumni
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

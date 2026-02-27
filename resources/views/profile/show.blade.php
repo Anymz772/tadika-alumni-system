@@ -124,6 +124,43 @@
                 </div>
             </div>
         </div>
+
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="fas fa-envelope me-2"></i>Messages From Tadika</h6>
+                <small class="text-muted">Latest 20</small>
+            </div>
+            <div class="card-body">
+                @if(isset($messages) && $messages->count())
+                    @foreach($messages as $item)
+                        <div class="border rounded p-3 mb-3 {{ is_null($item->read_at) ? 'bg-light' : '' }}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ $item->data['subject'] ?? 'No Subject' }}</h6>
+                                    <small class="text-muted">
+                                        From: {{ $item->data['sender_name'] ?? 'Tadika Owner' }}
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted d-block mb-2">{{ $item->created_at?->format('d M Y, H:i') }}</small>
+                                    <form action="{{ route('notifications.destroy', $item->id) }}" method="POST"
+                                        onsubmit="return confirm('Delete this message?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash me-1"></i>Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <p class="mb-0 mt-2">{{ $item->data['message'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-muted mb-0">No in-app messages yet.</p>
+                @endif
+            </div>
+        </div>
     </div>
 </div>
 @endsection

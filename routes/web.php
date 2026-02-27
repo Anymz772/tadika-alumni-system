@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\TadikaOwnerController;
 use App\Http\Controllers\Auth\AlumniRegisterController;
 use App\Http\Controllers\Auth\TadikaRegisterController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -82,6 +83,24 @@ Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
     Route::get('/profile/edit', [TadikaOwnerController::class, 'editProfile'])->name('tadika.profile.edit');
     Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.profile.update');
     Route::get('/alumni', [TadikaOwnerController::class, 'viewAlumniList'])->name('tadika.alumni');
+
+    // manage individual alumni
+    Route::get('/alumni/{alumni}/edit', [TadikaOwnerController::class, 'editAlumni'])
+        ->name('tadika.alumni.edit');
+    Route::put('/alumni/{alumni}', [TadikaOwnerController::class, 'updateAlumni'])
+        ->name('tadika.alumni.update');
+
+    // messaging routes
+    Route::get('/alumni/{alumni}/message', [TadikaOwnerController::class, 'messageAlumniForm'])
+        ->name('tadika.alumni.message.form');
+    Route::post('/alumni/{alumni}/message', [TadikaOwnerController::class, 'sendMessageAlumni'])
+        ->name('tadika.alumni.message');
+
+    // broadcast to all alumni
+    Route::get('/alumni/message-all', [TadikaOwnerController::class, 'messageAllForm'])
+        ->name('tadika.alumni.message_all.form');
+    Route::post('/alumni/message-all', [TadikaOwnerController::class, 'sendMessageAll'])
+        ->name('tadika.alumni.message_all');
 });
 
 // ================= ALUMNI PROFILE ROUTES =================
@@ -91,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
 

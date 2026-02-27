@@ -1,4 +1,9 @@
 <nav x-data="{ open: false }" class="bg-white border-b-4 border-pink-200 rounded-b-[25px] shadow-sm sticky top-0 z-50">
+    @php
+        $unreadInAppMessages = auth()->check() && auth()->user()->isAlumni()
+            ? auth()->user()->unreadNotifications()->count()
+            : 0;
+    @endphp
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20"> <div class="flex">
                 <div class="shrink-0 flex items-center">
@@ -15,6 +20,11 @@
                     @if(auth()->check() && auth()->user()->isAlumni())
                         <x-nav-link :href="route('profile.show')" :active="request()->routeIs('profile.*')" class="font-bold text-lg text-gray-600 hover:text-purple-500 transition-colors">
                            <i class="fas fa-child me-2 text-purple-400"></i> {{ __('My Profile') }}
+                           @if($unreadInAppMessages > 0)
+                               <span class="ms-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                                   {{ $unreadInAppMessages }}
+                               </span>
+                           @endif
                         </x-nav-link>
                     @endif
                 </div>
@@ -73,6 +83,11 @@
             @if(auth()->check() && auth()->user()->isAlumni())
                 <x-responsive-nav-link :href="route('profile.show')" :active="request()->routeIs('profile.*')" class="rounded-xl">
                     <i class="fas fa-child me-2"></i> {{ __('My Profile') }}
+                    @if($unreadInAppMessages > 0)
+                        <span class="ms-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                            {{ $unreadInAppMessages }}
+                        </span>
+                    @endif
                 </x-responsive-nav-link>
             @endif
         </div>

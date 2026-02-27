@@ -173,6 +173,11 @@
 </head>
 
 <body>
+    @php
+        $unreadInAppMessages = auth()->check() && auth()->user()->isAlumni()
+            ? auth()->user()->unreadNotifications()->count()
+            : 0;
+    @endphp
 
     <div class="overlay" id="overlay"></div>
 
@@ -206,6 +211,9 @@
             @elseif(auth()->user()->isAlumni())
                 <a href="{{ route('profile.show') }}" class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Dashboard
+                    @if($unreadInAppMessages > 0)
+                        <span class="badge bg-warning text-dark ms-auto rounded-pill">{{ $unreadInAppMessages }}</span>
+                    @endif
                 </a>
             @endif
 
@@ -279,6 +287,15 @@
                     <small class="text-muted">Selamat datang, {{ Auth::user()->user_name }}</small>
                 </div>
             </div>
+
+            @if(auth()->user()->isAlumni())
+                <a href="{{ route('profile.show') }}" class="btn btn-white border rounded-pill px-3 py-1 shadow-sm me-2">
+                    <i class="fas fa-envelope me-1"></i> Messages
+                    @if($unreadInAppMessages > 0)
+                        <span class="badge bg-danger ms-1 rounded-pill">{{ $unreadInAppMessages }}</span>
+                    @endif
+                </a>
+            @endif
 
             <div class="dropdown">
                 <button

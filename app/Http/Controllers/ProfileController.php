@@ -34,7 +34,15 @@ class ProfileController extends Controller
             return redirect()->route('profile.create')->with('info', 'Please complete your alumni profile.');
         }
 
-        return view('profile.show', compact('alumni'));
+        $messages = $user->notifications()
+            ->latest()
+            ->take(20)
+            ->get();
+
+        // Mark newly seen messages as read when alumni opens profile.
+        $user->unreadNotifications()->update(['read_at' => now()]);
+
+        return view('profile.show', compact('alumni', 'messages'));
     }
 
     public function create()
