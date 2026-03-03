@@ -58,6 +58,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/alumni/{alumni}', [AlumniController::class, 'update'])->name('alumni.update');
     Route::delete('/alumni/{alumni}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
 
+    // Export all alumni
+    Route::get('/admin/alumni/export', [AlumniController::class, 'export'])->name('admin.alumni.export');
+
     // Password Reset
     Route::post('/alumni/{alumni}/reset-password', [AlumniController::class, 'resetPassword'])
         ->name('alumni.reset-password');

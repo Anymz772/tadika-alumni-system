@@ -12,14 +12,21 @@ class AlumniExport implements FromCollection, WithHeadings, WithMapping
     protected $tadikaId;
 
     // Pass the Tadika ID through the constructor so owners only download their own data
-    public function __construct($tadikaId)
+    // Made nullable to allow exporting all alumni for admin
+    public function __construct($tadikaId = null)
     {
         $this->tadikaId = $tadikaId;
     }
 
     public function collection()
     {
-        return Alumni::where('tadika_id', $this->tadikaId)->orderBy('grad_year', 'desc')->get();
+        $query = Alumni::query();
+
+        if ($this->tadikaId) {
+            $query->where('tadika_id', $this->tadikaId);
+        }
+
+        return $query->orderBy('grad_year', 'desc')->get();
     }
 
     // Define the Excel column headers

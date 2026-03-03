@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Exports\AlumniExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AlumniController extends Controller
 {
@@ -262,6 +264,11 @@ class AlumniController extends Controller
         ]);
 
         return back()->with('success', 'Kata laluan berjaya diset semula untuk ' . $alumni->alumni_name);
+    }
+
+    public function export()
+    {
+        return Excel::download(new AlumniExport(), 'semua_alumni.xlsx');
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int

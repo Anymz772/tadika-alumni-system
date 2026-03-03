@@ -50,7 +50,7 @@
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-center">
                         <i class="fas fa-bolt fa-3x"></i>
-                        <div class="text-end fw-bold">Tindakan Pantas</div>
+                        <div class="text-end fw-bold">Tindakan</div>
                     </div>
                     <div class="mt-auto">
                         <a href="{{ route('tadika.alumni.message_all.form') }}" class="btn btn-light btn-sm mt-3 text-start w-100">
@@ -76,7 +76,7 @@
                         <div class="row">
                             <div class="col-sm-6 mb-3">
                                 <strong class="text-muted d-block mb-1">Nama Tadika:</strong>
-                                {{ $tadika->name }}
+                                {{ $tadika->tadika_name }}
                             </div>
                             <div class="col-sm-6 mb-3">
                                 <strong class="text-muted d-block mb-1">No. Pendaftaran:</strong>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-sm-6 mb-3">
                                 <strong class="text-muted d-block mb-1">E-mel:</strong>
-                                {{ $tadika->email ?? '-' }}
+                                {{ $tadika->tadika_email ?? '-' }}
                             </div>
                             <div class="col-sm-6 mb-3">
                                 <strong class="text-muted d-block mb-1">Lokasi:</strong>

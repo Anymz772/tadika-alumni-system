@@ -127,6 +127,9 @@
                     <a href="{{ route('alumni.index') }}" class="btn btn-outline-primary w-100">
                         <i class="fas fa-list me-2"></i> Lihat Semua Alumni
                     </a>
+                    <a href="{{ route('admin.alumni.export') }}" class="btn btn-success w-100 mt-2">
+                        <i class="fas fa-file-excel me-2"></i> Export Semua Alumni
+                    </a>
                 </div>
             </div>
         </div>
