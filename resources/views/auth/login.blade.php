@@ -44,10 +44,14 @@
                                     <i class="fas fa-lock text-muted"></i>
                                 </span>
                                 <input id="password"
-                                    class="form-control border-start-0 rounded-end-pill py-2 bg-light @error('password') is-invalid @enderror"
+                                    class="form-control border-start-0 py-2 bg-light @error('password') is-invalid @enderror"
                                     type="password" name="password" required autocomplete="current-password"
-                                    placeholder="••••••••" style="box-shadow: none;">
+                                    placeholder="••••••••" style="box-shadow: none; border-radius: 0;">
+                                <span class="input-group-text bg-light border-start-0 rounded-end-pill pe-3" id="show_password_toggle" style="cursor: pointer;">
+                                    <i class="fas fa-eye text-muted"></i>
+                                </span>
                             </div>
+                            <input type="checkbox" id="show_password" class="d-none">
                             @error('password')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -115,4 +119,23 @@
             }
         </style>
     </div>
+    <script>
+        document.getElementById('show_password_toggle').addEventListener('click', function() {
+            var passwordInput = document.getElementById('password');
+            var showPasswordCheckbox = document.getElementById('show_password');
+            var icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordCheckbox.checked = true;
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                showPasswordCheckbox.checked = false;
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 @endsection
