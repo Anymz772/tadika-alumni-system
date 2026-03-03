@@ -8,15 +8,74 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Notifications\TadikaOwnerInAppMessage;
 use App\Models\Tadika;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AlumniExport;
 
 class TadikaOwnerController extends Controller
 {
     public function dashboard()
     {
         $tadika = auth()->user()->ownedTadika;
-        $alumniCount = $tadika ? $tadika->alumni()->count() : 0;
+        
+        $alumniCount = 0;
+        $newAlumniCount = 0;
+        
+        // New variables for our widgets
+        $recentAlumni = collect();
+        $statusChartData = ['studying' => 0, 'working' => 0];
+        $gradYearLabels = [];
+        $gradYearValues = [];
 
-        return view('tadika_owner.dashboard', compact('tadika', 'alumniCount'));
+        if ($tadika) {
+            // Base query to keep things dry
+            $alumniQuery = $tadika->alumni();
+            
+            $alumniCount = $alumniQuery->count();
+            
+            $newAlumniCount = (clone $alumniQuery)
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count();
+
+            // 1. Fetch 5 most recent registrations
+            $recentAlumni = (clone $alumniQuery)
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+
+            // 2. Fetch data for Status Pie Chart (Studying vs Working)
+            $statusCounts = (clone $alumniQuery)
+                ->select('alumni_status', \DB::raw('count(*) as total'))
+                ->whereNotNull('alumni_status')
+                ->groupBy('alumni_status')
+                ->pluck('total', 'alumni_status')
+                ->toArray();
+            
+            $statusChartData['studying'] = $statusCounts['studying'] ?? 0;
+            $statusChartData['working'] = $statusCounts['working'] ?? 0;
+
+            // 3. Fetch data for Graduation Year Bar Chart
+            $gradYearCounts = (clone $alumniQuery)
+                ->select('grad_year', \DB::raw('count(*) as total'))
+                ->whereNotNull('grad_year')
+                ->groupBy('grad_year')
+                ->orderBy('grad_year', 'asc')
+                ->pluck('total', 'grad_year')
+                ->toArray();
+
+            $gradYearLabels = array_keys($gradYearCounts);
+            $gradYearValues = array_values($gradYearCounts);
+        }
+
+        return view('tadika_owner.dashboard', compact(
+            'tadika', 
+            'alumniCount', 
+            'newAlumniCount',
+            'recentAlumni',
+            'statusChartData',
+            'gradYearLabels',
+            'gradYearValues'
+        ));
     }
 
     public function editProfile()
@@ -60,6 +119,17 @@ class TadikaOwnerController extends Controller
             'tadika_logo' => ['nullable', 'image', 'max:2048'],
         ]);
 
+        // Map form input names to the standardized database columns
+        if (array_key_exists('tadika_name', $data)) {
+            $data['name'] = $data['tadika_name'];
+            unset($data['tadika_name']);
+        }
+        
+        if (array_key_exists('tadika_email', $data)) {
+            $data['email'] = $data['tadika_email'];
+            unset($data['tadika_email']);
+        }
+
         $user = $request->user();
         $tadika = $user->ownedTadika;
 
@@ -81,7 +151,7 @@ class TadikaOwnerController extends Controller
             $user->ownedTadika()->create($data);
         }
 
-        return redirect()->route('tadika.profile.edit')->with('success', 'Tadika profile updated.');
+        return redirect()->route('tadika.profile.edit')->with('success', 'Profil Tadika dikemas kini.');
     }
 
     public function viewAlumniList()
@@ -89,7 +159,7 @@ class TadikaOwnerController extends Controller
         $tadika = auth()->user()->ownedTadika;
 
         if (!$tadika) {
-            return redirect()->route('tadika.profile.edit')->with('error', 'Please set up your Tadika profile first.');
+            return redirect()->route('tadika.profile.edit')->with('error', 'Sila sediakan profil Tadika anda terlebih dahulu.');
         }
 
         $alumni = $tadika->alumni()->with('user')->paginate(20);
@@ -196,7 +266,7 @@ class TadikaOwnerController extends Controller
             }
         });
 
-        return redirect()->route('tadika.alumni')->with('success', 'Alumni details updated successfully.');
+        return redirect()->route('tadika.alumni')->with('success', 'Butiran alumni berjaya dikemas kini.');
     }
 
     public function messageAlumniForm(\App\Models\Alumni $alumni)
@@ -215,7 +285,7 @@ class TadikaOwnerController extends Controller
         ]);
 
         if (! $alumni->user) {
-            return back()->with('error', 'This alumni does not have a linked login account.');
+            return back()->with('error', 'Alumni ini tidak mempunyai akaun log masuk yang dipautkan.');
         }
 
         try {
@@ -226,10 +296,10 @@ class TadikaOwnerController extends Controller
             ]));
         } catch (\Throwable $e) {
             report($e);
-            return back()->with('error', 'Failed to send message: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menghantar mesej: ' . $e->getMessage());
         }
 
-        return back()->with('success', 'Message sent in app to ' . $alumni->alumni_name);
+        return back()->with('success', 'Mesej dihantar dalam aplikasi kepada ' . $alumni->alumni_name);
     }
 
     public function messageAllForm()
@@ -247,7 +317,7 @@ class TadikaOwnerController extends Controller
 
         $tadika = auth()->user()->ownedTadika;
         if (! $tadika) {
-            return back()->with('error', 'Please set up your Tadika profile first.');
+            return back()->with('error', 'Sila sediakan profil Tadika anda terlebih dahulu.');
         }
 
         $alumniUsers = $tadika->alumni()
@@ -274,10 +344,10 @@ class TadikaOwnerController extends Controller
         }
 
         if (count($failed) > 0) {
-            return back()->with('error', 'Some messages failed to send: ' . implode(', ', array_slice($failed, 0, 5)));
+            return back()->with('error', 'Beberapa mesej gagal dihantar: ' . implode(', ', array_slice($failed, 0, 5)));
         }
 
-        return back()->with('success', 'Broadcast message sent in app to all linked alumni accounts.');
+        return back()->with('success', 'Mesej siaran dihantar dalam aplikasi kepada semua akaun alumni yang dipautkan.');
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int
@@ -287,10 +357,23 @@ class TadikaOwnerController extends Controller
             return null;
         }
 
+        // Updated query to reference the new 'name' column instead of 'tadika_name'
         $tadika = Tadika::query()
-            ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower($name)])
+            ->whereRaw('LOWER(TRIM(name)) = ?', [strtolower($name)])
             ->first();
 
         return $tadika?->tadika_id;
+    }
+    public function exportAlumniExcel()
+    {
+        $tadika = auth()->user()->ownedTadika;
+
+        if (!$tadika) {
+            return back()->with('error', 'Sila sediakan profil Tadika anda terlebih dahulu.');
+        }
+
+        $fileName = 'Senarai_Alumni_' . str_replace(' ', '_', $tadika->name) . '_' . now()->format('Ymd') . '.xlsx';
+
+        return Excel::download(new AlumniExport($tadika->tadika_id), $fileName);
     }
 }

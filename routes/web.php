@@ -84,6 +84,9 @@ Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
     Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.profile.update');
     Route::get('/alumni', [TadikaOwnerController::class, 'viewAlumniList'])->name('tadika.alumni');
 
+    // Export alumni data to Excel
+    Route::get('/alumni/export', [TadikaOwnerController::class, 'exportAlumniExcel'])->name('tadika.alumni.export');
+
     // manage individual alumni
     Route::get('/alumni/{alumni}/edit', [TadikaOwnerController::class, 'editAlumni'])
         ->name('tadika.alumni.edit');
