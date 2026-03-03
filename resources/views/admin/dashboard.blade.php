@@ -130,6 +130,9 @@
                     <a href="{{ route('admin.alumni.export') }}" class="btn btn-success w-100 mt-2">
                         <i class="fas fa-file-excel me-2"></i> Export Semua Alumni
                     </a>
+                    <a href="{{ route('admin.tadika.export') }}" class="btn btn-info w-100 mt-2">
+                        <i class="fas fa-file-excel me-2"></i> Export Senarai Tadika
+                    </a>
                 </div>
             </div>
         </div>

@@ -61,6 +61,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Export all alumni
     Route::get('/admin/alumni/export', [AlumniController::class, 'export'])->name('admin.alumni.export');
 
+    // Export all tadika
+    Route::get('/admin/tadika/export', [TadikaAdminController::class, 'export'])->name('admin.tadika.export');
+
     // Password Reset
     Route::post('/alumni/{alumni}/reset-password', [AlumniController::class, 'resetPassword'])
         ->name('alumni.reset-password');

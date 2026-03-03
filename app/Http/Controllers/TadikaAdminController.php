@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use App\Exports\TadikaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TadikaAdminController extends Controller
 {
@@ -256,5 +258,10 @@ class TadikaAdminController extends Controller
             report($e);
             return back()->withErrors(['password_error' => 'Tidak dapat menetapkan semula kata laluan. Sila cuba lagi.']);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new TadikaExport, 'tadika-list.xlsx');
     }
 }

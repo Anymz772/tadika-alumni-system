@@ -1,8 +1,8 @@
 @extends('layouts.cms')
 
-@section('title', 'Add New Alumni')
-@section('page-title', 'Add Alumni')
-@section('header-title', 'Add New Alumni')
+@section('title', 'Tambah Alumni Baru')
+@section('page-title', 'Tambah Alumni')
+@section('header-title', 'Tambah Alumni Baru')
 
 @section('header-buttons')
     <a href="{{ route('alumni.index') }}" class="btn btn-secondary">
@@ -13,7 +13,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Add New Alumni</h5>
+        <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Tambah Alumni Baru</h5>
     </div>
 
     <form method="POST" action="{{ route('alumni.store') }}" enctype="multipart/form-data">
