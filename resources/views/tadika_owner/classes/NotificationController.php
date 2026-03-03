@@ -11,6 +11,6 @@ class NotificationController extends Controller
         $notification = auth()->user()->notifications()->findOrFail($id);
         $notification->delete();
 
-        return back()->with('success', 'Message deleted successfully.');
+        return back()->with('success', 'Mesej berjaya dipadam.');
     }
 }

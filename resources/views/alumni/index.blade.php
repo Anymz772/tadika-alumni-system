@@ -1,13 +1,13 @@
 @extends('layouts.cms')
 
-@section('title', 'Manage Alumni - Tadika Alumni CMS')
-@section('page-title', 'Manage Alumni')
-@section('header-title', 'Alumni Management')
-@section('header-subtitle', 'Manage all alumni records in the system')
+@section('title', 'Urus Alumni - Tadika Alumni CMS')
+@section('page-title', 'Urus Alumni')
+@section('header-title', 'Pengurusan Alumni')
+@section('header-subtitle', 'Urus semua rekod alumni dalam sistem')
 
 @section('header-buttons')
 <a href="{{ route('alumni.create') }}" class="btn btn-primary">
-    <i class="fas fa-plus me-2"></i> Add New Alumni
+    <i class="fas fa-plus me-2"></i> Tambah Alumni Baru
 </a>
 @endsection
 
@@ -17,39 +17,39 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filters</h5>
-                    <span class="badge bg-primary">{{ $alumni->total() }} Records Found</span>
+                    <h5 class="mb-0"><i class="fas fa-filter me-2"></i> Penapis</h5>
+                    <span class="badge bg-primary">{{ $alumni->total() }} Rekod Ditemui</span>
                 </div>
             </div>
             <div class="card-body">
                 <form method="GET" action="{{ route('alumni.index') }}" class="row g-3">
                     <div class="col-md-3">
-                        <label class="form-label">Search Name/Email</label>
+                        <label class="form-label">Cari Nama/Email</label>
                         <input type="text" name="search" class="form-control"
-                            value="{{ request('search') }}" placeholder="Search...">
+                            value="{{ request('search') }}" placeholder="Cari...">
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label">Graduation Year From</label>
+                        <label class="form-label">Tahun Graduasi Dari</label>
                         <input type="number" name="year_from" class="form-control"
-                            value="{{ request('year_from') }}" placeholder="e.g., 2010" min="2000" max="{{ date('Y') }}">
+                            value="{{ request('year_from') }}" placeholder="cth. 2010" min="2000" max="{{ date('Y') }}">
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label">Graduation Year To</label>
+                        <label class="form-label">Tahun Graduasi Hingga</label>
                         <input type="number" name="year_to" class="form-control"
-                            value="{{ request('year_to') }}" placeholder="e.g., 2020" min="2000" max="{{ date('Y') }}">
+                            value="{{ request('year_to') }}" placeholder="cth. 2020" min="2000" max="{{ date('Y') }}">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">CCompany</label>
+                        <label class="form-label">Syarikat</label>
                         <input type="text" name="company" class="form-control"
-                            value="{{ request('company') }}" placeholder="Company name">
+                            value="{{ request('company') }}" placeholder="Nama syarikat">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <div class="btn-group w-100">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-search me-2"></i> Search
+                                <i class="fas fa-search me-2"></i> Cari
                             </button>
                             <a href="{{ route('alumni.index') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-redo me-2"></i> Reset
+                                <i class="fas fa-redo me-2"></i> Set Semula
                             </a>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-users me-2"></i>Alumni List</h5>
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i>Senarai Alumni</h5>
             </div>
 
             <div class="card-body">
@@ -87,11 +87,11 @@
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>
-                                <th>Alumni Information</th>
-                                <th>Graduation</th>
-                                <th>Contact</th>
-                                <th>Company</th>
-                                <th class="text-center">Actions</th>
+                                <th>Maklumat Alumni</th>
+                                <th>Graduasi</th>
+                                <th>Kenalan</th>
+                                <th>Syarikat</th>
+                                <th class="text-center">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,14 +139,14 @@
                                 </td>
                                 <td>
                                     @if($item->alumni_status === 'studying')
-                                    <div><strong>{{ $item->institution ?? 'Institution not specified' }}</strong></div>
-                                    <div class="small text-muted"><span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span></div>
+                                    <div><strong>{{ $item->institution ?? 'Institusi tidak ditetapkan' }}</strong></div>
+                                    <div class="small text-muted"><span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Sedang belajar</span></div>
                                     @elseif($item->alumni_status === 'working')
-                                    <div><strong>{{ $item->company ?? 'Company not specified' }}</strong></div>
-                                    <div class="small text-muted">{{ $item->job_position ?? 'Position not specified' }}</div>
-                                    <div class="small text-muted"><span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span></div>
+                                    <div><strong>{{ $item->company ?? 'Syarikat tidak ditetapkan' }}</strong></div>
+                                    <div class="small text-muted">{{ $item->job_position ?? 'Jawatan tidak ditetapkan' }}</div>
+                                    <div class="small text-muted"><span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Bekerja</span></div>
                                     @else
-                                    <span class="text-muted">Not specified</span>
+                                    <span class="text-muted">Tidak ditetapkan</span>
                                     @endif
                                 </td>
                                 <td>
@@ -162,7 +162,7 @@
 
                                         <form action="{{ route('alumni.destroy', $item->alumni_id) }}" method="POST"
                                             class="d-inline"
-                                            onsubmit="return confirm('Are you sure you want to delete {{ $item->alumni_name }}?')">
+                                            onsubmit="return confirm('Adakah anda pasti mahu memadam {{ $item->alumni_name }}?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">
@@ -177,7 +177,7 @@
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Alumni Details: {{ $item->alumni_name }}</h5>
+                                            <h5 class="modal-title">Butiran Alumni: {{ $item->alumni_name }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
@@ -198,27 +198,27 @@
                                                     <p class="text-muted">{{ $item->job_position ?? 'Alumni' }}</p>
 
                                                     <div class="mt-3">
-                                                        <span class="badge bg-primary">{{ $item->grad_year }} Graduate</span>
+                                                        <span class="badge bg-primary">Graduan {{ $item->grad_year }}</span>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-8">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <h6 class="text-primary">Contact Information</h6>
+                                                            <h6 class="text-primary">Maklumat Kenalan</h6>
                                                             <p><i class="fas fa-envelope me-2 text-muted"></i>{{ $item->user_email }}</p>
                                                             <p><i class="fas fa-phone me-2 text-muted"></i>{{ $item->alumni_phone }}</p>
-                                                            <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->alumni_state ?? 'State not specified' }}</p>
-                                                            <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->alumni_address ?? 'Address not specified' }}</p>
+                                                            <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->alumni_state ?? 'Negeri tidak ditetapkan' }}</p>
+                                                            <p><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ $item->alumni_address ?? 'Alamat tidak ditetapkan' }}</p>
                                                         </div>
 
                                                         <div class="col-md-6">
-                                                            <h6 class="text-primary">Professional Information</h6>
+                                                            <h6 class="text-primary">Maklumat Profesional</h6>
                                                             <p><i class="fas fa-info-circle me-2 text-muted"></i>
                                                                 @if($item->alumni_status === 'studying')
-                                                                <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span>
+                                                                <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Sedang belajar</span>
                                                                 @elseif($item->alumni_status === 'working')
-                                                                <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span>
+                                                                <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Bekerja</span>
                                                                 @else
                                                                 Not specified
                                                                 @endif
@@ -229,9 +229,9 @@
                                                             <p><i class="fas fa-building me-2 text-muted"></i>{{ $item->company ?? 'Company not specified' }}</p>
                                                             <p><i class="fas fa-user-tie me-2 text-muted"></i>{{ $item->job_position ?? 'Position not specified' }}</p>
                                                             @endif
-                                                            <p><i class="fas fa-school me-2 text-muted"></i>{{ $item->tadika_name ?? 'Tadika not specified' }}</p>
-                                                            <p><i class="fas fa-birthday-cake me-2 text-muted"></i>{{ $item->age ? $item->age . ' years old' : 'Age not specified' }}</p>
-                                                            <p><i class="fas fa-id-card me-2 text-muted"></i>{{ $item->alumni_ic ?? 'IC not provided' }}</p>
+                                                            <p><i class="fas fa-school me-2 text-muted"></i>{{ $item->tadika_name ?? 'Tadika tidak ditetapkan' }}</p>
+                                                            <p><i class="fas fa-birthday-cake me-2 text-muted"></i>{{ $item->age ? $item->age . ' tahun' : 'Umur tidak ditetapkan' }}</p>
+                                                            <p><i class="fas fa-id-card me-2 text-muted"></i>{{ $item->alumni_ic ?? 'IC tidak disediakan' }}</p>
                                                         </div>
                                                     </div>
 
@@ -256,13 +256,13 @@
                                         </div>
                                         <div class="modal-footer">
                                             <a href="{{ route('alumni.edit', $item->alumni_id) }}" class="btn btn-warning">
-                                                <i class="fas fa-edit me-2"></i> Edit Profile
+                                                <i class="fas fa-edit me-2"></i> Sunting Profil
                                             </a>
                                             <a href="{{ route('alumni.show', $item->alumni_id) }}" class="btn btn-primary">
-                                                <i class="fas fa-external-link-alt me-2"></i> Full Details
+                                                <i class="fas fa-external-link-alt me-2"></i> Butiran Penuh
                                             </a>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
+                                                Tutup
                                             </button>
                                         </div>
                                     </div>
@@ -276,8 +276,8 @@
                 @if($alumni->hasPages())
                 <div class="d-flex justify-content-between align-items-center mt-3 small">
                     <div class="text-muted">
-                        Showing {{ $alumni->firstItem() }}–{{ $alumni->lastItem() }}
-                        of {{ $alumni->total() }}
+                        Menunjukkan {{ $alumni->firstItem() }}–{{ $alumni->lastItem() }}
+                        daripada {{ $alumni->total() }}
                     </div>
 
                     <div>
@@ -291,10 +291,10 @@
                     <div class="mb-3">
                         <i class="fas fa-users fa-3x text-muted"></i>
                     </div>
-                    <h4 class="text-muted">No Alumni Found</h4>
-                    <p class="text-muted">Start by adding your first alumni record.</p>
+                    <h4 class="text-muted">Tiada Alumni Ditemui</h4>
+                    <p class="text-muted">Mulakan dengan menambah rekod alumni pertama anda.</p>
                     <a href="{{ route('alumni.create') }}" class="btn btn-primary mt-2">
-                        <i class="fas fa-plus me-2"></i> Add First Alumni
+                        <i class="fas fa-plus me-2"></i> Tambah Alumni Pertama
                     </a>
                 </div>
                 @endif

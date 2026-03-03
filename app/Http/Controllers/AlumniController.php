@@ -85,7 +85,7 @@ class AlumniController extends Controller
             'parent_phone' => 'nullable|digits_between:10,15',
             'alumni_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'user_email.unique' => 'This email is already registered in our system.',
+            'user_email.unique' => 'Emel ini sudah didaftarkan dalam sistem kami.',
         ]);
 
         if ($validator->fails()) {
@@ -136,11 +136,11 @@ class AlumniController extends Controller
         } catch (\Throwable $e) {
             report($e);
             return redirect()->back()
-                ->withErrors(['alumni_create' => 'Unable to create alumni profile. Please check the form and try again.'])
+                ->withErrors(['alumni_create' => 'Tidak dapat membuat profil alumni. Sila semak borang dan cuba lagi.'])
                 ->withInput();
         }
 
-        return redirect()->route('alumni.show', $alumni->alumni_id)->with('success', 'Alumni account created successfully!');
+        return redirect()->route('alumni.show', $alumni->alumni_id)->with('success', 'Akaun alumni berjaya dibuat!');
     }
 
     public function show(Alumni $alumni)
@@ -234,7 +234,7 @@ class AlumniController extends Controller
             }
         });
 
-        return redirect()->route('alumni.index')->with('success', 'Alumni and Login credentials updated successfully.');
+        return redirect()->route('alumni.index')->with('success', 'Maklumat alumni dan kelayakan log masuk berjaya dikemas kini.');
     }
 
     // Delete alumni
@@ -248,7 +248,7 @@ class AlumniController extends Controller
         // 2. Delete the actual Alumni profile record
         $alumni->delete();
 
-        return redirect()->route('alumni.index')->with('success', 'Alumni deleted successfully.');
+        return redirect()->route('alumni.index')->with('success', 'Alumni berjaya dipadam.');
     }
 
     public function resetPassword(Request $request, Alumni $alumni)
@@ -261,7 +261,7 @@ class AlumniController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return back()->with('success', 'Password reset successfully for ' . $alumni->alumni_name);
+        return back()->with('success', 'Kata laluan berjaya diset semula untuk ' . $alumni->alumni_name);
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int

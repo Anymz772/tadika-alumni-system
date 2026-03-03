@@ -1,13 +1,13 @@
 @extends('layouts.public')
 
-@section('title', 'Login - Tadika Alumni System')
+@section('title', 'Log Masuk - Sistem Alumni Tadika')
 
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header text-center">
-                    <h4 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Login</h4>
+                    <h4 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Log Masuk</h4>
                 </div>
                 <div class="card-body">
                     @if (session('status'))

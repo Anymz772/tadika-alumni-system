@@ -2,6 +2,6 @@
     <body>
         <p>{{ $messageBody }}</p>
         <hr>
-        <p>This message was sent by your Tadika owner via the alumni system.</p>
+        <p>Mesej ini dihantar oleh pemilik Tadika anda melalui sistem alumni.</p>
     </body>
 </html>

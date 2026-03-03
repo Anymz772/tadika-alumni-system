@@ -31,7 +31,7 @@ class ProfileController extends Controller
         $alumni = $user->alumni;
 
         if (!$alumni) {
-            return redirect()->route('profile.create')->with('info', 'Please complete your alumni profile.');
+            return redirect()->route('profile.create')->with('info', 'Sila lengkapkan profil alumni anda.');
         }
 
         $messages = $user->notifications()
@@ -97,13 +97,13 @@ class ProfileController extends Controller
         });
 
         if ($request->alumni_status === 'studying' && empty($request->institution)) {
-            $validator->errors()->add('institution', 'Institution Name is required when studying.');
+            $validator->errors()->add('institution', 'Nama Institusi diperlukan apabila sedang belajar.');
         }
         if ($request->alumni_status === 'working' && empty($request->company)) {
-            $validator->errors()->add('company', 'Company Name is required when working.');
+            $validator->errors()->add('company', 'Nama Syarikat diperlukan apabila bekerja.');
         }
         if ($request->alumni_status === 'working' && empty($request->job_position)) {
-            $validator->errors()->add('job_position', 'Job Position is required when working.');
+            $validator->errors()->add('job_position', 'Jawatan diperlukan apabila bekerja.');
         }
 
         $validator->validate();
@@ -140,7 +140,7 @@ class ProfileController extends Controller
 
         Alumni::create($createData);
 
-        return redirect()->route('profile.show')->with('success', 'Alumni profile created successfully!');
+        return redirect()->route('profile.show')->with('success', 'Profil alumni berjaya dibuat!');
     }
 
     public function edit()
@@ -149,7 +149,7 @@ class ProfileController extends Controller
         $alumni = $user->alumni;
 
         if (!$alumni) {
-            return redirect()->route('profile.create')->with('error', 'Please create your alumni profile first.');
+            return redirect()->route('profile.create')->with('error', 'Sila buat profil alumni anda terlebih dahulu.');
         }
 
         return view('profile.edit', compact('alumni'));
@@ -192,13 +192,13 @@ class ProfileController extends Controller
         });
 
         if ($request->alumni_status === 'studying' && empty($request->institution)) {
-            $validator->errors()->add('institution', 'Institution Name is required when studying.');
+            $validator->errors()->add('institution', 'Nama Institusi diperlukan apabila sedang belajar.');
         }
         if ($request->alumni_status === 'working' && empty($request->company)) {
-            $validator->errors()->add('company', 'Company Name is required when working.');
+            $validator->errors()->add('company', 'Nama Syarikat diperlukan apabila bekerja.');
         }
         if ($request->alumni_status === 'working' && empty($request->job_position)) {
-            $validator->errors()->add('job_position', 'Job Position is required when working.');
+            $validator->errors()->add('job_position', 'Jawatan diperlukan apabila bekerja.');
         }
 
         $validator->validate();
@@ -244,7 +244,7 @@ class ProfileController extends Controller
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
+        return redirect()->route('profile.show')->with('success', 'Profil berjaya dikemas kini.');
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int

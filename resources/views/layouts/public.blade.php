@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,23 +119,23 @@
     <img src="{{ asset('images/tadika-logo.png') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
 </div>
                         <div class="logo-text">
-                            <h3>TADIKA ALUMNI NETWORK</h3>
-                            <p>Connecting Graduates Since 2000</p>
+                            <h3>RANGKAIAN ALUMNI TADIKA</h3>
+                            <p>Menghubungkan Graduan Sejak 2000</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 text-end">
                     @if(auth()->check())
-                        <span class="me-3">Welcome, {{ auth()->user()->user_name }}</span>
+                        <span class="me-3">Selamat datang, {{ auth()->user()->user_name }}</span>
                         <form method="POST" action="{{ route('logout') }}" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-light btn-sm">
-                                <i class="fas fa-sign-out-alt me-1"></i> Logout
+                                <i class="fas fa-sign-out-alt me-1"></i> Log Keluar
                             </button>
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-light">
-                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                            <i class="fas fa-sign-in-alt me-1"></i> Log Masuk
                         </a>
                     @endif
                 </div>
@@ -181,8 +181,8 @@
     <img src="{{ asset('images/tadika-logo.png') }}" alt="Tadika Logo" style="width: 50px; height: 50px;">
 </div>
                         <div class="logo-text">
-                            <h5>TADIKA ALUMNI NETWORK</h5>
-                            <p>Building lasting connections</p>
+                            <h5>RANGKAIAN ALUMNI TADIKA</h5>
+                            <p>Membina hubungan berkekalan</p>
                         </div>
                     </div>
                     <p class="mt-3" style="color: #bdc3c7;">
@@ -191,12 +191,12 @@
                     </p>
                 </div>
                 <div class="col-md-4">
-                    <h5>Quick Links</h5>
+                    <h5>Pautan Pantas</h5>
                     <div class="footer-links mt-3">
-                        <a href="{{ url('/') }}"><i class="fas fa-home me-1"></i> Home</a><br>
-                        <a href="{{ route('alumni.register') }}"><i class="fas fa-user-plus me-1"></i> Register</a><br>
-                        <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> Login</a><br>
-                        <a href="#"><i class="fas fa-question-circle me-1"></i> FAQ</a>
+                        <a href="{{ url('/') }}"><i class="fas fa-home me-1"></i> Laman Utama</a><br>
+                        <a href="{{ route('alumni.register') }}"><i class="fas fa-user-plus me-1"></i> Daftar</a><br>
+                        <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> Log Masuk</a><br>
+                        <a href="#"><i class="fas fa-question-circle me-1"></i> Soalan Lazim</a>
                     </div>
                 </div>
                 <div class="col-md-4">

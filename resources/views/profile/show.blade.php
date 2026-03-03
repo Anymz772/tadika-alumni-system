@@ -1,9 +1,9 @@
 @extends('layouts.cms')
 
-@section('title', 'My Alumni Profile')
-@section('page-title', 'My Profile')
-@section('header-title', 'My Alumni Profile')
-@section('header-subtitle', 'View and manage your alumni information')
+@section('title', 'Profil Alumni Saya')
+@section('page-title', 'Profil Saya')
+@section('header-title', 'Profil Alumni Saya')
+@section('header-subtitle', 'Lihat dan urus maklumat alumni anda')
 
 @section('content')
 <div class="row">
@@ -24,14 +24,14 @@
                 <h4>{{ $alumni->alumni_name }}</h4>
                 <p class="text-muted">{{ $alumni->job_position ?? 'Alumni' }}</p>
                 <div class="mt-2">
-                    <span class="badge bg-primary">{{ $alumni->grad_year }} Graduate</span>
+                    <span class="badge bg-primary">Graduan {{ $alumni->grad_year }}</span>
                 </div>
             </div>
         </div>
 
         <div class="card mt-3">
             <div class="card-header">
-                <h6 class="mb-0"><i class="fas fa-users me-2"></i>Parents</h6>
+                <h6 class="mb-0"><i class="fas fa-users me-2"></i>Ibu Bapa</h6>
             </div>
             <div class="card-body">
                 <p><strong>Father:</strong> {{ $alumni->father_name }}</p>
@@ -44,7 +44,7 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Profile Details</h6>
+                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Butiran Profil</h6>
             </div>
             <div class="card-body">
                 @if(session('success'))
@@ -56,31 +56,31 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Email:</strong><br>{{ $alumni->alumni_email }}</p>
-                        <p><strong>Contact Number:</strong><br>{{ $alumni->alumni_phone }}</p>
-                        <p><strong>IC Number:</strong><br>{{ $alumni->alumni_ic ?? 'N/A' }}</p>
-                        <p><strong>Age:</strong><br>{{ $alumni->age ?? 'N/A' }}</p>
-                        <p><strong>Gender:</strong><br>{{ ucfirst($alumni->gender) ?? 'N/A' }}</p>
+                        <p><strong>E-mel:</strong><br>{{ $alumni->alumni_email }}</p>
+                        <p><strong>Nombor Kenalan:</strong><br>{{ $alumni->alumni_phone }}</p>
+                        <p><strong>No. IC:</strong><br>{{ $alumni->alumni_ic ?? 'N/A' }}</p>
+                        <p><strong>Umur:</strong><br>{{ $alumni->age ?? 'N/A' }}</p>
+                        <p><strong>Jantina:</strong><br>{{ ucfirst($alumni->gender) ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Current Status:</strong><br>
                             @if($alumni->alumni_status === 'studying')
-                            <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Studying</span>
+                            <span class="badge bg-info"><i class="fas fa-graduation-cap me-1"></i> Sedang belajar</span>
                             @elseif($alumni->alumni_status === 'working')
-                            <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Working</span>
+                            <span class="badge bg-success"><i class="fas fa-briefcase me-1"></i> Bekerja</span>
                             @else
                             N/A
                             @endif
                         </p>
                         @if($alumni->alumni_status === 'studying')
-                        <p><strong>Institution:</strong><br>{{ $alumni->institution ?? 'N/A' }}</p>
+                        <p><strong>Institusi:</strong><br>{{ $alumni->institution ?? 'N/A' }}</p>
                         @elseif($alumni->alumni_status === 'working')
-                        <p><strong>Company:</strong><br>{{ $alumni->company ?? 'N/A' }}</p>
-                        <p><strong>Position:</strong><br>{{ $alumni->job_position ?? 'N/A' }}</p>
+                        <p><strong>Syarikat:</strong><br>{{ $alumni->company ?? 'N/A' }}</p>
+                        <p><strong>Jawatan:</strong><br>{{ $alumni->job_position ?? 'N/A' }}</p>
                         @endif
-                        <p><strong>Tadika Name:</strong><br>{{ $alumni->tadika_name ?? 'N/A' }}</p>
-                        <p><strong>State:</strong><br>{{ $alumni->alumni_state ?? 'N/A' }}</p>
-                        <p><strong>Address:</strong><br>{{ $alumni->alumni_address ?? 'N/A' }}</p>
+                        <p><strong>Nama Tadika:</strong><br>{{ $alumni->tadika_name ?? 'N/A' }}</p>
+                        <p><strong>Negeri:</strong><br>{{ $alumni->alumni_state ?? 'N/A' }}</p>
+                        <p><strong>Alamat:</strong><br>{{ $alumni->alumni_address ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
@@ -107,18 +107,18 @@
 
         <div class="card mt-3">
             <div class="card-header">
-                <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Quick Actions</h6>
+                <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Tindakan</h6>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <a href="{{ route('profile.edit') }}" class="btn btn-warning w-100">
-                            <i class="fas fa-edit me-2"></i> Edit Profile
+                            <i class="fas fa-edit me-2"></i> Sunting Profil
                         </a>
                     </div>
                     <div class="col-md-6">
                         <a href="{{ url('/dashboard') }}" class="btn btn-primary w-100">
-                            <i class="fas fa-home me-2"></i> Dashboard
+                            <i class="fas fa-home me-2"></i> Papan Pemuka
                         </a>
                     </div>
                 </div>
@@ -127,8 +127,8 @@
 
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="mb-0"><i class="fas fa-envelope me-2"></i>Messages From Tadika</h6>
-                <small class="text-muted">Latest 20</small>
+                <h6 class="mb-0"><i class="fas fa-envelope me-2"></i>Mesej Dari Tadika</h6>
+                <small class="text-muted">20 Terakhir</small>
             </div>
             <div class="card-body">
                 @if(isset($messages) && $messages->count())
@@ -144,11 +144,11 @@
                                 <div class="text-end">
                                     <small class="text-muted d-block mb-2">{{ $item->created_at?->format('d M Y, H:i') }}</small>
                                     <form action="{{ route('notifications.destroy', $item->id) }}" method="POST"
-                                        onsubmit="return confirm('Delete this message?')">
+                                        onsubmit="return confirm('Padam mesej ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash me-1"></i>Delete
+                                            <i class="fas fa-trash me-1"></i>Padam
                                         </button>
                                     </form>
                                 </div>
@@ -157,7 +157,7 @@
                         </div>
                     @endforeach
                 @else
-                    <p class="text-muted mb-0">No in-app messages yet.</p>
+                    <p class="text-muted mb-0">Tiada mesej dalam aplikasi lagi.</p>
                 @endif
             </div>
         </div>

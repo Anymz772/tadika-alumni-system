@@ -201,16 +201,16 @@
             @if (auth()->user()->isAdmin())
                 <a href="{{ route('admin.dashboard') }}"
                     class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                    <i class="bi bi-speedometer2"></i> Papan Pemuka
                 </a>
             @elseif(auth()->user()->isTadika())
                 <a href="{{ route('tadika.dashboard') }}"
                     class="nav-link {{ Request::is('tadika/dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                    <i class="bi bi-speedometer2"></i> Papan Pemuka
                 </a>
             @elseif(auth()->user()->isAlumni())
                 <a href="{{ route('profile.show') }}" class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
-                    <i class="bi bi-person-circle"></i> Dashboard
+                    <i class="bi bi-person-circle"></i> Papan Pemuka
                     @if($unreadInAppMessages > 0)
                         <span class="badge bg-warning text-dark ms-auto rounded-pill">{{ $unreadInAppMessages }}</span>
                     @endif
@@ -283,14 +283,14 @@
                 </button>
 
                 <div class="d-none d-md-block">
-                    <h5 class="mb-0 fw-bold text-primary">@yield('page-title', 'Dashboard')</h5>
+                    <h5 class="mb-0 fw-bold text-primary">@yield('page-title', 'Papan Pemuka')</h5>
                     <small class="text-muted">Selamat datang, {{ Auth::user()->user_name }}</small>
                 </div>
             </div>
 
             @if(auth()->user()->isAlumni())
                 <a href="{{ route('profile.show') }}" class="btn btn-white border rounded-pill px-3 py-1 shadow-sm me-2">
-                    <i class="fas fa-envelope me-1"></i> Messages
+                    <i class="fas fa-envelope me-1"></i> Mesej
                     @if($unreadInAppMessages > 0)
                         <span class="badge bg-danger ms-1 rounded-pill">{{ $unreadInAppMessages }}</span>
                     @endif

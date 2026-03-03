@@ -1,13 +1,13 @@
 @extends('layouts.cms')
 
-@section('title', 'Manage Tadikas - Tadika Alumni CMS')
-@section('page-title', 'Manage Tadikas')
-@section('header-title', 'Tadika Management')
-@section('header-subtitle', 'Manage all tadika records in the system')
+@section('title', 'Urus Tadika - Tadika Alumni CMS')
+@section('page-title', 'Urus Tadika')
+@section('header-title', 'Pengurusan Tadika')
+@section('header-subtitle', 'Urus semua rekod tadika dalam sistem')
 
 @section('header-buttons')
 <a href="{{ route('tadika.create') }}" class="btn btn-primary">
-    <i class="fas fa-plus me-2"></i> Add New Tadika
+    <i class="fas fa-plus me-2"></i> Tambah Tadika Baru
 </a>
 @endsection
 
@@ -17,33 +17,33 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filters</h5>
-                    <span class="badge bg-primary">{{ $tadikas->total() }} Records Found</span>
+                    <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Penapis</h5>
+                    <span class="badge bg-primary">{{ $tadikas->total() }} Rekod Ditemui</span>
                 </div>
             </div>
             <div class="card-body">
                 <form method="GET" action="{{ route('tadika.index') }}" class="row g-3">
                     <div class="col-md-4">
-                        <label class="form-label">Search Name/Email/Phone</label>
+                        <label class="form-label">Cari Nama/Email/Telefon</label>
                         <input type="text" name="search" class="form-control"
-                            value="{{ request('search') }}" placeholder="Search...">
+                            value="{{ request('search') }}" placeholder="Cari...">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">District</label>
                         <input type="text" name="district" class="form-control"
-                            value="{{ request('district') }}" placeholder="District name">
+                            value="{{ request('district') }}" placeholder="Nama daerah">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">State</label>
                         <input type="text" name="state" class="form-control"
-                            value="{{ request('state') }}" placeholder="State name">
+                            value="{{ request('state') }}" placeholder="Nama negeri">
                     </div>
                     <div class="col-md-12 d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search me-2"></i> Search
+                            <i class="fas fa-search me-2"></i> Cari
                         </button>
                         <a href="{{ route('tadika.index') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-redo me-2"></i> Reset
+                            <i class="fas fa-redo me-2"></i> Tetapkan Semula
                         </a>
                     </div>
                 </form>
@@ -70,7 +70,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-school me-2"></i>Tadika List</h5>
+                <h5 class="mb-0"><i class="fas fa-school me-2"></i>Senarai Tadika</h5>
             </div>
 
             <div class="card-body">
@@ -80,10 +80,10 @@
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>
-                                <th>Tadika Information</th>
-                                <th>Registration</th>
-                                <th>Contact</th>
-                                <th>Owner</th>
+                                <th>Maklumat Tadika</th>
+                                <th>Daftar</th>
+                                <th>Kenalan</th>
+                                <th>Pemilik</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -149,7 +149,7 @@
 
                                         <form action="{{ route('tadika.destroy', $item->tadika_id) }}" method="POST"
                                             class="d-inline"
-                                            onsubmit="return confirm('Are you sure you want to delete {{ $item->tadika_name }}? This will also delete the owner account.')">
+                                            onsubmit="return confirm('Adakah anda pasti mahu memadam {{ $item->tadika_name }}? Ini juga akan memadam akaun pemilik.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">
@@ -164,7 +164,7 @@
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Tadika Details: {{ $item->tadika_name }}</h5>
+                                            <h5 class="modal-title">Butiran Tadika: {{ $item->tadika_name }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
@@ -185,13 +185,13 @@
                                                     <p class="text-muted">Reg No: {{ $item->tadika_reg_no }}</p>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <h6 class="fw-bold mb-3">Information</h6>
+                                                    <h6 class="fw-bold mb-3">Maklumat</h6>
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>Phone:</strong></div>
+                                                        <div class="col-sm-4"><strong>Telefon:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_phone }}</div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>Email:</strong></div>
+                                                        <div class="col-sm-4"><strong>E-mel:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_email }}</div>
                                                     </div>
                                                     <div class="row mb-2">
@@ -199,32 +199,32 @@
                                                         <div class="col-sm-8">{{ $item->tadika_address }}</div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>District:</strong></div>
+                                                        <div class="col-sm-4"><strong>Daerah:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_district }}</div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>State:</strong></div>
+                                                        <div class="col-sm-4"><strong>Negeri:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_state }}</div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>Postcode:</strong></div>
+                                                        <div class="col-sm-4"><strong>Poskod:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_postcode }}</div>
                                                     </div>
                                                     @if($item->tadika_location)
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>Location:</strong></div>
+                                                        <div class="col-sm-4"><strong>Lokasi:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_location }}</div>
                                                     </div>
                                                     @endif
                                                     <hr>
-                                                    <h6 class="fw-bold mb-3">Owner Information</h6>
+                                                    <h6 class="fw-bold mb-3">Maklumat Pemilik</h6>
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>Owner Name:</strong></div>
+                                                        <div class="col-sm-4"><strong>Nama Pemilik:</strong></div>
                                                         <div class="col-sm-8">{{ $item->tadika_owner }}</div>
                                                     </div>
                                                     @if($item->owner)
                                                     <div class="row mb-2">
-                                                        <div class="col-sm-4"><strong>Email:</strong></div>
+                                                        <div class="col-sm-4"><strong>E-mel:</strong></div>
                                                         <div class="col-sm-8">{{ $item->owner->user_email }}</div>
                                                     </div>
                                                     @endif
@@ -233,9 +233,9 @@
                                         </div>
                                         <div class="modal-footer">
                                             <a href="{{ route('tadika.edit', $item->tadika_id) }}" class="btn btn-warning">
-                                                <i class="fas fa-edit me-2"></i> Edit
+                                                <i class="fas fa-edit me-2"></i> Sunting
                                             </a>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                         </div>
                                     </div>
                                 </div>
@@ -253,9 +253,9 @@
                 @else
                 <div class="text-center py-5">
                     <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                    <p class="text-muted">No tadikas found.</p>
+                    <p class="text-muted">Tiada tadika dijumpai.</p>
                     <a href="{{ route('tadika.create') }}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus me-2"></i> Create First Tadika
+                        <i class="fas fa-plus me-2"></i> Buat Tadika Pertama
                     </a>
                 </div>
                 @endif

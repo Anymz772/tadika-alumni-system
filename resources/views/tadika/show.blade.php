@@ -1,16 +1,16 @@
 @extends('layouts.cms')
 
 @section('title', $tadika->tadika_name . ' - Tadika Alumni CMS')
-@section('page-title', 'Tadika Details')
+@section('page-title', 'Butiran Tadika')
 @section('header-title', $tadika->tadika_name)
-@section('header-subtitle', 'Registration: ' . $tadika->tadika_reg_no)
+@section('header-subtitle', 'Pendaftaran: ' . $tadika->tadika_reg_no)
 
 @section('header-buttons')
     <a href="{{ route('tadika.edit', $tadika->tadika_id) }}" class="btn btn-warning me-2">
-        <i class="fas fa-edit me-2"></i> Edit
+        <i class="fas fa-edit me-2"></i> Sunting
     </a>
     <a href="{{ route('tadika.index') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i> Back
+        <i class="fas fa-arrow-left me-2"></i> Kembali
     </a>
 @endsection
 
@@ -31,11 +31,11 @@
                     </div>
                     @endif
                     <h5 class="mt-3">{{ $tadika->tadika_name }}</h5>
-                    <p class="text-muted small">Reg No: {{ $tadika->tadika_reg_no }}</p>
+                    <p class="text-muted small">No Pendaftaran: {{ $tadika->tadika_reg_no }}</p>
                     
                     <div class="alert alert-info small mt-3" role="alert">
                         <i class="fas fa-users me-2"></i>
-                        <strong>Alumni Count:</strong> {{ $tadika->alumni->count() }}
+                        <strong>Bilangan Alumni:</strong> {{ $tadika->alumni->count() }}
                     </div>
                 </div>
             </div>
@@ -44,13 +44,13 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Tadika Information</h5>
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Maklumat Tadika</h5>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-phone me-2"></i>Phone
+                                <i class="fas fa-phone me-2"></i>Telefon
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_phone }}</p>
                         </div>
@@ -69,7 +69,7 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-map-pin me-2"></i>Address
+                                <i class="fas fa-map-pin me-2"></i>Alamat
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_address }}</p>
                         </div>
@@ -80,13 +80,13 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-location-dot me-2"></i>District
+                                <i class="fas fa-location-dot me-2"></i>Daerah
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_district }}</p>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-map me-2"></i>State
+                                <i class="fas fa-map me-2"></i>Negeri
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_state }}</p>
                         </div>
@@ -95,14 +95,14 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-mailbox me-2"></i>Postcode
+                                <i class="fas fa-mailbox me-2"></i>Poskod
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_postcode }}</p>
                         </div>
                         @if($tadika->tadika_location)
                         <div class="col-md-6">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-location me-2"></i>Location
+                                <i class="fas fa-location me-2"></i>Lokasi
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_location }}</p>
                         </div>
@@ -114,13 +114,13 @@
             @if($tadika->owner)
             <div class="card mt-3">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Owner Information</h5>
+                    <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Maklumat Pemilik</h5>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-secondary small text-uppercase mb-1">
-                                <i class="fas fa-user me-2"></i>Owner Name
+                                <i class="fas fa-user me-2"></i>Nama Pemilik
                             </h6>
                             <p class="mb-0">{{ $tadika->tadika_owner }}</p>
                         </div>
@@ -142,18 +142,18 @@
     @if($tadika->alumni->count() > 0)
     <div class="card mt-4">
         <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-users me-2"></i>Alumni from this Tadika ({{ $tadika->alumni->count() }})</h5>
+            <h5 class="mb-0"><i class="fas fa-users me-2"></i>Alumni dari Tadika ini ({{ $tadika->alumni->count() }})</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-sm table-hover">
                     <thead class="table-light">
                         <tr>
-                            <th>Alumni Name</th>
-                            <th>Email</th>
-                            <th>Graduation Year</th>
-                            <th>Company/Institution</th>
-                            <th>Actions</th>
+                            <th>Nama Alumni</th>
+                            <th>E-mel</th>
+                            <th>Tahun Graduasi</th>
+                            <th>Syarikat/Institusi</th>
+                            <th>Tindakan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -185,8 +185,8 @@
             @if($tadika->alumni->count() > 10)
             <div class="alert alert-info small mt-3">
                 <i class="fas fa-info-circle me-2"></i>
-                Showing 10 of {{ $tadika->alumni->count() }} alumni. 
-                <a href="{{ route('alumni.index', ['tadika_name' => $tadika->tadika_name]) }}" class="alert-link">View all</a>
+                Menunjukkan 10 daripada {{ $tadika->alumni->count() }} alumni. 
+                <a href="{{ route('alumni.index', ['tadika_name' => $tadika->tadika_name]) }}" class="alert-link">Lihat semua</a>
             </div>
             @endif
         </div>

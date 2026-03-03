@@ -112,11 +112,11 @@ class TadikaAdminController extends Controller
                 return Tadika::create($tadikaData);
             });
 
-            return redirect()->route('tadika.show', $tadika->tadika_id)->with('success', 'Tadika account created successfully!');
+            return redirect()->route('tadika.show', $tadika->tadika_id)->with('success', 'Akaun Tadika berjaya dibuat!');
         } catch (\Throwable $e) {
             report($e);
             return redirect()->back()
-                ->withErrors(['tadika_create' => 'Unable to create tadika. Please check the form and try again.'])
+                ->withErrors(['tadika_create' => 'Tidak dapat membuat tadika. Sila semak borang dan cuba lagi.'])
                 ->withInput();
         }
     }
@@ -209,11 +209,11 @@ class TadikaAdminController extends Controller
                 $tadika->owner->update($ownerUpdates);
             });
 
-            return redirect()->route('tadika.index')->with('success', 'Tadika and owner information updated successfully.');
+            return redirect()->route('tadika.index')->with('success', 'Maklumat tadika dan pemilik berjaya dikemas kini.');
         } catch (\Throwable $e) {
             report($e);
             return redirect()->back()
-                ->withErrors(['update_error' => 'Unable to update tadika. Please try again.'])
+                ->withErrors(['update_error' => 'Tidak dapat mengemas kini tadika. Sila cuba lagi.'])
                 ->withInput();
         }
     }
@@ -232,11 +232,11 @@ class TadikaAdminController extends Controller
                 $tadika->delete();
             });
 
-            return redirect()->route('tadika.index')->with('success', 'Tadika deleted successfully.');
+            return redirect()->route('tadika.index')->with('success', 'Tadika berjaya dipadam.');
         } catch (\Throwable $e) {
             report($e);
             return redirect()->back()
-                ->withErrors(['delete_error' => 'Unable to delete tadika. Please try again.']);
+                ->withErrors(['delete_error' => 'Tidak dapat memadam tadika. Sila cuba lagi.']);
         }
     }
 
@@ -251,10 +251,10 @@ class TadikaAdminController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
-            return back()->with('success', 'Password reset successfully for ' . $tadika->tadika_name);
+            return back()->with('success', 'Kata laluan berjaya diset semula untuk ' . $tadika->tadika_name);
         } catch (\Throwable $e) {
             report($e);
-            return back()->withErrors(['password_error' => 'Unable to reset password. Please try again.']);
+            return back()->withErrors(['password_error' => 'Tidak dapat menetapkan semula kata laluan. Sila cuba lagi.']);
         }
     }
 }

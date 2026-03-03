@@ -1,9 +1,9 @@
 @extends('layouts.cms')
 
-@section('title', 'Dashboard - Tadika Alumni CMS')
-@section('page-title', 'Dashboard')
-@section('header-title', 'CMS Dashboard')
-@section('header-subtitle', 'Welcome back, ' . Auth::user()->user_name)
+@section('title', 'Papan Pemuka - Tadika Alumni CMS')
+@section('page-title', 'Papan Pemuka')
+@section('header-title', 'Papan Pemuka CMS')
+@section('header-subtitle', 'Selamat kembali, ' . Auth::user()->user_name)
 
 @section('content')
     <div class="row">
@@ -12,7 +12,7 @@
                 <div class="card-body text-center">
                     <i class="fas fa-users fa-2x"></i>
                     <div class="count mt-2">{{ $stats['total_alumni'] }}</div>
-                    <div class="label">Total Alumni</div>
+                    <div class="label">Jumlah Alumni</div>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
                 <div class="card-body text-center">
                     <i class="fas fa-user-check fa-2x"></i>
                     <div class="count mt-2">{{ $stats['total_users'] }}</div>
-                    <div class="label">Total Users</div>
+                    <div class="label">Jumlah Pengguna</div>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                 <div class="card-body text-center">
                     <i class="fas fa-calendar-alt fa-2x"></i>
                     <div class="count mt-2">{{ $stats['recent_alumni'] }}</div>
-                    <div class="label">New This Year</div>
+                    <div class="label">Baru Tahun Ini</div>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 <div class="card-body text-center">
                     <i class="fas fa-chart-line fa-2x"></i>
                     <div class="count mt-2">{{ $stats['alumni_by_year']->count() }}</div>
-                    <div class="label">Graduation Years</div>
+                    <div class="label">Tahun Graduasi</div>
                 </div>
             </div>
         </div>
@@ -52,17 +52,17 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Alumni</h5>
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Alumni Terkini</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Graduation Year</th>
-                                    <th>Company/Institution</th>
-                                    <th>Actions</th>
+                                    <th>Nama</th>
+                                    <th>Tahun Graduasi</th>
+                                    <th>Syarikat/Institusi</th>
+                                    <th>Tindakan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,9 +73,9 @@
                                         <td>{{ $alumni->grad_year }}</td>
                                         <td>
                                             @if ($alumni->alumni_status === 'working')
-                                                {{ $alumni->company ?? 'Company not specified' }}
+                                                {{ $alumni->company ?? 'Syarikat tidak ditetapkan' }}
                                             @elseif($alumni->alumni_status === 'studying')
-                                                {{ $alumni->institution ?? 'Institution not specified' }}
+                                                {{ $alumni->institution ?? 'Institusi tidak ditetapkan' }}
                                             @else
                                                 <span class="text-muted">N/A</span>
                                             @endif
@@ -102,7 +102,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Graduation Years</h5>
+                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Tahun Graduasi</h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -118,14 +118,14 @@
 
             <div class="card mt-3">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Tindakan</h5>
                 </div>
                 <div class="card-body">
                     <a href="{{ route('alumni.create') }}" class="btn btn-primary w-100 mb-2">
-                        <i class="fas fa-user-plus me-2"></i> Add New Alumni
+                        <i class="fas fa-user-plus me-2"></i> Tambah Alumni Baru
                     </a>
                     <a href="{{ route('alumni.index') }}" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-list me-2"></i> View All Alumni
+                        <i class="fas fa-list me-2"></i> Lihat Semua Alumni
                     </a>
                 </div>
             </div>

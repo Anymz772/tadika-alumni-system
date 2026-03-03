@@ -1,23 +1,23 @@
 @extends('layouts.public')
 
-@section('title', 'Home - Tadika Alumni System')
+@section('title', 'Laman Utama - Sistem Alumni Tadika')
 @section('content')
 <div class="row align-items-center mb-5">
     <div class="col-md-6">
-        <h1 class="display-4 fw-bold mb-4">Welcome to Alumni Network</h1>
+        <h1 class="display-4 fw-bold mb-4">Selamat datang ke Rangkaian Alumni</h1>
         <p class="lead mb-4">
-            Reconnect with your classmates, stay updated with school news, 
-            and be part of our growing alumni community. Your journey continues here.
+            Sambungkan semula dengan rakan sekelas anda, kekal dikemas kini dengan berita sekolah,
+            dan jadilah sebahagian daripada komuniti alumni kami yang berkembang. Perjalanan anda berterusan di sini.
         </p>
         <div class="d-flex gap-3">
             <a href="{{ route('alumni.register') }}" class="btn btn-tadika-primary btn-lg">
-                <i class="fas fa-user-plus me-2"></i> Join as Alumni
+                <i class="fas fa-user-plus me-2"></i> Sertai sebagai Alumni
             </a>
             <a href="{{ route('tadika.register') }}" class="btn btn-outline-success btn-lg">
-                <i class="fas fa-school me-2"></i> Register Tadika
+                <i class="fas fa-school me-2"></i> Daftar Tadika
             </a>
             <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
-                <i class="fas fa-sign-in-alt me-2"></i> Member Login
+                <i class="fas fa-sign-in-alt me-2"></i> Log Masuk Ahli
             </a>
         </div>
     </div>
@@ -25,10 +25,10 @@
         <div class="card border-0">
             <div class="card-body text-center p-5">
                 <i class="fas fa-graduation-cap fa-6x text-primary mb-4"></i>
-                <h3 class="mb-3">Official Alumni Portal</h3>
+                <h3 class="mb-3">Portal Rasmi Alumni</h3>
                 <p class="text-muted">
-                    Exclusive platform for Tadika graduates to network, 
-                    share opportunities, and participate in alumni events.
+                    Platform eksklusif untuk graduan Tadika berhubung, berkongsi peluang,
+                    dan menyertai acara alumni.
                 </p>
             </div>
         </div>
@@ -36,12 +36,12 @@
 </div>
 
 
-<!-- Statistics -->
+<!-- Statistik -->
 <div class="row mb-5">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Alumni Network Statistics</h4>
+                <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Statistik Rangkaian Alumni</h4>
             </div>
             <div class="card-body">
                 <div class="row text-center">
@@ -49,19 +49,19 @@
                         <div class="display-4 fw-bold text-primary">
                             {{ \App\Models\Alumni::count() }}
                         </div>
-                        <p class="text-muted">Registered Alumni</p>
+                        <p class="text-muted">Alumni Berdaftar</p>
                     </div>
                     <div class="col-md-3 mb-3">
                         <div class="display-4 fw-bold text-success">
                             {{ \App\Models\Alumni::whereYear('grad_year', '>=', date('Y') - 5)->count() }}
                         </div>
-                        <p class="text-muted">Recent Graduates (5 years)</p>
+                        <p class="text-muted">Graduan Terkini (5 tahun)</p>
                     </div>
                     <div class="col-md-3 mb-3">
                         <div class="display-4 fw-bold text-info">
                             {{ \App\Models\Alumni::distinct('grad_year')->count('grad_year') }}
                         </div>
-                        <p class="text-muted">Graduation Batches</p>
+                        <p class="text-muted">Kumpulan Graduasi</p>
                     </div>
                 </div>
             </div>
@@ -69,10 +69,10 @@
     </div>
 </div>
 
-<!-- Features -->
+<!-- Ciri-ciri -->
 <div class="row">
     <div class="col-md-12">
-        <h3 class="mb-4 text-center">Why Join as Alumni?</h3>
+        <h3 class="mb-4 text-center">Mengapa Sertai sebagai Alumni?</h3>
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
@@ -80,9 +80,9 @@
                         <div class="mb-3">
                             <i class="fas fa-network-wired fa-3x text-primary"></i>
                         </div>
-                        <h5>Networking Opportunities</h5>
+                        <h5>Peluang Rangkaian</h5>
                         <p class="text-muted">
-                            Connect with alumni across different industries and build professional relationships.
+                            Berhubung dengan alumni dalam pelbagai industri dan bina hubungan profesional.
                         </p>
                     </div>
                 </div>
@@ -93,9 +93,9 @@
                         <div class="mb-3">
                             <i class="fas fa-briefcase fa-3x text-success"></i>
                         </div>
-                        <h5>Career Development</h5>
+                        <h5>Pembangunan Kerjaya</h5>
                         <p class="text-muted">
-                            Access job opportunities, mentorship programs, and career guidance from senior alumni.
+                            Akses peluang kerja, program bimbingan, dan panduan kerjaya daripada alumni senior.
                         </p>
                     </div>
                 </div>
@@ -106,9 +106,9 @@
                         <div class="mb-3">
                             <i class="fas fa-hands-helping fa-3x text-warning"></i>
                         </div>
-                        <h5>Give Back to School</h5>
+                        <h5>Menyumbang kepada Sekolah</h5>
                         <p class="text-muted">
-                            Participate in school events, mentor current students, and contribute to school development.
+                            Sertai acara sekolah, bimbing pelajar semasa, dan sumbang kepada pembangunan sekolah.
                         </p>
                     </div>
                 </div>
@@ -116,4 +116,5 @@
         </div>
     </div>
 </div>
+
 @endsection

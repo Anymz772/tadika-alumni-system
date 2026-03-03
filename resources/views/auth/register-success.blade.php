@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You - Tadika Alumni</title>
+    <title>Terima Kasih - Agen Alumni Tadika</title>
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -55,7 +55,7 @@
                 <i class="fas fa-check-circle"></i>
             </div>
             
-            <h2 class="mb-3">Thank You!</h2>
+            <h2 class="mb-3">Terima Kasih!</h2>
             
             @if(session('success'))
                 <div class="alert alert-success">
@@ -64,19 +64,19 @@
             @endif
             
             <p class="mb-4">
-                Your alumni registration has been submitted successfully. 
-                Our team will review your information and you will be notified once your account is approved.
+                Pendaftaran alumni anda telah dihantar dengan jayanya. 
+                Pasukan kami akan menyemak maklumat anda dan anda akan dimaklumkan setelah akaun anda diluluskan.
             </p>
             
             <div class="row mt-4">
                 <div class="col-md-6 mb-2">
                     <a href="{{ route('alumni.register') }}" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-plus me-2"></i> Submit Another
+                        <i class="fas fa-plus me-2"></i> Hantar Lagi
                     </a>
                 </div>
                 <div class="col-md-6 mb-2">
                     <a href="{{ url('/') }}" class="btn btn-home w-100">
-                        <i class="fas fa-home me-2"></i> Back to Home
+                        <i class="fas fa-home me-2"></i> Kembali ke Utama
                     </a>
                 </div>
             </div>
@@ -86,11 +86,11 @@
             <div class="text-muted small">
                 <p class="mb-1">
                     <i class="fas fa-clock me-1"></i> 
-                    Approval usually takes 1-2 working days
+                    Kelulusan biasanya mengambil masa 1-2 hari bekerja
                 </p>
                 <p class="mb-0">
                     <i class="fas fa-envelope me-1"></i> 
-                    You will receive an email with login credentials upon approval
+                    Anda akan menerima emel dengan kelayakan log masuk setelah diluluskan
                 </p>
             </div>
         </div>

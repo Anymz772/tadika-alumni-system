@@ -117,7 +117,7 @@ class AlumniRegisterController extends Controller
         } catch (\Throwable $e) {
             report($e);
             return redirect()->back()
-                ->withErrors(['alumni_create' => 'Registration failed while creating alumni profile. Please try again.'])
+                ->withErrors(['alumni_create' => 'Pendaftaran gagal semasa membuat profil alumni. Sila cuba lagi.'])
                 ->withInput();
         }
 
@@ -125,7 +125,7 @@ class AlumniRegisterController extends Controller
         auth()->login($user);
 
         // Redirect to profile
-        return redirect()->route('profile.show')->with('success', 'Registration successful! Welcome to Tadika Alumni System.');
+        return redirect()->route('profile.show')->with('success', 'Pendaftaran berjaya! Selamat datang ke Sistem Alumni Tadika.');
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int
