@@ -182,6 +182,8 @@ class AlumniController extends Controller
             'mother_name' => 'nullable|string|max:255',
             'parent_phone' => 'nullable|digits_between:10,15',
             'alumni_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo_childhood' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo_current' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -215,9 +217,28 @@ class AlumniController extends Controller
                 unlink(public_path('storage/' . $alumni->alumni_photo));
             }
             $filename = time() . '_' . $request->file('alumni_photo')->getClientOriginalName();
-            $request->file('alumni_photo')->move(public_path('storage/alumni_photos'), $filename);
-            $updateData['alumni_photo'] = 'alumni_photos/' . $filename;
+            $path = $request->file('alumni_photo')->storeAs('alumni_photos', $filename, 'public');
+            $updateData['alumni_photo'] = $path;
         }
+
+        if ($request->hasFile('photo_childhood')) {
+            if ($alumni->photo_childhood && file_exists(public_path('storage/' . $alumni->photo_childhood))) {
+                unlink(public_path('storage/' . $alumni->photo_childhood));
+            }
+            $filename = time() . '_childhood_' . $request->file('photo_childhood')->getClientOriginalName();
+            $path = $request->file('photo_childhood')->storeAs('alumni_then_now', $filename, 'public');
+            $updateData['photo_childhood'] = $path;
+        }
+
+        if ($request->hasFile('photo_current')) {
+            if ($alumni->photo_current && file_exists(public_path('storage/' . $alumni->photo_current))) {
+                unlink(public_path('storage/' . $alumni->photo_current));
+            }
+            $filename = time() . '_current_' . $request->file('photo_current')->getClientOriginalName();
+            $path = $request->file('photo_current')->storeAs('alumni_then_now', $filename, 'public');
+            $updateData['photo_current'] = $path;
+        }
+
 
         DB::transaction(function () use ($alumni, $request, $updateData) {
             $alumni->update($updateData);

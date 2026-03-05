@@ -39,6 +39,37 @@
                 <p><strong>Contact:</strong> {{ $alumni->parent_phone }}</p>
             </div>
         </div>
+
+        {{-- then & now photos --}}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-camera-retro me-2"></i>Gambar Dulu & Sekarang</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <p class="fw-bold mb-1">Kanak-kanak</p>
+                        @if($alumni->photo_childhood)
+                            <img src="{{ asset('storage/' . $alumni->photo_childhood) }}" alt="Childhood Photo" class="img-fluid rounded">
+                        @else
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <i class="fas fa-image fa-2x text-muted"></i>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="col-6">
+                        <p class="fw-bold mb-1">Sekarang</p>
+                        @if($alumni->photo_current)
+                            <img src="{{ asset('storage/' . $alumni->photo_current) }}" alt="Current Photo" class="img-fluid rounded">
+                        @else
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <i class="fas fa-image fa-2x text-muted"></i>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="col-md-8">

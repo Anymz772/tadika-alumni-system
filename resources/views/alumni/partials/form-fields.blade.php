@@ -154,3 +154,37 @@
     </div>
 </div>
 
+<div class="mb-3 border-top pt-3 mt-4">
+    <label class="form-label fw-bold">Then & Now Photos</label>
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Childhood Photo</label>
+            <div class="d-flex align-items-center gap-3">
+                @if ($alumni->photo_childhood)
+                    <img src="{{ asset('storage/' . $alumni->photo_childhood) }}" alt="Childhood Photo"
+                        class="img-thumbnail"
+                        style="width: 80px; height: 80px; object-fit: cover;">
+                @endif
+                <div class="flex-grow-1">
+                    <input type="file" class="form-control" name="photo_childhood" accept="image/*">
+                    <div class="form-text">Kosongkan jika anda tidak mahu menukar foto. Saiz maks: 2MB</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Current Photo</label>
+            <div class="d-flex align-items-center gap-3">
+                @if ($alumni->photo_current)
+                    <img src="{{ asset('storage/' . $alumni->photo_current) }}" alt="Current Photo"
+                        class="img-thumbnail"
+                        style="width: 80px; height: 80px; object-fit: cover;">
+                @endif
+                <div class="flex-grow-1">
+                    <input type="file" class="form-control" name="photo_current" accept="image/*">
+                    <div class="form-text">Kosongkan jika anda tidak mahu menukar foto. Saiz maks: 2MB</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

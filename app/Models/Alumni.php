@@ -31,6 +31,8 @@ class Alumni extends Model
         'parent_phone',                     // was 'parent_contact'
         'alumni_email',                     // was 'email'
         'alumni_photo',                     // was 'photo'
+        'photo_childhood',
+        'photo_current',
         'alumni_state',                     // was 'state'
         'tadika_name',                      // stays the same
         'gender',                           // stays the same

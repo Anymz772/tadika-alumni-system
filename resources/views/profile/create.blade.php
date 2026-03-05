@@ -1,15 +1,9 @@
 @extends('layouts.cms')
 
-@section('title', 'Edit My Profile')
-@section('page-title', 'Edit Profile')
-@section('header-title', 'Edit My Alumni Profile')
-@section('header-subtitle', 'Update your personal and professional information')
-
-@section('header-buttons')
-    <a href="{{ route('profile.show') }}" class="btn btn-info">
-        <i class="fas fa-eye me-2"></i> View Profile
-    </a>
-@endsection
+@section('title', 'Create My Profile')
+@section('page-title', 'Create Profile')
+@section('header-title', 'Create My Alumni Profile')
+@section('header-subtitle', 'Fill in your personal and professional information')
 
 @section('content')
 <div class="card shadow-sm">
@@ -27,24 +21,16 @@
                 ->orderBy('bandar_postcode')
                 ->pluck('bandar_postcode');
         @endphp
-        <h5 class="mb-0 text-primary"><i class="fas fa-user-edit me-2"></i>Edit Profile</h5>
+        <h5 class="mb-0 text-primary"><i class="fas fa-user-edit me-2"></i>Create Profile</h5>
     </div>
 
-    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('profile.store') }}" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
 
         <div class="card-body">
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i> Please fix the errors below.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
@@ -183,8 +169,7 @@
                 <div class="col-md-4 mb-3">
                     <label for="alumni_state" class="form-label">State</label>
                     <input type="text" class="form-control @error('alumni_state') is-invalid @enderror" 
-                           id="alumni_state" name="alumni_state" 
-                           value="{{ old('alumni_state', $alumni->alumni_state) }}" placeholder="e.g. Selangor">
+                           id="alumni_state" name="alumni_state" value="{{ old('alumni_state', $alumni->alumni_state) }}" placeholder="e.g. Selangor">
                     @error('alumni_state')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -328,7 +313,7 @@
                 <i class="fas fa-times me-1"></i> Cancel
             </a>
             <button type="submit" class="btn btn-primary px-4">
-                <i class="fas fa-save me-1"></i> Update Profile
+                <i class="fas fa-save me-1"></i> Create Profile
             </button>
         </div>
     </form>
