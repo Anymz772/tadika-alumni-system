@@ -8,6 +8,7 @@ use App\Http\Controllers\TadikaOwnerController;
 use App\Http\Controllers\Auth\AlumniRegisterController;
 use App\Http\Controllers\Auth\TadikaRegisterController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -89,6 +90,7 @@ Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
     Route::get('/profile/edit', [TadikaOwnerController::class, 'editProfile'])->name('tadika.profile.edit');
     Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.profile.update');
     Route::get('/alumni', [TadikaOwnerController::class, 'viewAlumniList'])->name('tadika.alumni');
+    Route::get('/alumni/{alumni}', [TadikaOwnerController::class, 'showAlumni'])->name('tadika.alumni.show');
 
     // Export alumni data to Excel
     Route::get('/alumni/export', [TadikaOwnerController::class, 'exportAlumniExcel'])->name('tadika.alumni.export');
@@ -114,6 +116,9 @@ Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
 
 // ================= ALUMNI PROFILE ROUTES =================
 Route::middleware(['auth'])->group(function () {
+    Route::get('/media/public/{path}', [MediaController::class, 'showPublic'])
+        ->where('path', '.*')
+        ->name('media.public');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');

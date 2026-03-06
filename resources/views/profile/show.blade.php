@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-body text-center">
                 @if($alumni->alumni_photo)
-                <img src="{{ asset('storage/' . $alumni->alumni_photo) }}"
+                <img src="{{ $alumni->alumni_photo_url }}"
                     alt="Profile Photo"
                     class="rounded-circle mb-3"
                     style="width: 100px; height: 100px; object-fit: cover;">
@@ -50,7 +50,7 @@
                     <div class="col-6">
                         <p class="fw-bold mb-1">Kanak-kanak</p>
                         @if($alumni->photo_childhood)
-                            <img src="{{ asset('storage/' . $alumni->photo_childhood) }}" alt="Childhood Photo" class="img-fluid rounded">
+                            <img src="{{ $alumni->photo_childhood_url }}" alt="Childhood Photo" class="img-fluid rounded">
                         @else
                             <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px;">
                                 <i class="fas fa-image fa-2x text-muted"></i>
@@ -60,7 +60,7 @@
                     <div class="col-6">
                         <p class="fw-bold mb-1">Sekarang</p>
                         @if($alumni->photo_current)
-                            <img src="{{ asset('storage/' . $alumni->photo_current) }}" alt="Current Photo" class="img-fluid rounded">
+                            <img src="{{ $alumni->photo_current_url }}" alt="Current Photo" class="img-fluid rounded">
                         @else
                             <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px;">
                                 <i class="fas fa-image fa-2x text-muted"></i>

@@ -48,4 +48,38 @@ class Alumni extends Model
     {
         return $this->belongsTo(Tadika::class, 'tadika_id', 'tadika_id');
     }
+
+    public function getAlumniPhotoUrlAttribute(): ?string
+    {
+        return $this->buildPhotoUrl($this->alumni_photo);
+    }
+
+    public function getPhotoChildhoodUrlAttribute(): ?string
+    {
+        return $this->buildPhotoUrl($this->photo_childhood);
+    }
+
+    public function getPhotoCurrentUrlAttribute(): ?string
+    {
+        return $this->buildPhotoUrl($this->photo_current);
+    }
+
+    private function buildPhotoUrl(?string $path): ?string
+    {
+        $path = trim((string) $path);
+        if ($path === '') {
+            return null;
+        }
+
+        $publicPath = public_path('storage/' . $path);
+        if (file_exists($publicPath)) {
+            return asset('storage/' . $path);
+        }
+
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            return route('media.public', ['path' => $path]);
+        }
+
+        return asset('storage/' . $path);
+    }
 }

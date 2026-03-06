@@ -106,4 +106,41 @@ class TadikaOwnerAlumniTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Send message');
     }
+
+    public function test_owner_can_click_view_alumni_profile_and_see_then_now_photos()
+    {
+        $owner = User::factory()->create(['user_role' => 'tadika']);
+        $tadika = Tadika::create([
+            'user_id' => $owner->user_id,
+            'tadika_name' => 'Sample Tadika',
+            'tadika_reg_no' => 'REG123',
+            'tadika_district' => 'Test',
+            'tadika_state' => 'Test',
+            'tadika_postcode' => '00000',
+        ]);
+
+        $alumni = Alumni::create([
+            'tadika_id' => $tadika->tadika_id,
+            'alumni_name' => 'Photo User',
+            'alumni_ic' => 'A123456789013',
+            'alumni_phone' => '0123456789',
+            'alumni_status' => 'studying',
+            'institution' => 'Test University',
+            'alumni_address' => 'Address',
+            'alumni_email' => 'photo@example.com',
+            'photo_childhood' => 'alumni_then_now/childhood.jpg',
+            'photo_current' => 'alumni_then_now/current.jpg',
+        ]);
+
+        $listResponse = $this->actingAs($owner)->get(route('tadika.alumni'));
+        $listResponse->assertStatus(200);
+        $listResponse->assertSee(route('tadika.alumni.show', $alumni));
+
+        $showResponse = $this->actingAs($owner)->get(route('tadika.alumni.show', $alumni));
+        $showResponse->assertStatus(200);
+        $showResponse->assertSee('Childhood');
+        $showResponse->assertSee('Current');
+        $showResponse->assertSee('alumni_then_now/childhood.jpg');
+        $showResponse->assertSee('alumni_then_now/current.jpg');
+    }
 }

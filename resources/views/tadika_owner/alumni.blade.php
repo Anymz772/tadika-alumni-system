@@ -100,7 +100,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <a href="{{ route('alumni.show', $item->alumni_id) }}" class="btn btn-sm btn-info" title="Lihat Profil Penuh">
+                                        <a href="{{ route('tadika.alumni.show', $item->alumni_id) }}" class="btn btn-sm btn-info" title="Lihat Profil Penuh">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="{{ route('tadika.alumni.edit', $item->alumni_id) }}" class="btn btn-sm btn-warning" title="Sunting">

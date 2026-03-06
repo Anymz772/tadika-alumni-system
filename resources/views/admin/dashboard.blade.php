@@ -62,6 +62,7 @@
                                     <th>Nama</th>
                                     <th>Tahun Graduasi</th>
                                     <th>Syarikat/Institusi</th>
+                                    <th>Foto</th>
                                     <th>Tindakan</th>
                                 </tr>
                             </thead>
@@ -79,6 +80,16 @@
                                             @else
                                                 <span class="text-muted">N/A</span>
                                             @endif
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                @if($alumni->photo_childhood)
+                                                    <img src="{{ asset('storage/' . $alumni->photo_childhood) }}" alt="Childhood Photo" class="img-fluid rounded me-2" style="width: 50px; height: 50px; object-fit: cover;">
+                                                @endif
+                                                @if($alumni->photo_current)
+                                                    <img src="{{ asset('storage/' . $alumni->photo_current) }}" alt="Current Photo" class="img-fluid rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                                @endif
+                                            </div>
                                         </td>
                                         <td>
                                             <a href="{{ route('alumni.show', $alumni->alumni_id) }}"

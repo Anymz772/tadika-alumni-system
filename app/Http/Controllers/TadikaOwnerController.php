@@ -119,17 +119,6 @@ class TadikaOwnerController extends Controller
             'tadika_logo' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        // Map form input names to the standardized database columns
-        if (array_key_exists('tadika_name', $data)) {
-            $data['name'] = $data['tadika_name'];
-            unset($data['tadika_name']);
-        }
-        
-        if (array_key_exists('tadika_email', $data)) {
-            $data['email'] = $data['tadika_email'];
-            unset($data['tadika_email']);
-        }
-
         $user = $request->user();
         $tadika = $user->ownedTadika;
 
@@ -165,6 +154,12 @@ class TadikaOwnerController extends Controller
         $alumni = $tadika->alumni()->with('user')->paginate(20);
 
         return view('tadika_owner.alumni', compact('tadika', 'alumni'));
+    }
+
+    public function showAlumni(\App\Models\Alumni $alumni)
+    {
+        $this->authorizeTadikaOwner($alumni);
+        return view('tadika_owner.alumni_show', compact('alumni'));
     }
 
     /**
@@ -357,9 +352,8 @@ class TadikaOwnerController extends Controller
             return null;
         }
 
-        // Updated query to reference the new 'name' column instead of 'tadika_name'
         $tadika = Tadika::query()
-            ->whereRaw('LOWER(TRIM(name)) = ?', [strtolower($name)])
+            ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower($name)])
             ->first();
 
         return $tadika?->tadika_id;
@@ -372,7 +366,7 @@ class TadikaOwnerController extends Controller
             return back()->with('error', 'Sila sediakan profil Tadika anda terlebih dahulu.');
         }
 
-        $fileName = 'Senarai_Alumni_' . str_replace(' ', '_', $tadika->name) . '_' . now()->format('Ymd') . '.xlsx';
+        $fileName = 'Senarai_Alumni_' . str_replace(' ', '_', $tadika->tadika_name) . '_' . now()->format('Ymd') . '.xlsx';
 
         return Excel::download(new AlumniExport($tadika->tadika_id), $fileName);
     }
