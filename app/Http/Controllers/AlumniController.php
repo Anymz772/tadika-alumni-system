@@ -54,7 +54,8 @@ class AlumniController extends Controller
 
     public function create()
     {
-        return view('alumni.create');
+        $tadikas = Tadika::query()->orderBy('tadika_name')->get(['tadika_id', 'tadika_name']);
+        return view('alumni.create', compact('tadikas'));
     }
 
     public function store(Request $request)
@@ -72,7 +73,8 @@ class AlumniController extends Controller
             'alumni_name' => 'required|string|max:255',
             'alumni_ic' => 'required|string|max:14',
             'grad_year' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
-            'tadika_name' => 'nullable|string|max:255',
+            'tadika_id' => 'nullable|string',
+            'other_tadika_name' => 'nullable|string|max:255|required_if:tadika_id,other',
             'alumni_state' => 'nullable|string|max:255',
             'gender' => 'nullable|in:male,female',
             'age' => 'nullable|integer|min:1|max:100',
@@ -105,12 +107,25 @@ class AlumniController extends Controller
                     'user_role' => 'alumni'
                 ]);
 
+                $tadikaId = null;
+                $tadikaName = null;
+
+                if ($request->tadika_id === 'other') {
+                    $tadikaName = $request->other_tadika_name;
+                } elseif ($request->tadika_id) {
+                    $tadika = Tadika::find($request->tadika_id);
+                    if ($tadika) {
+                        $tadikaId = $tadika->tadika_id;
+                        $tadikaName = $tadika->tadika_name;
+                    }
+                }
+
                 $alumniData = [
                     'user_id' => $user->user_id,
-                    'tadika_id' => $this->resolveTadikaIdByName($request->tadika_name),
+                    'tadika_id' => $tadikaId,
                     'alumni_name' => $request->alumni_name,
                     'alumni_ic' => $request->alumni_ic,
-                    'tadika_name' => $request->tadika_name,
+                    'tadika_name' => $tadikaName,
                     'alumni_state' => $request->alumni_state,
                     'gender' => $request->gender,
                     'age' => $request->age,
@@ -152,7 +167,8 @@ class AlumniController extends Controller
 
     public function edit(Alumni $alumni)
     {
-        return view('alumni.edit', compact('alumni'));
+        $tadikas = Tadika::query()->orderBy('tadika_name')->get(['tadika_id', 'tadika_name']);
+        return view('alumni.edit', compact('alumni', 'tadikas'));
     }
 
     public function update(Request $request, Alumni $alumni)

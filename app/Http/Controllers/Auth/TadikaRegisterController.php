@@ -16,23 +16,35 @@ class TadikaRegisterController extends Controller
 {
     public function create()
     {
-        $districts = DB::table('glo_bandar')
-            ->whereNotNull('bandar_nama')
-            ->distinct()
-            ->orderBy('bandar_nama')
-            ->pluck('bandar_nama');
-
         $states = DB::table('glo_bandar')
             ->distinct()
             ->orderBy('bandar_negeri')
             ->pluck('bandar_negeri');
 
+        return view('auth.tadika-register', compact('states'));
+    }
+
+    public function getDistricts(Request $request)
+    {
+        $districts = DB::table('glo_bandar')
+            ->where('bandar_negeri', $request->state)
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        return response()->json($districts);
+    }
+
+    public function getPostcodes(Request $request)
+    {
         $postcodes = DB::table('glo_bandar')
+            ->where('bandar_nama', $request->district)
             ->distinct()
             ->orderBy('bandar_postcode')
             ->pluck('bandar_postcode');
 
-        return view('auth.tadika-register', compact('districts', 'states', 'postcodes'));
+        return response()->json($postcodes);
     }
 
     public function store(Request $request)
@@ -40,7 +52,8 @@ class TadikaRegisterController extends Controller
         $request->validate([
             'tadika_name' => ['required', 'string', 'max:255'],
             'tadika_reg_no' => ['required', 'string', 'max:100', 'unique:tadikas,tadika_reg_no'],
-            'tadika_district' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
+            'tadika_district' => 
+            ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
             'tadika_state' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
             'tadika_postcode' => ['required', 'string', 'max:50', Rule::exists('glo_bandar', 'bandar_postcode')],
             // Validate against the correct `user_email` column in the `users` table

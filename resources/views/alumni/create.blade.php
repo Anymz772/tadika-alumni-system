@@ -106,9 +106,25 @@
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Tadika Name</label>
-                    <input type="text" class="form-control @error('tadika_name') is-invalid @enderror" 
-                           name="tadika_name" value="{{ old('tadika_name') }}">
-                    @error('tadika_name')
+                    <select class="form-control @error('tadika_id') is-invalid @enderror" id="tadika_id" name="tadika_id">
+                        <option value="">Pilih Tadika</option>
+                        @foreach ($tadikas as $tadika)
+                            <option value="{{ $tadika->tadika_id }}" {{ old('tadika_id') == $tadika->tadika_id ? 'selected' : '' }}>
+                                {{ $tadika->tadika_name }}
+                            </option>
+                        @endforeach
+                        <option value="other" {{ old('tadika_id') == 'other' ? 'selected' : '' }}>Lain-lain (Others)</option>
+                    </select>
+                    @error('tadika_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-4 mb-3" id="other_tadika_name_div" style="display: none;">
+                    <label for="other_tadika_name" class="form-label">Sila nyatakan Nama Tadika</label>
+                    <input type="text" class="form-control @error('other_tadika_name') is-invalid @enderror"
+                        id="other_tadika_name" name="other_tadika_name" value="{{ old('other_tadika_name') }}">
+                    @error('other_tadika_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -209,14 +225,14 @@
             <h6 class="fw-bold mb-3 text-primary">Security & Media</h6>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Password *</label>
+                    <label class="form-label">Kata Laluan *</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Confirm Password *</label>
+                    <label class="form-label">Sahkan Kata Laluan *</label>
                     <input type="password" class="form-control" name="password_confirmation" required>
                 </div>
             </div>
@@ -243,6 +259,23 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const tadikaSelect = document.getElementById('tadika_id');
+        const otherTadikaDiv = document.getElementById('other_tadika_name_div');
+
+        function toggleOtherTadika() {
+            if (tadikaSelect.value === 'other') {
+                otherTadikaDiv.style.display = 'block';
+            } else {
+                otherTadikaDiv.style.display = 'none';
+            }
+        }
+
+        // Initial check
+        toggleOtherTadika();
+
+        // Event listener
+        tadikaSelect.addEventListener('change', toggleOtherTadika);
+        
         const studyingRadio = document.getElementById('studying');
         const workingRadio = document.getElementById('working');
         const studyingFields = document.getElementById('studying-fields');

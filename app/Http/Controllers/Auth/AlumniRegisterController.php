@@ -21,33 +21,52 @@ class AlumniRegisterController extends Controller
             ->orderBy('bandar_negeri')
             ->pluck('bandar_negeri');
 
-        $districts = DB::table('glo_bandar')
-            ->whereNotNull('bandar_nama')
-            ->distinct()
-            ->orderBy('bandar_nama')
-            ->pluck('bandar_nama');
-
-        $postcodes = DB::table('glo_bandar')
-            ->distinct()
-            ->orderBy('bandar_postcode')
-            ->pluck('bandar_postcode');
-
-        $tadikaNames = Tadika::query()
-            ->orderBy('tadika_name')
-            ->pluck('tadika_name');
-
         $prefilledTadika = null;
         if ($request->has('ref')) {
             $prefilledTadika = Tadika::find($request->query('ref'));
         }
 
-        return view('auth.alumni-register', compact('states', 'districts', 'postcodes', 'tadikaNames', 'prefilledTadika'));
+        return view('auth.alumni-register', compact('states', 'prefilledTadika'));
+    }
+
+    public function getDistricts(Request $request)
+    {
+        $districts = DB::table('glo_bandar')
+            ->where('bandar_negeri', $request->state)
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        return response()->json($districts);
+    }
+
+    public function getPostcodes(Request $request)
+    {
+        $postcodes = DB::table('glo_bandar')
+            ->where('bandar_nama', $request->district)
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
+
+        return response()->json($postcodes);
+    }
+
+    public function getTadikas(Request $request)
+    {
+        $tadikas = Tadika::query()
+            ->where('tadika_state', $request->state)
+            ->where('tadika_district', $request->district)
+            ->where('tadika_postcode', $request->postcode)
+            ->orderBy('tadika_name')
+            ->get(['tadika_id', 'tadika_name']);
+
+        return response()->json($tadikas);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'user_name' => ['required', 'string', 'max:255'],
             'user_email' => [
                 'required', 'string', 'lowercase', 'email', 'max:255',
                 Rule::unique(User::class, 'user_email'),
@@ -55,60 +74,47 @@ class AlumniRegisterController extends Controller
             ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'alumni_name' => ['required', 'string', 'max:255'],
-            'alumni_ic' => ['nullable', 'string', 'regex:/^\d{6}-\d{2}-\d{4}$/', 'max:14'],
-            'alumni_state' => ['nullable', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
-            'alumni_district' => ['nullable', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
-            'alumni_postcode' => ['nullable', 'string', 'max:10', Rule::exists('glo_bandar', 'bandar_postcode')],
-            'tadika_name' => ['nullable', 'string', 'max:255'],
-            'gender' => ['nullable', 'in:male,female'],
-            'age' => ['nullable', 'integer', 'min:1', 'max:100'],
-            'grad_year' => ['nullable', 'digits:4', 'integer', 'min:2000', 'max:' . date('Y')],
-            'alumni_phone' => ['nullable', 'string', 'max:15'],
-            'alumni_status' => ['nullable', 'in:studying,working'],
-            'institution' => ['nullable', 'string', 'max:255'],
-            'company' => ['nullable', 'string', 'max:255'],
-            'job_position' => ['nullable', 'string', 'max:255'],
-            'father_name' => ['nullable', 'string', 'max:255'],
-            'mother_name' => ['nullable', 'string', 'max:255'],
-            'parent_phone' => ['nullable', 'string', 'max:15'],
-            'alumni_address' => ['nullable', 'string', 'max:500'],
+            'alumni_state' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
+            'alumni_district' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
+            'alumni_postcode' => ['required', 'string', 'max:10', Rule::exists('glo_bandar', 'bandar_postcode')],
+            'tadika_id' => ['required', 'string'],
+            'other_tadika_name' => ['nullable', 'string', 'max:255', 'required_if:tadika_id,other'],
         ]);
 
         try {
             $user = DB::transaction(function () use ($request) {
                 // 1. Create the User (Login Credentials)
                 $user = User::create([
-                    'user_name' => $request->user_name,
+                    'user_name' => $request->alumni_name,
                     'user_email' => $request->user_email,
                     'password' => Hash::make($request->password),
                     'user_role' => 'alumni',
                 ]);
 
-                // 2. Resolve Tadika ID by name (if user typed a known Tadika)
-                $tadikaId = $this->resolveTadikaIdByName($request->tadika_name);
+                $tadikaId = null;
+                $tadikaName = null;
+
+                if ($request->tadika_id === 'other') {
+                    $tadikaName = $request->other_tadika_name;
+                    // We don't create a new tadika here, just store the name.
+                    // A separate admin process could handle new tadikas.
+                } elseif ($request->tadika_id) {
+                    $tadika = Tadika::find($request->tadika_id);
+                    if ($tadika) {
+                        $tadikaId = $tadika->tadika_id;
+                        $tadikaName = $tadika->tadika_name;
+                    }
+                }
 
                 // 3. Create the Alumni Profile
                 Alumni::create([
                     'user_id' => $user->user_id,
-                    'tadika_id' => $tadikaId, // Link the ID if we found it (otherwise it remains null)
+                    'tadika_id' => $tadikaId,
                     'alumni_name' => $request->alumni_name,
-                    'alumni_ic' => $request->alumni_ic,
                     'alumni_state' => $request->alumni_state,
                     'alumni_district' => $request->alumni_district,
                     'alumni_postcode' => $request->alumni_postcode,
-                    'tadika_name' => $request->tadika_name, // Always save the text name for reference
-                    'gender' => $request->gender,
-                    'age' => $request->age,
-                    'grad_year' => $request->grad_year,
-                    'alumni_status' => $request->alumni_status,
-                    'institution' => $request->institution,
-                    'company' => $request->company,
-                    'job_position' => $request->job_position,
-                    'alumni_phone' => $request->alumni_phone,
-                    'alumni_address' => $request->alumni_address,
-                    'father_name' => $request->father_name,
-                    'mother_name' => $request->mother_name,
-                    'parent_phone' => $request->parent_phone,
+                    'tadika_name' => $tadikaName, // Always save the text name for reference
                     'alumni_email' => $request->user_email
                 ]);
 
@@ -126,19 +132,5 @@ class AlumniRegisterController extends Controller
 
         // Redirect to profile
         return redirect()->route('profile.show')->with('success', 'Pendaftaran berjaya! Selamat datang ke Sistem Alumni Tadika.');
-    }
-
-    private function resolveTadikaIdByName(?string $tadikaName): ?int
-    {
-        $name = trim((string) $tadikaName);
-        if ($name === '') {
-            return null;
-        }
-
-        $tadika = Tadika::query()
-            ->whereRaw('LOWER(TRIM(tadika_name)) = ?', [strtolower($name)])
-            ->first();
-
-        return $tadika?->tadika_id;
     }
 }

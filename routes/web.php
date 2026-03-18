@@ -22,9 +22,14 @@ Route::middleware('guest')->group(function () {
     Route::get('/register/alumni', [AlumniRegisterController::class, 'create'])->name('alumni.register');
     Route::post('/register/alumni', [AlumniRegisterController::class, 'store']);
     Route::get('/register/alumni/thankyou', [AlumniRegisterController::class, 'thankyou'])->name('alumni.register.thankyou');
+    Route::get('/register/alumni/districts', [AlumniRegisterController::class, 'getDistricts'])->name('alumni.register.districts');
+    Route::get('/register/alumni/postcodes', [AlumniRegisterController::class, 'getPostcodes'])->name('alumni.register.postcodes');
+    Route::get('/register/alumni/tadikas', [AlumniRegisterController::class, 'getTadikas'])->name('alumni.register.tadikas');
 
     Route::get('/register/tadika', [TadikaRegisterController::class, 'create'])->name('tadika.register');
     Route::post('/register/tadika', [TadikaRegisterController::class, 'store']);
+    Route::get('/register/tadika/districts', [TadikaRegisterController::class, 'getDistricts'])->name('tadika.register.districts');
+    Route::get('/register/tadika/postcodes', [TadikaRegisterController::class, 'getPostcodes'])->name('tadika.register.postcodes');
     Route::get('/register/tadika/success', function () {
         return view('auth.tadika-register-success');
     })->name('tadika.register.success');
