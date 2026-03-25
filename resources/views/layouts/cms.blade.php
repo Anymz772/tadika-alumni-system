@@ -288,13 +288,13 @@
                 </div>
             </div>
 
-            @if(auth()->user()->isAlumni())
-                <a href="{{ route('profile.show') }}" class="btn btn-white border rounded-pill px-3 py-1 shadow-sm me-2">
+          @if(auth()->user()->isAlumni())
+               <!--   <a href="{{ route('profile.show') }}" class="btn btn-white border rounded-pill px-3 py-1 shadow-sm me-2">
                     <i class="fas fa-envelope me-1"></i> Mesej
                     @if($unreadInAppMessages > 0)
                         <span class="badge bg-danger ms-1 rounded-pill">{{ $unreadInAppMessages }}</span>
                     @endif
-                </a>
+                </a> -->
             @endif
 
             <div class="dropdown">

@@ -34,9 +34,9 @@
                 <h6 class="mb-0"><i class="fas fa-users me-2"></i>Ibu Bapa</h6>
             </div>
             <div class="card-body">
-                <p><strong>Father:</strong> {{ $alumni->father_name }}</p>
-                <p><strong>Mother:</strong> {{ $alumni->mother_name }}</p>
-                <p><strong>Contact:</strong> {{ $alumni->parent_phone }}</p>
+                <p><strong>Ayah:</strong> {{ $alumni->father_name }}</p>
+                <p><strong>Ibu:</strong> {{ $alumni->mother_name }}</p>
+                <p><strong>No Telefon:</strong> {{ $alumni->parent_phone }}</p>
             </div>
         </div>
 
@@ -88,8 +88,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p><strong>E-mel:</strong><br>{{ $alumni->alumni_email }}</p>
-                        <p><strong>Nombor Kenalan:</strong><br>{{ $alumni->alumni_phone }}</p>
-                        <p><strong>No. IC:</strong><br>{{ $alumni->alumni_ic ?? 'N/A' }}</p>
+                        <p><strong>Nombor Telefon:</strong><br>{{ $alumni->alumni_phone }}</p>
+                        <p><strong>No. Kad Pengenalan:</strong><br>{{ $alumni->alumni_ic ?? 'N/A' }}</p>
                         <p><strong>Umur:</strong><br>{{ $alumni->age ?? 'N/A' }}</p>
                         <p><strong>Jantina:</strong><br>{{ ucfirst($alumni->gender) ?? 'N/A' }}</p>
                     </div>
@@ -144,7 +144,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <a href="{{ route('profile.edit') }}" class="btn btn-warning w-100">
-                            <i class="fas fa-edit me-2"></i> Sunting Profil
+                            <i class="fas fa-edit me-2"></i> Kemaskini Profil
                         </a>
                     </div>
                     <div class="col-md-6">

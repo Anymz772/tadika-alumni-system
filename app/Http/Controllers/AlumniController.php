@@ -61,7 +61,6 @@ class AlumniController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_name' => 'required|string|max:255',
             'user_email' => [
                 'required',
                 'email',
@@ -101,7 +100,7 @@ class AlumniController extends Controller
         try {
             $alumni = DB::transaction(function () use ($request) {
                 $user = User::create([
-                    'user_name' => $request->user_name,
+                    'user_name' => $request->alumni_name,
                     'user_email' => $request->user_email,
                     'password' => Hash::make($request->password),
                     'user_role' => 'alumni'
@@ -177,7 +176,6 @@ class AlumniController extends Controller
             'alumni_name' => 'required|string|max:255',
             'alumni_ic' => 'required|string|max:14',
             'grad_year' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
-            'tadika_name' => 'nullable|string|max:255',
             'alumni_state' => 'nullable|string|max:255',
             'gender' => 'nullable|in:male,female',
             'age' => 'nullable|integer|min:1|max:100',
@@ -262,7 +260,6 @@ class AlumniController extends Controller
             if ($alumni->user) {
                 $userUpdates = [
                     'user_email' => $request->user_email,
-                    'user_name' => $request->alumni_name,
                 ];
 
                 if ($request->filled('password')) {
