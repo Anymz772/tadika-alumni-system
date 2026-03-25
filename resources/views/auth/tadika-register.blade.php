@@ -84,6 +84,7 @@
                             @error('tadika_state')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div id="tadika_state_error" class="invalid-feedback"></div>
                             <datalist id="state-list">
                                 @foreach($states as $state)
                                     <option value="{{ $state }}"></option>
@@ -103,6 +104,7 @@
                             @error('tadika_district')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div id="tadika_district_error" class="invalid-feedback"></div>
                             <datalist id="district-list"></datalist>
                         </div>
 
@@ -118,6 +120,7 @@
                             @error('tadika_postcode')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div id="tadika_postcode_error" class="invalid-feedback"></div>
                             <datalist id="postcode-list"></datalist>
                         </div>
                     </div>
@@ -408,13 +411,51 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Location cascade ─────────────────────────
-    const stateInput    = document.getElementById('tadika_state');
+    const form = document.querySelector('form');
+    const stateInput = document.getElementById('tadika_state');
     const districtInput = document.getElementById('tadika_district');
     const postcodeInput = document.getElementById('tadika_postcode');
     const districtList  = document.getElementById('district-list');
     const postcodeList  = document.getElementById('postcode-list');
 
+    const stateError = document.getElementById('tadika_state_error');
+    const districtError = document.getElementById('tadika_district_error');
+    const postcodeError = document.getElementById('tadika_postcode_error');
+    const errorMessage = "Maklumat lokasi tidak sah.";
+
+    function validateDatalistInput(input, dataListId, errorDiv) {
+        const value = input.value.trim();
+        if (value) {
+            const dataList = document.getElementById(dataListId);
+            let optionFound = false;
+            for (const option of dataList.options) {
+                if (option.value.toLowerCase() === value.toLowerCase()) {
+                    optionFound = true;
+                    break;
+                }
+            }
+            if (!optionFound) {
+                input.classList.add('is-invalid');
+                errorDiv.textContent = errorMessage;
+                return false;
+            }
+        }
+        input.classList.remove('is-invalid');
+        errorDiv.textContent = '';
+        return true;
+    }
+
+    form.addEventListener('submit', function(event) {
+        const isStateValid = validateDatalistInput(stateInput, 'state-list', stateError);
+        const isDistrictValid = validateDatalistInput(districtInput, 'district-list', districtError);
+        const isPostcodeValid = validateDatalistInput(postcodeInput, 'postcode-list', postcodeError);
+
+        if (!isStateValid || !isDistrictValid || !isPostcodeValid) {
+            event.preventDefault();
+        }
+    });
+
+    // ── Location cascade ─────────────────────────
     stateInput.addEventListener('change', function () {
         const state = this.value.trim();
         districtInput.value = '';

@@ -127,6 +127,7 @@
                             @error('alumni_state')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div id="alumni_state_error" class="invalid-feedback"></div>
                             <datalist id="alumni-state-list">
                                 @foreach($states as $state)
                                     <option value="{{ $state }}"></option>
@@ -146,6 +147,7 @@
                             @error('alumni_district')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                             <div id="alumni_district_error" class="invalid-feedback"></div>
                             <datalist id="alumni-district-list"></datalist>
                         </div>
 
@@ -161,12 +163,13 @@
                             @error('alumni_postcode')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                             <div id="alumni_postcode_error" class="invalid-feedback"></div>
                             <datalist id="alumni-postcode-list"></datalist>
                         </div>
 
                         <div class="col-md-12">
                             <label for="tadika_id" class="form-label required">Nama Tadika</label>
-                            <select class="form-control @error('tadika_id') is-invalid @enderror"
+                            <select class="form-control form-select @error('tadika_id') is-invalid @enderror"
                                 id="tadika_id" name="tadika_id" required>
                                 <option value="">-- Pilih Tadika --</option>
                                 <option value="other" {{ old('tadika_id') == 'other' ? 'selected' : '' }}>Lain-lain (Others)</option>
@@ -396,6 +399,14 @@
         border-color: #1a73e8;
     }
 
+    .form-control.form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right .75rem center;
+        background-size: 16px 12px;
+        appearance: none;
+    }
+
     /* ── Buttons ───────────────────────────────── */
     .btn-tadika-primary {
         background: linear-gradient(135deg, #1a73e8, #0d47a1);
@@ -424,13 +435,51 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const stateInput    = document.getElementById('alumni_state');
+    const form = document.querySelector('form');
+    const stateInput = document.getElementById('alumni_state');
     const districtInput = document.getElementById('alumni_district');
     const postcodeInput = document.getElementById('alumni_postcode');
     const tadikaSelect  = document.getElementById('tadika_id');
     const districtList  = document.getElementById('alumni-district-list');
     const postcodeList  = document.getElementById('alumni-postcode-list');
     const otherDiv      = document.getElementById('other_tadika_name_div');
+
+    const stateError = document.getElementById('alumni_state_error');
+    const districtError = document.getElementById('alumni_district_error');
+    const postcodeError = document.getElementById('alumni_postcode_error');
+    const errorMessage = "Maklumat lokasi tidak sah.";
+
+    function validateDatalistInput(input, dataListId, errorDiv) {
+        const value = input.value.trim();
+        if (value) {
+            const dataList = document.getElementById(dataListId);
+            let optionFound = false;
+            for (const option of dataList.options) {
+                if (option.value.toLowerCase() === value.toLowerCase()) {
+                    optionFound = true;
+                    break;
+                }
+            }
+            if (!optionFound) {
+                input.classList.add('is-invalid');
+                errorDiv.textContent = errorMessage;
+                return false;
+            }
+        }
+        input.classList.remove('is-invalid');
+        errorDiv.textContent = '';
+        return true;
+    }
+
+    form.addEventListener('submit', function(event) {
+        const isStateValid = validateDatalistInput(stateInput, 'alumni-state-list', stateError);
+        const isDistrictValid = validateDatalistInput(districtInput, 'alumni-district-list', districtError);
+        const isPostcodeValid = validateDatalistInput(postcodeInput, 'alumni-postcode-list', postcodeError);
+
+        if (!isStateValid || !isDistrictValid || !isPostcodeValid) {
+            event.preventDefault();
+        }
+    });
 
     function resetTadikaSelect() {
         tadikaSelect.innerHTML = '<option value="">-- Pilih Tadika --</option><option value="other">Lain-lain (Others)</option>';
