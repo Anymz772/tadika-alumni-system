@@ -81,21 +81,12 @@ class TadikaOwnerController extends Controller
     public function editProfile()
     {
         $tadika = auth()->user()->ownedTadika;
-        $districts = DB::table('glo_bandar')
-            ->whereNotNull('bandar_nama')
-            ->distinct()
-            ->orderBy('bandar_nama')
-            ->pluck('bandar_nama');
         $states = DB::table('glo_bandar')
             ->distinct()
             ->orderBy('bandar_negeri')
             ->pluck('bandar_negeri');
-        $postcodes = DB::table('glo_bandar')
-            ->distinct()
-            ->orderBy('bandar_postcode')
-            ->pluck('bandar_postcode');
 
-        return view('tadika_owner.edit', compact('tadika', 'districts', 'states', 'postcodes'));
+        return view('tadika_owner.edit', compact('tadika', 'states'));
     }
 
     public function updateProfile(Request $request)
@@ -140,7 +131,7 @@ class TadikaOwnerController extends Controller
             $user->ownedTadika()->create($data);
         }
 
-        return redirect()->route('tadika.profile.edit')->with('success', 'Profil Tadika dikemas kini.');
+        return redirect()->route('tadika.profile.edit')->with('success', 'Profil Tadika dikemaskini.');
     }
 
     public function viewAlumniList()
@@ -179,7 +170,11 @@ class TadikaOwnerController extends Controller
     public function editAlumni(\App\Models\Alumni $alumni)
     {
         $this->authorizeTadikaOwner($alumni);
-        return view('tadika_owner.alumni_edit', compact('alumni'));
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+        return view('tadika_owner.alumni_edit', compact('alumni', 'states'));
     }
 
     public function updateAlumni(Request $request, \App\Models\Alumni $alumni)
@@ -261,7 +256,7 @@ class TadikaOwnerController extends Controller
             }
         });
 
-        return redirect()->route('tadika.alumni')->with('success', 'Butiran alumni berjaya dikemas kini.');
+        return redirect()->route('tadika.alumni')->with('success', 'Butiran alumni berjaya dikemaskini.');
     }
 
     public function messageAlumniForm(\App\Models\Alumni $alumni)
@@ -369,5 +364,28 @@ class TadikaOwnerController extends Controller
         $fileName = 'Senarai_Alumni_' . str_replace(' ', '_', $tadika->tadika_name) . '_' . now()->format('Ymd') . '.xlsx';
 
         return Excel::download(new AlumniExport($tadika->tadika_id), $fileName);
+    }
+
+    public function getDistricts(Request $request)
+    {
+        $districts = DB::table('glo_bandar')
+            ->where('bandar_negeri', $request->state)
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        return response()->json($districts);
+    }
+
+    public function getPostcodes(Request $request)
+    {
+        $postcodes = DB::table('glo_bandar')
+            ->where('bandar_nama', $request->district)
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
+
+        return response()->json($postcodes);
     }
 }

@@ -8,14 +8,13 @@ use App\Http\Controllers\TadikaOwnerController;
 use App\Http\Controllers\Auth\AlumniRegisterController;
 use App\Http\Controllers\Auth\TadikaRegisterController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
 
 
 // ================= PUBLIC REGISTRATION ROUTES =================
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Public Registration (for alumni)
 Route::middleware('guest')->group(function () {
@@ -64,6 +63,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/alumni/{alumni}', [AlumniController::class, 'update'])->name('alumni.update');
     Route::delete('/alumni/{alumni}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
 
+    // Routes for dynamic location data
+    Route::get('/admin/alumni/districts', [AlumniController::class, 'getDistricts'])->name('admin.alumni.districts');
+    Route::get('/admin/alumni/postcodes', [AlumniController::class, 'getPostcodes'])->name('admin.alumni.postcodes');
+
     // Export all alumni
     Route::get('/admin/alumni/export', [AlumniController::class, 'export'])->name('admin.alumni.export');
 
@@ -83,6 +86,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/tadika/{tadika}', [TadikaAdminController::class, 'update'])->whereNumber('tadika')->name('tadika.update');
     Route::delete('/tadika/{tadika}', [TadikaAdminController::class, 'destroy'])->whereNumber('tadika')->name('tadika.destroy');
 
+    // Routes for dynamic location data
+    Route::get('/admin/tadika/districts', [TadikaAdminController::class, 'getDistricts'])->name('admin.tadika.districts');
+    Route::get('/admin/tadika/postcodes', [TadikaAdminController::class, 'getPostcodes'])->name('admin.tadika.postcodes');
+
     // Password Reset
     Route::post('/tadika/{tadika}/reset-password', [TadikaAdminController::class, 'resetPassword'])
         ->whereNumber('tadika')
@@ -95,28 +102,26 @@ Route::middleware(['auth', 'tadika'])->prefix('tadika')->group(function () {
     Route::get('/profile/edit', [TadikaOwnerController::class, 'editProfile'])->name('tadika.profile.edit');
     Route::put('/profile', [TadikaOwnerController::class, 'updateProfile'])->name('tadika.profile.update');
     Route::get('/alumni', [TadikaOwnerController::class, 'viewAlumniList'])->name('tadika.alumni');
-    Route::get('/alumni/{alumni}', [TadikaOwnerController::class, 'showAlumni'])->name('tadika.alumni.show');
-
+    
+    // 1. STATIC ROUTES GO FIRST
     // Export alumni data to Excel
     Route::get('/alumni/export', [TadikaOwnerController::class, 'exportAlumniExcel'])->name('tadika.alumni.export');
+    
+    // Broadcast to all alumni
+    Route::get('/alumni/message-all', [TadikaOwnerController::class, 'messageAllForm'])->name('tadika.alumni.message_all.form');
+    Route::post('/alumni/message-all', [TadikaOwnerController::class, 'sendMessageAll'])->name('tadika.alumni.message_all');
 
-    // manage individual alumni
-    Route::get('/alumni/{alumni}/edit', [TadikaOwnerController::class, 'editAlumni'])
-        ->name('tadika.alumni.edit');
-    Route::put('/alumni/{alumni}', [TadikaOwnerController::class, 'updateAlumni'])
-        ->name('tadika.alumni.update');
+    // 2. DYNAMIC ROUTES ({alumni}) GO LAST
+    Route::get('/alumni/{alumni}', [TadikaOwnerController::class, 'showAlumni'])->name('tadika.alumni.show');
+    Route::get('/alumni/{alumni}/edit', [TadikaOwnerController::class, 'editAlumni'])->name('tadika.alumni.edit');
+    Route::put('/alumni/{alumni}', [TadikaOwnerController::class, 'updateAlumni'])->name('tadika.alumni.update');
 
-    // messaging routes
-    Route::get('/alumni/{alumni}/message', [TadikaOwnerController::class, 'messageAlumniForm'])
-        ->name('tadika.alumni.message.form');
-    Route::post('/alumni/{alumni}/message', [TadikaOwnerController::class, 'sendMessageAlumni'])
-        ->name('tadika.alumni.message');
-
-    // broadcast to all alumni
-    Route::get('/alumni/message-all', [TadikaOwnerController::class, 'messageAllForm'])
-        ->name('tadika.alumni.message_all.form');
-    Route::post('/alumni/message-all', [TadikaOwnerController::class, 'sendMessageAll'])
-        ->name('tadika.alumni.message_all');
+    // Individual messaging routes
+    Route::get('/alumni/{alumni}/message', [TadikaOwnerController::class, 'messageAlumniForm'])->name('tadika.alumni.message.form');
+    Route::post('/alumni/{alumni}/message', [TadikaOwnerController::class, 'sendMessageAlumni'])->name('tadika.alumni.message');
+        
+    Route::get('/districts', [TadikaOwnerController::class, 'getDistricts'])->name('tadika.districts');
+    Route::get('/postcodes', [TadikaOwnerController::class, 'getPostcodes'])->name('tadika.postcodes');
 });
 
 // ================= ALUMNI PROFILE ROUTES =================

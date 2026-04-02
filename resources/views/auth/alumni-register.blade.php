@@ -196,10 +196,9 @@
                 {{-- Notice & Submit --}}
                 <div class="reg-footer">
                     <div class="notice-box notice-success">
-                        <i class="fas fa-check-circle notice-icon"></i>
+                        <i class="fas fa-clipboard notice-icon"></i>
                         <div>
-                            <strong>Pendaftaran Pantas!</strong>
-                            <p class="mb-0 text-muted small">Akaun anda akan dibuat serta-merta. Log masuk dan lengkapkan maklumat tambahan di profil anda kemudian.</p>
+                            <p class="mb-0 text-muted small">Log masuk dan lengkapkan maklumat tambahan di profil anda kemudian.</p>
                         </div>
                     </div>
 

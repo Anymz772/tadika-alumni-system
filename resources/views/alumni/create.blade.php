@@ -132,121 +132,45 @@
                     @enderror
                 </div>
 
+                <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Negeri</label>
                     <input type="text" class="form-control @error('alumni_state') is-invalid @enderror" 
-                           name="alumni_state" value="{{ old('alumni_state') }}">
+                           id="alumni_state" name="alumni_state" value="{{ old('alumni_state') }}"
+                           list="alumni-state-list" placeholder="Pilih negeri...">
                     @error('alumni_state')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                    <div id="alumni_state_error" class="invalid-feedback"></div>
+                    <datalist id="alumni-state-list">
+                        @foreach($states as $state)
+                            <option value="{{ $state }}"></option>
+                        @endforeach
+                    </datalist>
                 </div>
-            </div>
-
-            <hr>
-            
-            <h6 class="fw-bold mb-3 text-primary">Status Pekerjaan / Pengajian</h6>
-            
-            <div class="mb-4">
-                <div class="d-flex gap-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="alumni_status" id="studying" 
-                               value="studying" {{ old('alumni_status') === 'studying' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="studying">
-                            <i class="fas fa-graduation-cap me-1"></i> Belajar
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="alumni_status" id="working" 
-                               value="working" {{ old('alumni_status') === 'working' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="working">
-                            <i class="fas fa-briefcase me-1"></i> Bekerja
-                        </label>
-                    </div>
-                </div>
-                @error('alumni_status')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div id="studying-fields" class="mb-3" style="display: none;">
-                <label for="institution" class="form-label fw-bold">Nama Institusi</label>
-                <input type="text" class="form-control @error('institution') is-invalid @enderror" 
-                       id="institution" name="institution" value="{{ old('institution') }}">
-                @error('institution')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div id="working-fields" style="display: none;">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="company" class="form-label fw-bold">Nama Syarikat</label>
-                        <input type="text" class="form-control @error('company') is-invalid @enderror" 
-                               id="company" name="company" value="{{ old('company') }}">
-                        @error('company')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="job_position" class="form-label fw-bold">Jawatan</label>
-                        <input type="text" class="form-control @error('job_position') is-invalid @enderror" 
-                               id="job_position" name="job_position" value="{{ old('job_position') }}">
-                        @error('job_position')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-            
-            <h6 class="fw-bold mb-3 text-primary">Maklumat Keluarga</h6>
-            
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Nama Ayah</label>
-                    <input type="text" class="form-control @error('father_name') is-invalid @enderror" 
-                           name="father_name" value="{{ old('father_name') }}">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Nama Ibu</label>
-                    <input type="text" class="form-control @error('mother_name') is-invalid @enderror" 
-                           name="mother_name" value="{{ old('mother_name') }}">
-                </div>
-                <div class="col-md-12 mb-3">
-                    <label class="form-label">No. Telefon Ibu Bapa</label>
-                    <input type="text" class="form-control @error('parent_phone') is-invalid @enderror" 
-                           name="parent_phone" value="{{ old('parent_phone') }}">
-                </div>
-            </div>
-
-            <hr>
-            
-            <h6 class="fw-bold mb-3 text-primary">Keselamatan & Media</h6>
-            
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Kata Laluan *</label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
-                    @error('password')
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Daerah</label>
+                    <input type="text" class="form-control @error('alumni_district') is-invalid @enderror" 
+                           id="alumni_district" name="alumni_district" value="{{ old('alumni_district') }}"
+                           list="alumni-district-list" placeholder="Pilih daerah...">
+                    @error('alumni_district')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                    <div id="alumni_district_error" class="invalid-feedback"></div>
+                    <datalist id="alumni-district-list"></datalist>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Sahkan Kata Laluan *</label>
-                    <input type="password" class="form-control" name="password_confirmation" required>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Poskod</label>
+                    <input type="text" class="form-control @error('alumni_postcode') is-invalid @enderror" 
+                           id="alumni_postcode" name="alumni_postcode" value="{{ old('alumni_postcode') }}"
+                           list="alumni-postcode-list" placeholder="Pilih poskod...">
+                    @error('alumni_postcode')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <div id="alumni_postcode_error" class="invalid-feedback"></div>
+                    <datalist id="alumni-postcode-list"></datalist>
                 </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Gambar Profil</label>
-                <input type="file" class="form-control @error('alumni_photo') is-invalid @enderror" name="alumni_photo" accept="image/*">
-                <div class="form-text">Accepted formats: JPEG, PNG, JPG. Max size: 2MB</div>
-                @error('alumni_photo')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-            
         </div>
 
         <div class="card-footer text-end">
@@ -300,6 +224,90 @@
         workingRadio.addEventListener('change', toggleFields);
 
         toggleFields();
+
+        // Location cascade
+        const stateInput    = document.getElementById('alumni_state');
+        const districtInput = document.getElementById('alumni_district');
+        const postcodeInput = document.getElementById('alumni_postcode');
+        const districtList  = document.getElementById('alumni-district-list');
+        const postcodeList  = document.getElementById('alumni-postcode-list');
+
+        stateInput.addEventListener('change', function () {
+            const state = this.value.trim();
+            districtInput.value = '';
+            postcodeInput.value = '';
+            districtList.innerHTML = '';
+            postcodeList.innerHTML = '';
+
+            if (state) {
+                fetch(`{{ route('admin.alumni.districts') }}?state=${encodeURIComponent(state)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(district => {
+                            const opt = document.createElement('option');
+                            opt.value = district;
+                            districtList.appendChild(opt);
+                        });
+                    });
+            }
+        });
+
+        districtInput.addEventListener('change', function () {
+            const district = this.value.trim();
+            postcodeInput.value = '';
+            postcodeList.innerHTML = '';
+
+            if (district) {
+                fetch(`{{ route('admin.alumni.postcodes') }}?district=${encodeURIComponent(district)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(postcode => {
+                            const opt = document.createElement('option');
+                            opt.value = postcode;
+                            postcodeList.appendChild(opt);
+                        });
+                    });
+            }
+        });
+
+        // Form validation
+        const form = document.querySelector('form');
+        const stateError = document.getElementById('alumni_state_error');
+        const districtError = document.getElementById('alumni_district_error');
+        const postcodeError = document.getElementById('alumni_postcode_error');
+        const errorMessage = "Maklumat lokasi tidak sah. Sila pastikan pilihan dibuat daripada senarai yang disediakan.";
+
+        function validateDatalistInput(input, dataListId, errorDiv) {
+            const value = input.value.trim();
+            if (value) {
+                const dataList = document.getElementById(dataListId);
+                let optionFound = false;
+                for (const option of dataList.options) {
+                    if (option.value.toLowerCase() === value.toLowerCase()) {
+                        optionFound = true;
+                        break;
+                    }
+                }
+                if (!optionFound) {
+                    input.classList.add('is-invalid');
+                    errorDiv.textContent = errorMessage;
+                    return false;
+                }
+            }
+            input.classList.remove('is-invalid');
+            errorDiv.textContent = '';
+            return true;
+        }
+
+        form.addEventListener('submit', function(event) {
+            const isStateValid = validateDatalistInput(stateInput, 'alumni-state-list', stateError);
+            const isDistrictValid = validateDatalistInput(districtInput, 'alumni-district-list', districtError);
+            const isPostcodeValid = validateDatalistInput(postcodeInput, 'alumni-postcode-list', postcodeError);
+
+            if (!isStateValid || !isDistrictValid || !isPostcodeValid) {
+                event.preventDefault();
+            }
+        });
     });
 </script>
 @endpush

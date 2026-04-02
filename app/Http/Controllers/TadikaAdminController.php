@@ -44,7 +44,11 @@ class TadikaAdminController extends Controller
 
     public function create()
     {
-        return view('tadika.create');
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+        return view('tadika.create', compact('states'));
     }
 
     public function store(Request $request)
@@ -132,7 +136,11 @@ class TadikaAdminController extends Controller
     public function edit(Tadika $tadika)
     {
         $tadika->load('owner');
-        return view('tadika.edit', compact('tadika'));
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+        return view('tadika.edit', compact('tadika', 'states'));
     }
 
     public function update(Request $request, Tadika $tadika)
@@ -211,7 +219,7 @@ class TadikaAdminController extends Controller
                 $tadika->owner->update($ownerUpdates);
             });
 
-            return redirect()->route('tadika.index')->with('success', 'Maklumat tadika dan pemilik berjaya dikemas kini.');
+            return redirect()->route('tadika.index')->with('success', 'Maklumat tadika dan pemilik berjaya dikemaskini.');
         } catch (\Throwable $e) {
             report($e);
             return redirect()->back()
@@ -263,5 +271,28 @@ class TadikaAdminController extends Controller
     public function export()
     {
         return Excel::download(new TadikaExport, 'tadika-list.xlsx');
+    }
+
+    public function getDistricts(Request $request)
+    {
+        $districts = DB::table('glo_bandar')
+            ->where('bandar_negeri', $request->state)
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        return response()->json($districts);
+    }
+
+    public function getPostcodes(Request $request)
+    {
+        $postcodes = DB::table('glo_bandar')
+            ->where('bandar_nama', $request->district)
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
+
+        return response()->json($postcodes);
     }
 }

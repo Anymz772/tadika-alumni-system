@@ -13,7 +13,7 @@
 
     <!-- Stat Cards -->
     <div class="row">
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-6 col-md-6 mb-4">
             <a href="{{ route('tadika.alumni') }}" class="text-decoration-none">
                 <div class="card stat-card bg-primary text-white h-100">
                     <div class="card-body text-center">
@@ -24,7 +24,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-6 col-md-6 mb-4">
             <div class="card stat-card bg-success text-white h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-user-plus fa-3x"></i>
@@ -33,27 +33,24 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <a href="{{ route('tadika.alumni.message_all.form') }}" class="text-decoration-none">
-                <div class="card stat-card bg-warning text-white h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-envelope fa-3x"></i>
-                        <div class="display-6 fw-bold mt-2">&nbsp;</div>
-                        <div class="small">Mesej Semua</div>
-                    </div>
+    </div>
+
+    <!-- Tindakan Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 text-primary"><i class="fas fa-bolt me-2"></i>Tindakan Pantas</h5>
                 </div>
-            </a>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <a href="{{ route('tadika.alumni.export') }}" class="text-decoration-none">
-                <div class="card stat-card bg-danger text-white h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-file-excel fa-3x"></i>
-                        <div class="display-6 fw-bold mt-2">&nbsp;</div>
-                        <div class="small">Export Data</div>
-                    </div>
+                <div class="card-body d-flex flex-wrap gap-2">
+                    <a href="{{ route('tadika.alumni.message_all.form') }}" class="btn btn-warning">
+                        <i class="fas fa-envelope me-2"></i> Mesej Semua Alumni
+                    </a>
+                    <a href="{{ route('tadika.alumni.export') }}" class="btn btn-danger">
+                        <i class="fas fa-file-excel me-2"></i> Export Data Alumni
+                    </a>
                 </div>
-            </a>
+            </div>
         </div>
     </div>
 
@@ -113,7 +110,7 @@
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                     <h5 class="mb-0 text-primary"><i class="fas fa-building me-2"></i>Profil Tadika</h5>
                     <a href="{{ route('tadika.profile.edit') }}" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-edit me-1"></i> Sunting
+                        <i class="fas fa-edit me-1"></i> Kemaskini
                     </a>
                 </div>
                 <div class="card-body">

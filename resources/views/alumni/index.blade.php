@@ -256,7 +256,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <a href="{{ route('alumni.edit', $item->alumni_id) }}" class="btn btn-warning">
-                                                <i class="fas fa-edit me-2"></i> Sunting Profil
+                                                <i class="fas fa-edit me-2"></i> Kemaskini Profil
                                             </a>
                                             <a href="{{ route('alumni.show', $item->alumni_id) }}" class="btn btn-primary">
                                                 <i class="fas fa-external-link-alt me-2"></i> Butiran Penuh

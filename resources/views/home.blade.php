@@ -6,7 +6,7 @@
     <div class="col-md-6">
         <h1 class="display-4 fw-bold mb-4">Selamat datang ke Rangkaian Alumni</h1>
         <p class="lead mb-4">
-            Sambungkan semula dengan rakan sekelas anda, kekal dikemas kini dengan berita sekolah,
+            Sambungkan semula dengan rakan sekelas anda, kekal dikemaskini dengan berita sekolah,
             dan jadilah sebahagian daripada komuniti alumni kami yang berkembang. Perjalanan anda berterusan di sini.
         </p>
         <div class="d-flex gap-3">
@@ -39,29 +39,29 @@
 <!-- Statistik -->
 <div class="row mb-5">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
                 <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Statistik Rangkaian Alumni</h4>
             </div>
             <div class="card-body">
                 <div class="row text-center">
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="display-4 fw-bold text-primary">
-                            {{ \App\Models\Alumni::count() }}
+                            {{ $totalUsers }}
                         </div>
-                        <p class="text-muted">Alumni Berdaftar</p>
+                        <p class="text-muted mb-0">Jumlah Keseluruhan Pengguna</p>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="display-4 fw-bold text-success">
-                            {{ \App\Models\Alumni::whereYear('grad_year', '>=', date('Y') - 5)->count() }}
+                            {{ $totalTadikas }}
                         </div>
-                        <p class="text-muted">Graduan Terkini (5 tahun)</p>
+                        <p class="text-muted mb-0">Jumlah Tadika Berdaftar</p>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="display-4 fw-bold text-info">
-                            {{ \App\Models\Alumni::distinct('grad_year')->count('grad_year') }}
+                            {{ $totalAlumni }}
                         </div>
-                        <p class="text-muted">Kumpulan Graduasi</p>
+                        <p class="text-muted mb-0">Jumlah Keseluruhan Alumni</p>
                     </div>
                 </div>
             </div>

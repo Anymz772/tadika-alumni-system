@@ -233,7 +233,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <a href="{{ route('tadika.edit', $item->tadika_id) }}" class="btn btn-warning">
-                                                <i class="fas fa-edit me-2"></i> Sunting
+                                                <i class="fas fa-edit me-2"></i> Kemaskini
                                             </a>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                         </div>

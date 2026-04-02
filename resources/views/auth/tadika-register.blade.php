@@ -190,10 +190,9 @@
                 {{-- Notice & Submit --}}
                 <div class="reg-footer">
                     <div class="notice-box">
-                        <i class="fas fa-check-circle notice-icon"></i>
+                        <i class="fas fa-clipboard notice-icon"></i>
                         <div>
-                            <strong>Akaun sedia-merta</strong>
-                            <p class="mb-0 text-muted small">Akaun Tadika anda akan dibuat serta-merta. Maklumat tambahan boleh dikemaskini selepas log masuk.</p>
+                            <p class="mb-0 text-muted small">Maklumat tambahan boleh dikemaskini selepas log masuk.</p>
                         </div>
                     </div>
 

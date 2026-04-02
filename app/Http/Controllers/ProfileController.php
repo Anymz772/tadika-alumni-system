@@ -281,7 +281,7 @@ class ProfileController extends Controller
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        return redirect()->route('profile.show')->with('success', 'Profil berjaya dikemas kini.');
+        return redirect()->route('profile.show')->with('success', 'Profil berjaya dikemaskini.');
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int

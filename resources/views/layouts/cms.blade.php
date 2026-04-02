@@ -9,9 +9,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,9 +20,7 @@
     <style>
         :root {
             --primary-blue: #0ea5e9;
-            /* Sky Blue */
             --dark-blue: #0369a1;
-            /* Ocean Blue */
             --sidebar-width: 260px;
         }
 
@@ -36,7 +32,7 @@
             overflow-x: hidden;
         }
 
-        /* --- SIDEBAR STYLING --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -58,21 +54,45 @@
             font-family: 'Fredoka', sans-serif;
             font-size: 1.5rem;
             letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-body {
+            height: calc(100vh - 81px); /* matches sidebar-header height */
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
         }
 
         .nav-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 25px 25px 10px;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 20px 25px 8px;
             font-weight: 700;
+            flex-shrink: 0;
         }
 
         .nav-link {
             color: rgba(255, 255, 255, 0.9);
-            padding: 12px 25px;
+            padding: 10px 25px;
             font-weight: 600;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             border-left: 4px solid transparent;
@@ -95,13 +115,26 @@
         }
 
         .nav-link i {
-            width: 24px;
+            width: 22px;
             margin-right: 10px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
-        /* --- MAIN CONTENT STYLING --- */
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 15px;
+        }
+
+        .sidebar-copyright {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            padding: 10px 0 5px;
+        }
+
+        /* --- MAIN CONTENT --- */
         .main-content {
             margin-left: var(--sidebar-width);
             transition: all 0.3s ease;
@@ -140,6 +173,7 @@
             color: var(--dark-blue);
         }
 
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
             .sidebar {
                 margin-left: calc(-1 * var(--sidebar-width));
@@ -185,17 +219,17 @@
         <div class="sidebar-header d-flex align-items-center justify-content-center">
             <i class="fas fa-shapes me-2 text-warning"></i>
             <span>
-                    @if (auth()->user()->isAdmin())
-                            Admin
-                        @elseif(auth()->user()->isTadika())
-                            Tadika
-                        @elseif(auth()->user()->isAlumni())
-                            Alumni
-                    @endif
+                @if (auth()->user()->isAdmin())
+                    Admin
+                @elseif(auth()->user()->isTadika())
+                    Tadika
+                @elseif(auth()->user()->isAlumni())
+                    Alumni
+                @endif
             </span>
         </div>
 
-        <div class="overflow-auto" style="height: calc(100vh - 80px);">
+        <div class="sidebar-body">
             <div class="nav-label">Utama</div>
 
             @if (auth()->user()->isAdmin())
@@ -209,7 +243,8 @@
                     <i class="bi bi-speedometer2"></i> Papan Pemuka
                 </a>
             @elseif(auth()->user()->isAlumni())
-                <a href="{{ route('profile.show') }}" class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
+                <a href="{{ route('profile.show') }}"
+                    class="nav-link {{ Request::is('profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Papan Pemuka
                     @if($unreadInAppMessages > 0)
                         <span class="badge bg-warning text-dark ms-auto rounded-pill">{{ $unreadInAppMessages }}</span>
@@ -241,35 +276,38 @@
                         <i class="bi bi-building-add"></i> Tambah Tadika
                     </a>
                 @endif
+
             @elseif(auth()->user()->isTadika())
                 <div class="nav-label">Tadika</div>
+
                 <a href="{{ route('tadika.profile.edit') }}"
                     class="nav-link {{ Request::is('tadika/profile/edit') ? 'active' : '' }}">
                     <i class="bi bi-building"></i> Profil Tadika
                 </a>
+
                 <a href="{{ route('tadika.alumni') }}"
                     class="nav-link {{ Request::is('tadika/alumni') ? 'active' : '' }}">
                     <i class="bi bi-people-fill"></i> Alumni Tadika
                 </a>
+
             @elseif(auth()->user()->isAlumni())
                 <div class="nav-label">Alumni</div>
+
                 <a href="{{ route('profile.edit') }}"
                     class="nav-link {{ Request::is('profile/edit') ? 'active' : '' }}">
                     <i class="bi bi-pencil-square"></i> Kemaskini Profil
                 </a>
             @endif
 
-            <div class="nav-label">Akaun</div>
-
-            <form action="{{ route('logout') }}" method="POST" class="mt-2 px-3">
-                @csrf
-                <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm">
-                    <i class="bi bi-box-arrow-right me-2"></i> Log Keluar
-                </button>
-            </form>
-
-            <div class="mt-auto p-4 text-center text-white-50 small">
-                &copy; {{ date('Y') }} Tadika System
+            <div class="sidebar-footer">
+                <div class="nav-label" style="padding-top: 10px;">Akaun</div>
+                <form action="{{ route('logout') }}" method="POST" class="px-2 mt-1">
+                    @csrf
+                    <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm">
+                        <i class="bi bi-box-arrow-right me-2"></i> Log Keluar
+                    </button>
+                </form>
+                <div class="sidebar-copyright">&copy; {{ date('Y') }} Tadika System</div>
             </div>
         </div>
     </nav>
@@ -288,18 +326,8 @@
                 </div>
             </div>
 
-          @if(auth()->user()->isAlumni())
-               <!--   <a href="{{ route('profile.show') }}" class="btn btn-white border rounded-pill px-3 py-1 shadow-sm me-2">
-                    <i class="fas fa-envelope me-1"></i> Mesej
-                    @if($unreadInAppMessages > 0)
-                        <span class="badge bg-danger ms-1 rounded-pill">{{ $unreadInAppMessages }}</span>
-                    @endif
-                </a> -->
-            @endif
-
             <div class="dropdown">
-                <button
-                    class="btn btn-white border rounded-pill px-3 py-1 shadow-sm dropdown-toggle d-flex align-items-center gap-2"
+                <button class="btn btn-white border rounded-pill px-3 py-1 shadow-sm dropdown-toggle d-flex align-items-center gap-2"
                     type="button" data-bs-toggle="dropdown">
                     <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                         style="width: 30px; height: 30px;">
@@ -319,11 +347,8 @@
                             @endif
                         </h6>
                     </li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-muted"></i> Tetapan</a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-muted"></i> Tetapan</a></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

@@ -55,7 +55,11 @@ class AlumniController extends Controller
     public function create()
     {
         $tadikas = Tadika::query()->orderBy('tadika_name')->get(['tadika_id', 'tadika_name']);
-        return view('alumni.create', compact('tadikas'));
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+        return view('alumni.create', compact('tadikas', 'states'));
     }
 
     public function store(Request $request)
@@ -167,7 +171,11 @@ class AlumniController extends Controller
     public function edit(Alumni $alumni)
     {
         $tadikas = Tadika::query()->orderBy('tadika_name')->get(['tadika_id', 'tadika_name']);
-        return view('alumni.edit', compact('alumni', 'tadikas'));
+        $states = DB::table('glo_bandar')
+            ->distinct()
+            ->orderBy('bandar_negeri')
+            ->pluck('bandar_negeri');
+        return view('alumni.edit', compact('alumni', 'tadikas', 'states'));
     }
 
     public function update(Request $request, Alumni $alumni)
@@ -270,7 +278,7 @@ class AlumniController extends Controller
             }
         });
 
-        return redirect()->route('alumni.index')->with('success', 'Maklumat alumni dan kelayakan log masuk berjaya dikemas kini.');
+        return redirect()->route('alumni.index')->with('success', 'Maklumat alumni dan kelayakan log masuk berjaya dikemaskini.');
     }
 
     // Delete alumni
@@ -303,6 +311,29 @@ class AlumniController extends Controller
     public function export()
     {
         return Excel::download(new AlumniExport(), 'semua_alumni.xlsx');
+    }
+
+    public function getDistricts(Request $request)
+    {
+        $districts = DB::table('glo_bandar')
+            ->where('bandar_negeri', $request->state)
+            ->whereNotNull('bandar_nama')
+            ->distinct()
+            ->orderBy('bandar_nama')
+            ->pluck('bandar_nama');
+
+        return response()->json($districts);
+    }
+
+    public function getPostcodes(Request $request)
+    {
+        $postcodes = DB::table('glo_bandar')
+            ->where('bandar_nama', $request->district)
+            ->distinct()
+            ->orderBy('bandar_postcode')
+            ->pluck('bandar_postcode');
+
+        return response()->json($postcodes);
     }
 
     private function resolveTadikaIdByName(?string $tadikaName): ?int

@@ -7,7 +7,7 @@
 
 @section('header-buttons')
     <a href="{{ route('tadika.edit', $tadika->tadika_id) }}" class="btn btn-warning me-2">
-        <i class="fas fa-edit me-2"></i> Sunting
+        <i class="fas fa-edit me-2"></i> Kemaskini
     </a>
     <a href="{{ route('tadika.index') }}" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i> Kembali

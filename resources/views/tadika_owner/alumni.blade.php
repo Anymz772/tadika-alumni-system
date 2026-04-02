@@ -30,10 +30,18 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-users me-2"></i>Senarai Alumni</h5>
-                <span class="badge bg-primary">{{ $alumni->total() }} Rekod Ditemui</span>
+<div class="card-header d-flex flex-wrap gap-2 align-items-center">
+                <h5 class="mb-0 flex-grow-1"><i class="fas fa-users me-2"></i>Senarai Alumni ({{ $alumni->total() }} Rekod)</h5>
+                <div class="btn-group" role="group">
+                    <a href="{{ route('tadika.alumni.message_all.form') }}" class="btn btn-outline-warning btn-sm" title="Siar Mesej kepada Semua Alumni">
+                        <i class="fas fa-bullhorn me-1"></i> Mesej Semua
+                    </a>
+                    <a href="{{ route('tadika.alumni.export') }}" class="btn btn-outline-success btn-sm" title="Muat Turun Excel">
+                        <i class="fas fa-file-excel me-1"></i> Eksport
+                    </a>
+                </div>
             </div>
+
 
             <div class="card-body">
                 @if($alumni->count() > 0)
@@ -103,7 +111,7 @@
                                         <a href="{{ route('tadika.alumni.show', $item->alumni_id) }}" class="btn btn-sm btn-info" title="Lihat Profil Penuh">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('tadika.alumni.edit', $item->alumni_id) }}" class="btn btn-sm btn-warning" title="Sunting">
+                                        <a href="{{ route('tadika.alumni.edit', $item->alumni_id) }}" class="btn btn-sm btn-warning" title="Kemaskini">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="{{ route('tadika.alumni.message.form', $item->alumni_id) }}" class="btn btn-sm btn-secondary" title="Hantar Mesej">
