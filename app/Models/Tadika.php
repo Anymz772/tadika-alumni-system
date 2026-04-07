@@ -13,6 +13,8 @@ class Tadika extends Model
     protected $primaryKey = 'tadika_id';
 
     protected $fillable = [
+        'tadika_category_id',
+        'tadika_registered_name',
         'tadika_name',
         'tadika_reg_no',
         'tadika_address',
@@ -35,5 +37,10 @@ class Tadika extends Model
     public function alumni()
     {
         return $this->hasMany(Alumni::class, 'tadika_id', 'tadika_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(TadikaCategory::class, 'tadika_category_id');
     }
 }

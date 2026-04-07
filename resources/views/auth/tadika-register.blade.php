@@ -36,7 +36,67 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
+                            <label for="tadika_category_id" class="form-label required">Kategori Tadika</label>
+                            <select class="form-select @error('tadika_category_id') is-invalid @enderror" 
+                                id="tadika_category_id" name="tadika_category_id" required>
+                                <option value="">-- Pilih Kategori --</option>
+                                
+                                {{-- Loop dari database --}}
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('tadika_category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                                
+                                {{-- Pilihan Lain-lain sentiasa ada di bawah --}}
+                                <option value="lain_lain" {{ old('tadika_category_id') == 'lain_lain' ? 'selected' : '' }}>Lain-lain</option>
+                            </select>
+                            @error('tadika_category_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
+                            {{-- Input Box yang akan muncul jika "Lain-lain" dipilih --}}
+                            <div id="new_category_wrapper" class="mt-2" style="display: {{ old('tadika_category_id') == 'lain_lain' ? 'block' : 'none' }};">
+                                <input type="text" class="form-control @error('new_category_name') is-invalid @enderror" 
+                                    id="new_category_name" name="new_category_name" value="{{ old('new_category_name') }}" 
+                                    placeholder="Sila nyatakan kategori baharu...">
+                                <div class="form-text text-primary" style="font-size: 0.75rem;">
+                                    <i class="fas fa-info-circle"></i> Kategori ini akan disimpan dalam sistem.
+                                </div>
+                                @error('new_category_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="tadika_reg_no" class="form-label required">No. Pendaftaran</label>
+                            <input type="text"
+                                class="form-control @error('tadika_reg_no') is-invalid @enderror"
+                                id="tadika_reg_no" name="tadika_reg_no"
+                                value="{{ old('tadika_reg_no') }}"
+                                placeholder="Cth: JPN/2024/001"
+                                required>
+                            @error('tadika_reg_no')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 mt-2">
+                            <label for="tadika_registered_name" class="form-label required">Nama Berdaftar (SSM/Lesen)</label>
+                            <input type="text"
+                                class="form-control @error('tadika_registered_name') is-invalid @enderror"
+                                id="tadika_registered_name" name="tadika_registered_name"
+                                value="{{ old('tadika_registered_name') }}"
+                                placeholder="Cth: Syarikat Ceria Sdn Bhd"
+                                required>
+                            @error('tadika_registered_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 mt-2">
                             <label for="tadika_name" class="form-label required">Nama Tadika</label>
                             <input type="text"
                                 class="form-control @error('tadika_name') is-invalid @enderror"
@@ -49,22 +109,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-lg-6">
-                            <label for="tadika_reg_no" class="form-label required">No. Pendaftaran</label>
-                            <input type="text"
-                                class="form-control @error('tadika_reg_no') is-invalid @enderror"
-                                id="tadika_reg_no" name="tadika_reg_no"
-                                value="{{ old('tadika_reg_no') }}"
-                                placeholder="Cth: JPN/2024/001"
-                                required>
-                            @error('tadika_reg_no')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row g-3 mt-2">
-                        <div class="col-12">
+                        <div class="col-12 mt-2">
                             <label for="tadika_address" class="form-label required">Alamat</label>
                             <textarea class="form-control @error('tadika_address') is-invalid @enderror" 
                                 id="tadika_address" name="tadika_address" rows="2" required
@@ -84,7 +129,7 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="tadika_state" class="form-label required">Negeri</label>
                             <div class="dropdown-wrapper">
                                 <select class="form-select @error('tadika_state') is-invalid @enderror"
@@ -102,7 +147,7 @@
                             <div id="tadika_state_error" class="invalid-feedback"></div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="tadika_district" class="form-label required">Daerah</label>
                             <input type="text"
                                 class="form-control @error('tadika_district') is-invalid @enderror"
@@ -440,6 +485,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const stateError = document.getElementById('tadika_state_error');
     const districtError = document.getElementById('tadika_district_error');
     const errorMessage = "Maklumat lokasi tidak sah.";
+
+    // Script untuk toggle input "Lain-lain"
+    const categorySelect = document.getElementById('tadika_category_id');
+    const newCategoryWrapper = document.getElementById('new_category_wrapper');
+    const newCategoryInput = document.getElementById('new_category_name');
+
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            if (this.value === 'lain_lain') {
+                newCategoryWrapper.style.display = 'block';
+                newCategoryInput.setAttribute('required', 'required');
+                newCategoryInput.focus();
+            } else {
+                newCategoryWrapper.style.display = 'none';
+                newCategoryInput.removeAttribute('required');
+                newCategoryInput.value = ''; // Kosongkan input jika bukan lain-lain
+            }
+        });
+    }
 
     function validateDatalistInput(input, dataListId, errorDiv) {
         const value = input.value.trim();

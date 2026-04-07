@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Tadika;
 use App\Models\User;
-use App\Models\Alumni; // Import Alumni Model
+use App\Models\Alumni;
+use App\Models\TadikaCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,12 +17,15 @@ class TadikaRegisterController extends Controller
 {
     public function create()
     {
+
+        $categories = TadikaCategory::orderBy('name')->get();
+
         $states = DB::table('glo_bandar')
             ->distinct()
             ->orderBy('bandar_negeri')
             ->pluck('bandar_negeri');
 
-        return view('auth.tadika-register', compact('states'));
+        return view('auth.tadika-register', compact('states' , 'categories'));
     }
 
     public function getDistricts(Request $request)
@@ -50,13 +54,16 @@ class TadikaRegisterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            // Validasi Kategori
+            'tadika_category_id' => [ 'required', function ($attribute, $value, $fail) { if ($value !== 'lain_lain' && !TadikaCategory::find($value)) { $fail('Kategori tidak sah.'); } }, ],
+            'new_category_name' => ['required_if:tadika_category_id,lain_lain', 'nullable', 'string', 'max:100'],
+            // Validasi lain
+            'tadika_registered_name' => ['required', 'string', 'max:255'],
             'tadika_name' => ['required', 'string', 'max:255'],
             'tadika_reg_no' => ['required', 'string', 'max:100', 'unique:tadikas,tadika_reg_no'],
             'tadika_district' => 
             ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
             'tadika_state' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
-            'tadika_postcode' => ['required', 'string', 'max:50', Rule::exists('glo_bandar', 'bandar_postcode')],
-            // Validate against the correct `user_email` column in the `users` table
             'tadika_email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,user_email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'tadika_address' => ['nullable', 'string'],
@@ -80,6 +87,18 @@ class TadikaRegisterController extends Controller
         }
 
         DB::transaction(function () use ($request, $tadika_logoPath) {
+
+            // LOGIK KATEGORI DINAMIK
+            $categoryId = $request->tadika_category_id;
+            // Jika pengguna pilih "Lain-lain"
+            if ($categoryId === 'lain_lain') {
+                // Simpan kategori baharu ke database (firstOrCreate elak duplicate jika pengguna taip benda sama)
+                $newCategory = TadikaCategory::firstOrCreate([
+                    'name' => strtoupper(trim($request->new_category_name)) // Tukar huruf besar supaya seragam
+                ]);
+                $categoryId = $newCategory->id;
+            }
+
             // 1. Create User Account
             $user = User::create([
                 'user_name' => $request->tadika_name,
@@ -90,18 +109,20 @@ class TadikaRegisterController extends Controller
 
             // 2. Create Tadika Profile
             $tadika = Tadika::create([
+                // -- TAMBAH DUA BARIS INI --
+                'tadika_category_id' => $categoryId,
+                'tadika_registered_name' => $request->tadika_registered_name,
                 'tadika_name' => $request->tadika_name,
                 'tadika_reg_no' => $request->tadika_reg_no,
                 'tadika_district' => $request->tadika_district,
                 'tadika_state' => $request->tadika_state,
-                'tadika_postcode' => $request->tadika_postcode,
-                'tadika_email' => $request->tadika_email, // Store the tadika's business email here
+                'tadika_email' => $request->tadika_email,
                 'tadika_address' => $request->tadika_address,
                 'tadika_phone' => $request->tadika_phone,
                 'tadika_owner' => $request->tadika_owner,
                 'tadika_location' => $request->tadika_location,
                 'tadika_logo' => $tadika_logoPath,
-                'owner_user_id' => $user->user_id, // Linked to the new user_id column
+                'owner_user_id' => $user->user_id,
             ]);
 
             // 3. ADOPT ORPHANED ALUMNI

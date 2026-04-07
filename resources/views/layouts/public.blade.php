@@ -186,8 +186,8 @@
                         </div>
                     </div>
                     <p class="mt-3" style="color: #bdc3c7;">
-                        Official alumni network of Tadika Institution. 
-                        Connecting graduates and fostering lifelong relationships.
+                        Platform rasmi alumni institusi tadika untuk menghubungkan 
+                        graduan dan mengeratkan hubungan sepanjang hayat.
                     </p>
                 </div>
                 <div class="col-md-4">
