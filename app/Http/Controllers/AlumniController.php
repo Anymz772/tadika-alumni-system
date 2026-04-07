@@ -47,6 +47,10 @@ class AlumniController extends Controller
             });
         }
 
+        if ($request->has('tadika_name') && !empty($request->tadika_name)) {
+            $query->where('tadika_name', 'like', "%{$request->tadika_name}%");
+        }
+
         $alumni = $query->paginate(10)->withQueryString();
 
         return view('alumni.index', compact('alumni'));

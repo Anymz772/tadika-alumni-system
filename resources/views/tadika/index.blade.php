@@ -139,11 +139,15 @@
                                 <td>
                                     <div class="action-buttons d-flex justify-content-center gap-2">
                                         <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal{{ $item->tadika_id }}">
+                                            data-bs-target="#quickViewModal{{ $item->tadika_id }}" title="Lihat Pantas">
                                             <i class="fas fa-eye"></i>
                                         </button>
 
-                                        <a href="{{ route('tadika.edit', $item->tadika_id) }}" class="btn btn-sm btn-warning">
+                                        <a href="{{ route('tadika.show', $item->tadika_id) }}" class="btn btn-sm btn-primary" title="Senarai Alumni">
+                                            <i class="fas fa-users"></i>
+                                        </a>
+
+                                        <a href="{{ route('tadika.edit', $item->tadika_id) }}" class="btn btn-sm btn-warning" title="Kemaskini">
                                             <i class="fas fa-edit"></i>
                                         </a>
 
@@ -152,7 +156,7 @@
                                             onsubmit="return confirm('Adakah anda pasti mahu memadam {{ $item->tadika_name }}? Ini juga akan memadam akaun pemilik.')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Padam">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -232,6 +236,9 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
+                                            <a href="{{ route('tadika.show', $item->tadika_id) }}" class="btn btn-primary">
+                                                <i class="fas fa-users me-2"></i> Senarai Alumni
+                                            </a>
                                             <a href="{{ route('tadika.edit', $item->tadika_id) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit me-2"></i> Kemaskini
                                             </a>

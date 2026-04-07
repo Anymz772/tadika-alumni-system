@@ -117,22 +117,20 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="alumni_state" class="form-label required">Negeri</label>
-                            <input type="text"
-                                class="form-control @error('alumni_state') is-invalid @enderror"
-                                id="alumni_state" name="alumni_state"
-                                list="alumni-state-list"
-                                value="{{ old('alumni_state', $prefilledTadika->tadika_state ?? '') }}"
-                                placeholder="Pilih negeri..."
-                                required>
+                            <div class="dropdown-wrapper">
+                                <select class="form-select @error('alumni_state') is-invalid @enderror"
+                                    id="alumni_state" name="alumni_state"
+                                    required>
+                                    <option value="">-- Pilih Negeri --</option>
+                                    @foreach($states as $state)
+                                        <option value="{{ $state }}" {{ old('alumni_state', $prefilledTadika->tadika_state ?? '') == $state ? 'selected' : '' }}>{{ $state }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             @error('alumni_state')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                             <div id="alumni_state_error" class="invalid-feedback"></div>
-                            <datalist id="alumni-state-list">
-                                @foreach($states as $state)
-                                    <option value="{{ $state }}"></option>
-                                @endforeach
-                            </datalist>
                         </div>
 
                         <div class="col-md-4">
@@ -151,22 +149,6 @@
                             <datalist id="alumni-district-list"></datalist>
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="alumni_postcode" class="form-label required">Poskod</label>
-                            <input type="text"
-                                class="form-control @error('alumni_postcode') is-invalid @enderror"
-                                id="alumni_postcode" name="alumni_postcode"
-                                list="alumni-postcode-list"
-                                value="{{ old('alumni_postcode', $prefilledTadika->tadika_postcode ?? '') }}"
-                                placeholder="Pilih poskod..."
-                                required>
-                            @error('alumni_postcode')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                             <div id="alumni_postcode_error" class="invalid-feedback"></div>
-                            <datalist id="alumni-postcode-list"></datalist>
-                        </div>
-
                         <div class="col-md-12">
                             <label for="tadika_id" class="form-label required">Nama Tadika</label>
                             <select class="form-control form-select @error('tadika_id') is-invalid @enderror"
@@ -174,6 +156,10 @@
                                 <option value="">-- Pilih Tadika --</option>
                                 <option value="other" {{ old('tadika_id') == 'other' ? 'selected' : '' }}>Lain-lain (Others)</option>
                             </select>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1 text-primary"></i>
+                                Sila masukkan nama rasmi tadika. Pastikan anda mengisi nama tadika yang sebenar.
+                            </div>
                             @error('tadika_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -186,6 +172,10 @@
                                 id="other_tadika_name" name="other_tadika_name"
                                 value="{{ old('other_tadika_name') }}"
                                 placeholder="Nama tadika anda">
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1 text-primary"></i>
+                                Sila masukkan nama rasmi tadika. Pastikan anda mengisi nama tadika yang sebenar.
+                            </div>
                             @error('other_tadika_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -349,6 +339,34 @@
         margin-top: 0.35rem;
     }
 
+    /* ── Dropdowns ─────────────────────────────── */
+    .dropdown-wrapper {
+        position: relative;
+    }
+
+    .form-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+        border-radius: 8px;
+        border-color: #ced4da;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-select:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+    }
+
+    .form-select.is-invalid {
+        border-color: #dc3545;
+    }
+
     /* ── Password Toggle ───────────────────────── */
     .input-group .btn-outline-secondary {
         border-color: #ced4da;
@@ -437,21 +455,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form');
     const stateInput = document.getElementById('alumni_state');
     const districtInput = document.getElementById('alumni_district');
-    const postcodeInput = document.getElementById('alumni_postcode');
     const tadikaSelect  = document.getElementById('tadika_id');
     const districtList  = document.getElementById('alumni-district-list');
-    const postcodeList  = document.getElementById('alumni-postcode-list');
     const otherDiv      = document.getElementById('other_tadika_name_div');
 
     const stateError = document.getElementById('alumni_state_error');
     const districtError = document.getElementById('alumni_district_error');
-    const postcodeError = document.getElementById('alumni_postcode_error');
     const errorMessage = "Maklumat lokasi tidak sah.";
 
     function validateDatalistInput(input, dataListId, errorDiv) {
         const value = input.value.trim();
         if (value) {
             const dataList = document.getElementById(dataListId);
+            // if datalist is not populated, fallback to server-side validation rather than blocking prematurely
+            if (!dataList || dataList.options.length === 0) {
+                input.classList.remove('is-invalid');
+                errorDiv.textContent = '';
+                return true;
+            }
             let optionFound = false;
             for (const option of dataList.options) {
                 if (option.value.toLowerCase() === value.toLowerCase()) {
@@ -471,11 +492,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     form.addEventListener('submit', function(event) {
-        const isStateValid = validateDatalistInput(stateInput, 'alumni-state-list', stateError);
         const isDistrictValid = validateDatalistInput(districtInput, 'alumni-district-list', districtError);
-        const isPostcodeValid = validateDatalistInput(postcodeInput, 'alumni-postcode-list', postcodeError);
 
-        if (!isStateValid || !isDistrictValid || !isPostcodeValid) {
+        if (!isDistrictValid) {
             event.preventDefault();
         }
     });
@@ -487,9 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fetchDistricts() {
         const state = stateInput.value.trim();
         districtInput.value = '';
-        postcodeInput.value = '';
         districtList.innerHTML = '';
-        postcodeList.innerHTML = '';
         resetTadikaSelect();
 
         if (state) {
@@ -505,33 +522,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function fetchPostcodes() {
-        const district = districtInput.value.trim();
-        postcodeInput.value = '';
-        postcodeList.innerHTML = '';
-        resetTadikaSelect();
-
-        if (district) {
-            fetch(`{{ route('alumni.register.postcodes') }}?district=${encodeURIComponent(district)}`)
-                .then(r => r.json())
-                .then(data => {
-                    data.forEach(p => {
-                        const opt = document.createElement('option');
-                        opt.value = p;
-                        postcodeList.appendChild(opt);
-                    });
-                });
-        }
-    }
-
     function fetchTadikas() {
         const state    = stateInput.value.trim();
         const district = districtInput.value.trim();
-        const postcode = postcodeInput.value.trim();
         resetTadikaSelect();
 
-        if (state && district && postcode) {
-            fetch(`{{ route('alumni.register.tadikas') }}?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}&postcode=${encodeURIComponent(postcode)}`)
+        if (state && district) {
+            fetch(`{{ route('alumni.register.tadikas') }}?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}`)
                 .then(r => r.json())
                 .then(data => {
                     const other = tadikaSelect.querySelector('option[value="other"]');
@@ -550,9 +547,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     stateInput.addEventListener('change', fetchDistricts);
-    districtInput.addEventListener('change', fetchPostcodes);
-    postcodeInput.addEventListener('change', fetchTadikas);
+    districtInput.addEventListener('change', fetchTadikas);
     tadikaSelect.addEventListener('change', toggleOtherTadika);
+
+    // Initialize location-dependent select lists so old form values can be validated correctly on submit
+    const initialState = stateInput.value.trim();
+    const initialDistrict = districtInput.value.trim();
+
+    if (initialState) {
+        fetchDistricts();
+        if (initialDistrict) {
+            fetchTadikas();
+        }
+    }
 
     // ── Password visibility toggle ───────────────
     document.querySelectorAll('.toggle-password').forEach(btn => {

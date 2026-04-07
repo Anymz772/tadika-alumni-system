@@ -36,7 +36,10 @@ class Alumni extends Model
         'alumni_state',                     // was 'state'
         'tadika_name',                      // stays the same
         'gender',                           // stays the same
-        'age'                               // stays the same
+        'age',                              // stays the same
+        'hobby',
+        'favourite_things',
+        'bio'
     ];
 
     public function user()

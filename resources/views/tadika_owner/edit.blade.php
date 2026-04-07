@@ -20,8 +20,8 @@
 
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show small" role="alert">
-                    <i class="fas fa-exclamation-circle me-1"></i> Sila betulkan ralat di bawah.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    Please fill out this field with the red " * "
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 

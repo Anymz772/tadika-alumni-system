@@ -28,6 +28,11 @@
                         <input type="text" name="search" class="form-control"
                             value="{{ request('search') }}" placeholder="Cari...">
                     </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Tadika</label>
+                        <input type="text" name="tadika_name" class="form-control"
+                            value="{{ request('tadika_name') }}" placeholder="Nama tadika">
+                    </div>
                     <div class="col-md-2">
                         <label class="form-label">Tahun Graduasi Dari</label>
                         <input type="number" name="year_from" class="form-control"
@@ -38,18 +43,13 @@
                         <input type="number" name="year_to" class="form-control"
                             value="{{ request('year_to') }}" placeholder="cth. 2020" min="2000" max="{{ date('Y') }}">
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Syarikat</label>
-                        <input type="text" name="company" class="form-control"
-                            value="{{ request('company') }}" placeholder="Nama syarikat">
-                    </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <div class="btn-group w-100">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-search me-2"></i> Cari
                             </button>
-                            <a href="{{ route('alumni.index') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-redo me-2"></i> Set Semula
+                            <a href="{{ route('alumni.index') }}" class="btn btn-outline-secondary" title="Set Semula">
+                                <i class="fas fa-redo"></i>
                             </a>
                         </div>
                     </div>

@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label for="tadika_name" class="form-label required">Nama Tadika</label>
                             <input type="text"
                                 class="form-control @error('tadika_name') is-invalid @enderror"
@@ -49,7 +49,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label for="tadika_reg_no" class="form-label required">No. Pendaftaran</label>
                             <input type="text"
                                 class="form-control @error('tadika_reg_no') is-invalid @enderror"
@@ -58,6 +58,18 @@
                                 placeholder="Cth: JPN/2024/001"
                                 required>
                             @error('tadika_reg_no')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-12">
+                            <label for="tadika_address" class="form-label required">Alamat</label>
+                            <textarea class="form-control @error('tadika_address') is-invalid @enderror" 
+                                id="tadika_address" name="tadika_address" rows="2" required
+                                placeholder="Alamat penuh tadika">{{ old('tadika_address') }}</textarea>
+                            @error('tadika_address')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -74,22 +86,20 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="tadika_state" class="form-label required">Negeri</label>
-                            <input type="text"
-                                class="form-control @error('tadika_state') is-invalid @enderror"
-                                id="tadika_state" name="tadika_state"
-                                list="state-list"
-                                value="{{ old('tadika_state') }}"
-                                placeholder="Pilih negeri..."
-                                required>
+                            <div class="dropdown-wrapper">
+                                <select class="form-select @error('tadika_state') is-invalid @enderror"
+                                    id="tadika_state" name="tadika_state"
+                                    required>
+                                    <option value="">-- Pilih Negeri --</option>
+                                    @foreach($states as $state)
+                                        <option value="{{ $state }}" {{ old('tadika_state') == $state ? 'selected' : '' }}>{{ $state }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             @error('tadika_state')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                             <div id="tadika_state_error" class="invalid-feedback"></div>
-                            <datalist id="state-list">
-                                @foreach($states as $state)
-                                    <option value="{{ $state }}"></option>
-                                @endforeach
-                            </datalist>
                         </div>
 
                         <div class="col-md-4">
@@ -106,22 +116,6 @@
                             @enderror
                             <div id="tadika_district_error" class="invalid-feedback"></div>
                             <datalist id="district-list"></datalist>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="tadika_postcode" class="form-label required">Poskod</label>
-                            <input type="text"
-                                class="form-control @error('tadika_postcode') is-invalid @enderror"
-                                id="tadika_postcode" name="tadika_postcode"
-                                list="postcode-list"
-                                value="{{ old('tadika_postcode') }}"
-                                placeholder="Pilih poskod..."
-                                required>
-                            @error('tadika_postcode')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <div id="tadika_postcode_error" class="invalid-feedback"></div>
-                            <datalist id="postcode-list"></datalist>
                         </div>
                     </div>
                 </div>
@@ -343,6 +337,34 @@
         margin-top: 0.35rem;
     }
 
+    /* ── Dropdowns ─────────────────────────────── */
+    .dropdown-wrapper {
+        position: relative;
+    }
+
+    .form-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+        border-radius: 8px;
+        border-color: #ced4da;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-select:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+    }
+
+    .form-select.is-invalid {
+        border-color: #dc3545;
+    }
+
     /* ── Password Toggle ───────────────────────── */
     .input-group .btn-outline-secondary {
         border-color: #ced4da;
@@ -413,19 +435,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form');
     const stateInput = document.getElementById('tadika_state');
     const districtInput = document.getElementById('tadika_district');
-    const postcodeInput = document.getElementById('tadika_postcode');
     const districtList  = document.getElementById('district-list');
-    const postcodeList  = document.getElementById('postcode-list');
 
     const stateError = document.getElementById('tadika_state_error');
     const districtError = document.getElementById('tadika_district_error');
-    const postcodeError = document.getElementById('tadika_postcode_error');
     const errorMessage = "Maklumat lokasi tidak sah.";
 
     function validateDatalistInput(input, dataListId, errorDiv) {
         const value = input.value.trim();
         if (value) {
             const dataList = document.getElementById(dataListId);
+            // if the datalist is empty (e.g., not loaded yet), skip client-side strict validation
+            if (dataList.options.length === 0) {
+                input.classList.remove('is-invalid');
+                errorDiv.textContent = '';
+                return true;
+            }
             let optionFound = false;
             for (const option of dataList.options) {
                 if (option.value.toLowerCase() === value.toLowerCase()) {
@@ -444,12 +469,32 @@ document.addEventListener('DOMContentLoaded', function () {
         return true;
     }
 
-    form.addEventListener('submit', function(event) {
-        const isStateValid = validateDatalistInput(stateInput, 'state-list', stateError);
-        const isDistrictValid = validateDatalistInput(districtInput, 'district-list', districtError);
-        const isPostcodeValid = validateDatalistInput(postcodeInput, 'postcode-list', postcodeError);
+    function loadDistrictOptions(state) {
+        districtInput.value = '';
+        districtList.innerHTML = '';
 
-        if (!isStateValid || !isDistrictValid || !isPostcodeValid) {
+        if (!state) {
+            return Promise.resolve();
+        }
+
+        return fetch(`{{ route('tadika.register.districts') }}?state=${encodeURIComponent(state)}`)
+            .then(r => r.json())
+            .then(data => {
+                data.forEach(district => {
+                    const opt = document.createElement('option');
+                    opt.value = district;
+                    districtList.appendChild(opt);
+                });
+            })
+            .catch(() => {
+                // swallow fetch errors and rely on server-side validation
+            });
+    }
+
+    form.addEventListener('submit', function(event) {
+        const isDistrictValid = validateDatalistInput(districtInput, 'district-list', districtError);
+
+        if (!isDistrictValid) {
             event.preventDefault();
         }
     });
@@ -457,41 +502,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Location cascade ─────────────────────────
     stateInput.addEventListener('change', function () {
         const state = this.value.trim();
-        districtInput.value = '';
-        postcodeInput.value = '';
-        districtList.innerHTML = '';
-        postcodeList.innerHTML = '';
-
-        if (state) {
-            fetch(`{{ route('tadika.register.districts') }}?state=${encodeURIComponent(state)}`)
-                .then(r => r.json())
-                .then(data => {
-                    data.forEach(district => {
-                        const opt = document.createElement('option');
-                        opt.value = district;
-                        districtList.appendChild(opt);
-                    });
-                });
-        }
+        loadDistrictOptions(state);
     });
 
-    districtInput.addEventListener('change', function () {
-        const district = this.value.trim();
-        postcodeInput.value = '';
-        postcodeList.innerHTML = '';
+    // Initialize district list when form is reloaded after server validation error
+    const initialState = stateInput.value.trim();
 
-        if (district) {
-            fetch(`{{ route('tadika.register.postcodes') }}?district=${encodeURIComponent(district)}`)
-                .then(r => r.json())
-                .then(data => {
-                    data.forEach(postcode => {
-                        const opt = document.createElement('option');
-                        opt.value = postcode;
-                        postcodeList.appendChild(opt);
-                    });
-                });
-        }
-    });
+    if (initialState) {
+        loadDistrictOptions(initialState);
+    }
 
     // ── Password visibility toggle ───────────────
     document.querySelectorAll('.toggle-password').forEach(btn => {

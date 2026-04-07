@@ -4,13 +4,15 @@
     <div class="col-md-6">
         <label class="form-label form-label-sm">Nama Penuh <span class="text-danger">*</span></label>
         <input type="text" class="form-control form-control-sm" name="alumni_name"
-            value="{{ old('alumni_name', $alumni->alumni_name) }}" required>
+            value="{{ old('alumni_name', $alumni->alumni_name) }}" required
+            title="Nama penuh alumni">
     </div>
 
     <div class="col-md-6">
         <label class="form-label form-label-sm">Alamat E-mel <span class="text-danger">*</span></label>
         <input type="email" class="form-control form-control-sm" name="user_email"
-            value="{{ old('user_email', $alumni->user->user_email ?? $alumni->alumni_email) }}" required>
+            value="{{ old('user_email', $alumni->user->user_email ?? $alumni->alumni_email) }}" required
+            title="Alamat emel yang sah">
     </div>
 </div>
 
@@ -18,13 +20,18 @@
     <div class="col-md-6">
         <label class="form-label form-label-sm">No. IC <span class="text-danger">*</span></label>
         <input type="text" class="form-control form-control-sm" name="alumni_ic"
-            value="{{ old('alumni_ic', $alumni->alumni_ic) }}" required>
+            value="{{ old('alumni_ic', $alumni->alumni_ic) }}" required
+            pattern="[0-9]{12}"
+            maxlength="12"
+            title="No IC mestilah 12 digit">
     </div>
 
     <div class="col-md-6">
         <label class="form-label form-label-sm">Nombor Kenalan <span class="text-danger">*</span></label>
-        <input type="text" class="form-control form-control-sm" name="alumni_phone"
-            value="{{ old('alumni_phone', $alumni->alumni_phone) }}" required>
+        <input type="tel" class="form-control form-control-sm" name="alumni_phone"
+            value="{{ old('alumni_phone', $alumni->alumni_phone) }}" required
+            pattern="^\+?[\d\s\-\(\)]{10,15}$"
+            title="No telefon sah (cth: 012-3456789 atau +60123456789)">
     </div>
 </div>
 
@@ -41,7 +48,8 @@
     <div class="col-md-4">
         <label class="form-label form-label-sm">Umur</label>
         <input type="number" class="form-control form-control-sm" name="age" min="1" max="100"
-            value="{{ old('age', $alumni->age) }}">
+            value="{{ old('age', $alumni->age) }}"
+            title="Umur antara 1-100 tahun">
     </div>
 </div>
 
@@ -61,14 +69,14 @@
     </div>
 </div>
 
+<h6 class="fw-bold text-uppercase text-secondary mb-3 small border-bottom pb-2 mt-4">Lokasi Tadika</h6>
+
 <div class="row mb-3">
     <div class="col-md-4">
         <label class="form-label form-label-sm">Negeri</label>
-        <input type="text" class="form-control form-control-sm @error('alumni_state') is-invalid @enderror"
+        <input type="text" class="form-control form-control-sm" 
                 id="alumni_state" name="alumni_state" value="{{ old('alumni_state', $alumni->alumni_state) }}"
                 list="alumni-state-list" placeholder="Pilih negeri...">
-        <div id="alumni_state_error" class="invalid-feedback"></div>
-        @error('alumni_state') <div class="invalid-feedback">{{ $message }}</div> @enderror
         <datalist id="alumni-state-list">
             @foreach($states as $state)
                 <option value="{{ $state }}"></option>
@@ -78,21 +86,20 @@
 
     <div class="col-md-4">
         <label class="form-label form-label-sm">Daerah</label>
-        <input type="text" class="form-control form-control-sm @error('alumni_district') is-invalid @enderror"
+        <input type="text" class="form-control form-control-sm"
                 id="alumni_district" name="alumni_district" value="{{ old('alumni_district', $alumni->alumni_district) }}"
                 list="alumni-district-list" placeholder="Pilih daerah...">
-        <div id="alumni_district_error" class="invalid-feedback"></div>
-        @error('alumni_district') <div class="invalid-feedback">{{ $message }}</div> @enderror
         <datalist id="alumni-district-list"></datalist>
     </div>
 
     <div class="col-md-4">
         <label class="form-label form-label-sm">Poskod</label>
-        <input type="text" class="form-control form-control-sm @error('alumni_postcode') is-invalid @enderror"
+        <input type="text" class="form-control form-control-sm"
                 id="alumni_postcode" name="alumni_postcode" value="{{ old('alumni_postcode', $alumni->alumni_postcode) }}"
-                list="alumni-postcode-list" placeholder="Pilih poskod...">
-        <div id="alumni_postcode_error" class="invalid-feedback"></div>
-        @error('alumni_postcode') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                list="alumni-postcode-list" placeholder="Pilih poskod..."
+                pattern="^\d{5}$"
+                title="Poskod mestilah 5 digit (cth: 56000)"
+                maxlength="5">
         <datalist id="alumni-postcode-list"></datalist>
     </div>
 </div>
@@ -167,8 +174,10 @@
 <div class="row mb-3">
     <div class="col-12">
         <label class="form-label form-label-sm">Kenalan Ibu Bapa</label>
-        <input type="text" class="form-control form-control-sm" name="parent_phone"
-            value="{{ old('parent_phone', $alumni->parent_phone) }}">
+        <input type="tel" class="form-control form-control-sm" name="parent_phone"
+            value="{{ old('parent_phone', $alumni->parent_phone) }}"
+            pattern="^\+?[\d\s\-\(\)]{10,15}$"
+            title="No telefon ibu bapa sah">
     </div>
 </div>
 
@@ -222,116 +231,3 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form');
-    const stateInput = document.getElementById('alumni_state');
-    const districtInput = document.getElementById('alumni_district');
-    const postcodeInput = document.getElementById('alumni_postcode');
-    const districtList = document.getElementById('alumni-district-list');
-    const postcodeList = document.getElementById('alumni-postcode-list');
-
-    const stateError = document.getElementById('alumni_state_error');
-    const districtError = document.getElementById('alumni_district_error');
-    const postcodeError = document.getElementById('alumni_postcode_error');
-    const errorMessage = "Maklumat lokasi tidak sah. Sila pastikan pilihan dibuat daripada senarai yang disediakan.";
-
-    let districtsRoute, postcodesRoute;
-    const currentPath = window.location.pathname;
-
-    if (currentPath.includes('/admin/alumni') || currentPath.includes('/alumni/')) {
-        districtsRoute = "{{ route('admin.alumni.districts') }}";
-        postcodesRoute = "{{ route('admin.alumni.postcodes') }}";
-    } else if (currentPath.includes('/tadika/')) {
-        districtsRoute = "{{ route('tadika.districts') }}";
-        postcodesRoute = "{{ route('tadika.postcodes') }}";
-    }
-
-    function validateDatalistInput(input, dataListId, errorDiv) {
-        const value = input.value.trim();
-        if (value) {
-            const dataList = document.getElementById(dataListId);
-            if (dataList.options.length === 0) return true;
-            let optionFound = false;
-            for (const option of dataList.options) {
-                if (option.value.toLowerCase() === value.toLowerCase()) {
-                    optionFound = true;
-                    break;
-                }
-            }
-            if (!optionFound) {
-                input.classList.add('is-invalid');
-                errorDiv.textContent = errorMessage;
-                return false;
-            }
-        }
-        input.classList.remove('is-invalid');
-        errorDiv.textContent = '';
-        return true;
-    }
-
-    function fetchDistricts(callback) {
-        const state = stateInput.value.trim();
-        districtList.innerHTML = '';
-        if (state && districtsRoute) {
-            fetch(`${districtsRoute}?state=${encodeURIComponent(state)}`)
-                .then(r => r.json())
-                .then(data => {
-                    data.forEach(district => {
-                        const opt = document.createElement('option');
-                        opt.value = district;
-                        districtList.appendChild(opt);
-                    });
-                    if (callback) callback();
-                });
-        }
-    }
-
-    function fetchPostcodes(callback) {
-        const district = districtInput.value.trim();
-        postcodeList.innerHTML = '';
-        if (district && postcodesRoute) {
-            fetch(`${postcodesRoute}?district=${encodeURIComponent(district)}`)
-                .then(r => r.json())
-                .then(data => {
-                    data.forEach(postcode => {
-                        const opt = document.createElement('option');
-                        opt.value = postcode;
-                        postcodeList.appendChild(opt);
-                    });
-                    if (callback) callback();
-                });
-        }
-    }
-
-    if (stateInput.value) {
-        fetchDistricts(function () {
-            if (districtInput.value) fetchPostcodes();
-        });
-    }
-
-    stateInput.addEventListener('change', function () {
-        districtInput.value = '';
-        postcodeInput.value = '';
-        fetchDistricts();
-    });
-
-    districtInput.addEventListener('change', function () {
-        postcodeInput.value = '';
-        fetchPostcodes();
-    });
-
-    form.addEventListener('submit', function (event) {
-        const isStateValid = validateDatalistInput(stateInput, 'alumni-state-list', stateError);
-        const isDistrictValid = validateDatalistInput(districtInput, 'alumni-district-list', districtError);
-        const isPostcodeValid = validateDatalistInput(postcodeInput, 'alumni-postcode-list', postcodeError);
-
-        if (!isStateValid || !isDistrictValid || !isPostcodeValid) {
-            event.preventDefault();
-        }
-    });
-});
-</script>
-@endpush
