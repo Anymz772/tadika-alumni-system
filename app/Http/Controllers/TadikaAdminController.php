@@ -18,7 +18,7 @@ class TadikaAdminController extends Controller
     // Display tadika list with search
     public function index(Request $request)
     {
-        $query = Tadika::with('owner')->orderBy('tadika_id', 'desc');
+        $query = Tadika::with('owner')->where('is_archived', false)->orderBy('tadika_id', 'desc');
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
@@ -230,26 +230,46 @@ class TadikaAdminController extends Controller
         }
     }
 
-    // Delete tadika
+    // Archive tadika
     public function destroy(Tadika $tadika)
     {
-        try {
-            DB::transaction(function () use ($tadika) {
-                // Delete the owner user
-                if ($tadika->owner) {
-                    $tadika->owner->delete();
-                }
+        // Archive the tadika record instead of hard deleting
+        $tadika->update(['is_archived' => true]);
 
-                // Delete the tadika
-                $tadika->delete();
-            });
+        return redirect()->route('tadika.index')->with('success', 'Tadika berjaya diarkibkan.');
+    }
 
-            return redirect()->route('tadika.index')->with('success', 'Tadika berjaya dipadam.');
-        } catch (\Throwable $e) {
-            report($e);
-            return redirect()->back()
-                ->withErrors(['delete_error' => 'Tidak dapat memadam tadika. Sila cuba lagi.']);
+    public function unarchive($id)
+    {
+        $tadika = Tadika::find($id);
+
+        if (!$tadika) {
+            return redirect()->route('tadika.index')->with('error', 'Tadika tidak ditemui.');
         }
+
+        // Restore archived tadika
+        $tadika->update(['is_archived' => false]);
+
+        return redirect()->route('tadika.index')->with('success', 'Tadika berjaya dipulihkan.');
+    }
+
+    public function archived(Request $request)
+    {
+        // Display archived tadikas only
+        $query = Tadika::with('owner')->where('is_archived', true)->orderBy('tadika_id', 'desc');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('tadika_name', 'like', "%{$search}%")
+                    ->orWhere('tadika_email', 'like', "%{$search}%")
+                    ->orWhere('tadika_phone', 'like', "%{$search}%");
+            });
+        }
+
+        $tadikas = $query->paginate(10)->withQueryString();
+
+        return view('tadika.archived', compact('tadikas'));
     }
 
     public function resetPassword(Request $request, Tadika $tadika)

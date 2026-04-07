@@ -2,7 +2,7 @@
 
 @section('title', 'Papan Pemuka - Tadika Alumni CMS')
 @section('page-title', 'Papan Pemuka')
-@section('header-title', 'Papan Pemuka CMS')
+@section('header-title', 'Papan Pemuka Admin')
 @section('header-subtitle', 'Selamat kembali, ' . Auth::user()->user_name)
 
 @section('content')
@@ -135,8 +135,8 @@
                     <a href="{{ route('alumni.create') }}" class="btn btn-primary w-100 mb-2">
                         <i class="fas fa-user-plus me-2"></i> Tambah Alumni Baru
                     </a>
-                    <a href="{{ route('alumni.index') }}" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-list me-2"></i> Lihat Semua Alumni
+                    <a href="{{ route('tadika.create') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-school me-2"></i> Tambah Tadika Baru
                     </a>
                     <a href="{{ route('admin.alumni.export') }}" class="btn btn-success w-100 mt-2">
                         <i class="fas fa-file-excel me-2"></i> Export Semua Alumni

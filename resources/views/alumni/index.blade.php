@@ -6,8 +6,11 @@
 @section('header-subtitle', 'Urus semua rekod alumni dalam sistem')
 
 @section('header-buttons')
-<a href="{{ route('alumni.create') }}" class="btn btn-primary">
+<!--<a href="{{ route('alumni.create') }}" class="btn btn-primary">
     <i class="fas fa-plus me-2"></i> Tambah Alumni Baru
+</a>-->
+<a href="{{ route('alumni.archived') }}" class="btn btn-secondary">
+    <i class="fas fa-archive me-2"></i> Lihat Arsip
 </a>
 @endsection
 
@@ -162,11 +165,11 @@
 
                                         <form action="{{ route('alumni.destroy', $item->alumni_id) }}" method="POST"
                                             class="d-inline"
-                                            onsubmit="return confirm('Adakah anda pasti mahu memadam {{ $item->alumni_name }}?')">
+                                            onsubmit="return confirm('Adakah anda pasti mahu mengarkibkan {{ $item->alumni_name }}?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
+                                            <button type="submit" class="btn btn-sm btn-secondary" title="Arkib">
+                                                <i class="fas fa-archive"></i>
                                             </button>
                                         </form>
                                     </div>

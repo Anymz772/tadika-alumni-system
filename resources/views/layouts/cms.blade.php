@@ -261,20 +261,20 @@
                         <i class="bi bi-people-fill"></i> Senarai Alumni
                     </a>
 
-                    <a href="{{ route('alumni.create') }}"
+                <!--    <a href="{{ route('alumni.create') }}"
                         class="nav-link {{ Request::is('alumni/create') ? 'active' : '' }}">
                         <i class="bi bi-person-plus-fill"></i> Tambah Alumni
-                    </a>
+                    </a> -->
 
                     <a href="{{ route('tadika.index') }}"
                         class="nav-link {{ Request::is('tadika') || Request::is('tadika/*') ? 'active' : '' }}">
                         <i class="bi bi-building"></i> Senarai Tadika
                     </a>
 
-                    <a href="{{ route('tadika.create') }}"
+                <!--    <a href="{{ route('tadika.create') }}"
                         class="nav-link {{ Request::is('tadika/create') ? 'active' : '' }}">
                         <i class="bi bi-building-add"></i> Tambah Tadika
-                    </a>
+                    </a> -->
                 @endif
 
             @elseif(auth()->user()->isTadika())

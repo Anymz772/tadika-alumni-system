@@ -2,7 +2,7 @@
 
 @section('title', 'Tambah Tadika Baru - Tadika Alumni CMS')
 @section('page-title', 'Tambah Tadika Baru')
-@section('header-title', 'Tambah tadika ke dalam sistem')
+@section('header-title', 'Tambah tadika')
 
 @section('header-buttons')
     <a href="{{ route('tadika.index') }}" class="btn btn-sm btn-secondary">

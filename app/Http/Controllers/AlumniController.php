@@ -18,8 +18,8 @@ class AlumniController extends Controller
     // Display alumni list with search
     public function index(Request $request)
     {
-        // Updated id to alumni_id
-        $query = Alumni::with('user')->orderBy('alumni_id', 'desc');
+        // Updated id to alumni_id - exclude archived records
+        $query = Alumni::with('user')->where('is_archived', false)->orderBy('alumni_id', 'desc');
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
@@ -285,18 +285,46 @@ class AlumniController extends Controller
         return redirect()->route('alumni.index')->with('success', 'Maklumat alumni dan kelayakan log masuk berjaya dikemaskini.');
     }
 
-    // Delete alumni
+    // Archive alumni
     public function destroy(Alumni $alumni)
     {
-        // 1. Delete the associated User login account (IF it exists)
-        if ($alumni->user) {
-            $alumni->user->delete();
+        // Archive the alumni record instead of deleting
+        $alumni->update(['is_archived' => true]);
+
+        return redirect()->route('alumni.index')->with('success', 'Alumni berjaya diarkibkan.');
+    }
+
+    public function unarchive($id)
+    {
+        $alumni = Alumni::find($id);
+
+        if (!$alumni) {
+            return redirect()->route('alumni.index')->with('error', 'Alumni tidak ditemui.');
         }
 
-        // 2. Delete the actual Alumni profile record
-        $alumni->delete();
+        // Restore archived alumni
+        $alumni->update(['is_archived' => false]);
 
-        return redirect()->route('alumni.index')->with('success', 'Alumni berjaya dipadam.');
+        return redirect()->route('alumni.index')->with('success', 'Alumni berjaya dipulihkan.');
+    }
+
+    public function archived(Request $request)
+    {
+        // Display archived alumni only
+        $query = Alumni::with('user')->where('is_archived', true)->orderBy('alumni_id', 'desc');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('alumni_name', 'like', "%{$search}%")
+                    ->orWhere('alumni_email', 'like', "%{$search}%")
+                    ->orWhere('alumni_phone', 'like', "%{$search}%");
+            });
+        }
+
+        $alumni = $query->paginate(10)->withQueryString();
+
+        return view('alumni.archived', compact('alumni'));
     }
 
     public function resetPassword(Request $request, Alumni $alumni)

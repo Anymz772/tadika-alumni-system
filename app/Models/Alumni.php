@@ -39,7 +39,8 @@ class Alumni extends Model
         'age',                              // stays the same
         'hobby',
         'favourite_things',
-        'bio'
+        'bio',
+        'is_archived'                       // for archiving functionality
     ];
 
     public function user()

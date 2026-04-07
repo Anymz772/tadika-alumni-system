@@ -27,6 +27,7 @@ class Tadika extends Model
         'tadika_owner',
         'tadika_location',
         'owner_user_id',
+        'is_archived',
     ];
 
     public function owner()

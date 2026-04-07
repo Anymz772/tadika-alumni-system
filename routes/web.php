@@ -58,12 +58,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Alumni Management Routes (Standard RESTful routes)
     Route::get('/alumni', [AlumniController::class, 'index'])->name('alumni.index');
+    Route::get('/alumni/archived', [AlumniController::class, 'archived'])->name('alumni.archived');
     Route::get('/alumni/create', [AlumniController::class, 'create'])->name('alumni.create');
     Route::post('/alumni', [AlumniController::class, 'store'])->name('alumni.store');
     Route::get('/alumni/{alumni}', [AlumniController::class, 'show'])->name('alumni.show');
     Route::get('/alumni/{alumni}/edit', [AlumniController::class, 'edit'])->name('alumni.edit');
     Route::put('/alumni/{alumni}', [AlumniController::class, 'update'])->name('alumni.update');
     Route::delete('/alumni/{alumni}', [AlumniController::class, 'destroy'])->name('alumni.destroy');
+    Route::post('/alumni/{id}/unarchive', [AlumniController::class, 'unarchive'])->name('alumni.unarchive');
 
     // Routes for dynamic location data
     Route::get('/admin/alumni/districts', [AlumniController::class, 'getDistricts'])->name('admin.alumni.districts');
@@ -81,12 +83,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Tadika Management Routes (Standard RESTful routes)
     Route::get('/tadika', [TadikaAdminController::class, 'index'])->name('tadika.index');
+    Route::get('/tadika/archived', [TadikaAdminController::class, 'archived'])->name('tadika.archived');
     Route::get('/tadika/create', [TadikaAdminController::class, 'create'])->name('tadika.create');
     Route::post('/tadika', [TadikaAdminController::class, 'store'])->name('tadika.store');
     Route::get('/tadika/{tadika}', [TadikaAdminController::class, 'show'])->whereNumber('tadika')->name('tadika.show');
     Route::get('/tadika/{tadika}/edit', [TadikaAdminController::class, 'edit'])->whereNumber('tadika')->name('tadika.edit');
     Route::put('/tadika/{tadika}', [TadikaAdminController::class, 'update'])->whereNumber('tadika')->name('tadika.update');
     Route::delete('/tadika/{tadika}', [TadikaAdminController::class, 'destroy'])->whereNumber('tadika')->name('tadika.destroy');
+    Route::post('/tadika/{id}/unarchive', [TadikaAdminController::class, 'unarchive'])->name('tadika.unarchive');
 
     // Routes for dynamic location data
     Route::get('/admin/tadika/districts', [TadikaAdminController::class, 'getDistricts'])->name('admin.tadika.districts');

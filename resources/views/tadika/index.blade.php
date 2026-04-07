@@ -6,8 +6,11 @@
 @section('header-subtitle', 'Urus semua rekod tadika dalam sistem')
 
 @section('header-buttons')
-<a href="{{ route('tadika.create') }}" class="btn btn-primary">
+<!--<a href="{{ route('tadika.create') }}" class="btn btn-primary">
     <i class="fas fa-plus me-2"></i> Tambah Tadika Baru
+</a>-->
+<a href="{{ route('tadika.archived') }}" class="btn btn-secondary">
+    <i class="fas fa-archive me-2"></i> Lihat Arsip
 </a>
 @endsection
 
@@ -84,7 +87,7 @@
                                 <th>Daftar</th>
                                 <th>Kenalan</th>
                                 <th>Pemilik</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -153,11 +156,11 @@
 
                                         <form action="{{ route('tadika.destroy', $item->tadika_id) }}" method="POST"
                                             class="d-inline"
-                                            onsubmit="return confirm('Adakah anda pasti mahu memadam {{ $item->tadika_name }}? Ini juga akan memadam akaun pemilik.')">
+                                            onsubmit="return confirm('Adakah anda pasti mahu mengarkibkan {{ $item->tadika_name }}?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Padam">
-                                                <i class="fas fa-trash"></i>
+                                            <button type="submit" class="btn btn-sm btn-secondary" title="Arkib">
+                                                <i class="fas fa-archive"></i>
                                             </button>
                                         </form>
                                     </div>

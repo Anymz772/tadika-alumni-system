@@ -125,7 +125,7 @@
 
         <div class="card mt-3">
             <div class="card-header">
-                <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Actions</h6>
+                <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Tindakan</h6>
             </div>
             <div class="card-body">
                 <div class="row">
