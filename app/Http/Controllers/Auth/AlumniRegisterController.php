@@ -76,7 +76,6 @@ class AlumniRegisterController extends Controller
             'alumni_name' => ['required', 'string', 'max:255'],
             'alumni_state' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_negeri')],
             'alumni_district' => ['required', 'string', 'max:255', Rule::exists('glo_bandar', 'bandar_nama')],
-            'alumni_postcode' => ['required', 'string', 'max:10', Rule::exists('glo_bandar', 'bandar_postcode')],
             'tadika_id' => ['required', 'string'],
             'other_tadika_name' => ['nullable', 'string', 'max:255', 'required_if:tadika_id,other'],
         ]);
@@ -113,7 +112,6 @@ class AlumniRegisterController extends Controller
                     'alumni_name' => $request->alumni_name,
                     'alumni_state' => $request->alumni_state,
                     'alumni_district' => $request->alumni_district,
-                    'alumni_postcode' => $request->alumni_postcode,
                     'tadika_name' => $tadikaName, // Always save the text name for reference
                     'alumni_email' => $request->user_email
                 ]);

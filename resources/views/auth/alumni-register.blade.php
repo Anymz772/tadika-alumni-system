@@ -28,10 +28,82 @@
 
             <div class="reg-body">
 
-                {{-- Section 1: Maklumat Akaun --}}
+{{-- Section 1: Maklumat Tadika --}}
                 <div class="form-section">
                     <div class="section-label">
                         <span class="section-number">1</span>
+                        <span class="section-title"><i class="fas fa-school me-2"></i>Maklumat Tadika</span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="alumni_state" class="form-label required">Negeri</label>
+                            <div class="dropdown-wrapper">
+                                <select class="form-select @error('alumni_state') is-invalid @enderror"
+                                    id="alumni_state" name="alumni_state"
+                                    required>
+                                    <option value="">-- Pilih Negeri --</option>
+                                    @foreach($states as $state)
+                                        <option value="{{ $state }}" {{ old('alumni_state', $prefilledTadika->tadika_state ?? '') == $state ? 'selected' : '' }}>{{ $state }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('alumni_state')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            <div id="alumni_state_error" class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="alumni_district" class="form-label required">Daerah</label>
+                            <input type="text"
+                                class="form-control @error('alumni_district') is-invalid @enderror"
+                                id="alumni_district" name="alumni_district"
+                                list="alumni-district-list"
+                                value="{{ old('alumni_district', $prefilledTadika->tadika_district ?? '') }}"
+                                placeholder="Pilih daerah..."
+                                required>
+                            @error('alumni_district')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                             <div id="alumni_district_error" class="invalid-feedback"></div>
+                            <datalist id="alumni-district-list"></datalist>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="tadika_id" class="form-label required">Nama Tadika</label>
+                            <select class="form-control form-select @error('tadika_id') is-invalid @enderror"
+                                id="tadika_id" name="tadika_id" required>
+                                <option value="">-- Pilih Tadika --</option>
+                                <option value="other" {{ old('tadika_id') == 'other' ? 'selected' : '' }}>Lain-lain (Others)</option>
+                            </select>
+                            @error('tadika_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-12" id="other_tadika_name_div" style="display: none;">
+                            <label for="other_tadika_name" class="form-label">Sila nyatakan Nama Tadika</label>
+                            <input type="text"
+                                class="form-control @error('other_tadika_name') is-invalid @enderror"
+                                id="other_tadika_name" name="other_tadika_name"
+                                value="{{ old('other_tadika_name') }}"
+                                placeholder="Nama tadika anda">
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1 text-primary"></i>
+                                Sila masukkan nama rasmi tadika. Pastikan anda mengisi nama tadika yang sebenar.
+                            </div>
+                            @error('other_tadika_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Section 2: Maklumat Akaun --}}
+                <div class="form-section">
+                    <div class="section-label">
+                        <span class="section-number">2</span>
                         <span class="section-title"><i class="fas fa-user me-2"></i>Maklumat Akaun</span>
                     </div>
 
@@ -103,82 +175,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Section 2: Maklumat Tadika --}}
-                <div class="form-section">
-                    <div class="section-label">
-                        <span class="section-number">2</span>
-                        <span class="section-title"><i class="fas fa-school me-2"></i>Maklumat Tadika</span>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label for="alumni_state" class="form-label required">Negeri</label>
-                            <div class="dropdown-wrapper">
-                                <select class="form-select @error('alumni_state') is-invalid @enderror"
-                                    id="alumni_state" name="alumni_state"
-                                    required>
-                                    <option value="">-- Pilih Negeri --</option>
-                                    @foreach($states as $state)
-                                        <option value="{{ $state }}" {{ old('alumni_state', $prefilledTadika->tadika_state ?? '') == $state ? 'selected' : '' }}>{{ $state }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('alumni_state')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                            <div id="alumni_state_error" class="invalid-feedback"></div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="alumni_district" class="form-label required">Daerah</label>
-                            <input type="text"
-                                class="form-control @error('alumni_district') is-invalid @enderror"
-                                id="alumni_district" name="alumni_district"
-                                list="alumni-district-list"
-                                value="{{ old('alumni_district', $prefilledTadika->tadika_district ?? '') }}"
-                                placeholder="Pilih daerah..."
-                                required>
-                            @error('alumni_district')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                             <div id="alumni_district_error" class="invalid-feedback"></div>
-                            <datalist id="alumni-district-list"></datalist>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label for="tadika_id" class="form-label required">Nama Tadika</label>
-                            <select class="form-control form-select @error('tadika_id') is-invalid @enderror"
-                                id="tadika_id" name="tadika_id" required>
-                                <option value="">-- Pilih Tadika --</option>
-                                <option value="other" {{ old('tadika_id') == 'other' ? 'selected' : '' }}>Lain-lain (Others)</option>
-                            </select>
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1 text-primary"></i>
-                                Sila masukkan nama rasmi tadika. Pastikan anda mengisi nama tadika yang sebenar.
-                            </div>
-                            @error('tadika_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12" id="other_tadika_name_div" style="display: none;">
-                            <label for="other_tadika_name" class="form-label">Sila nyatakan Nama Tadika</label>
-                            <input type="text"
-                                class="form-control @error('other_tadika_name') is-invalid @enderror"
-                                id="other_tadika_name" name="other_tadika_name"
-                                value="{{ old('other_tadika_name') }}"
-                                placeholder="Nama tadika anda">
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1 text-primary"></i>
-                                Sila masukkan nama rasmi tadika. Pastikan anda mengisi nama tadika yang sebenar.
-                            </div>
-                            @error('other_tadika_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
                 </div>
