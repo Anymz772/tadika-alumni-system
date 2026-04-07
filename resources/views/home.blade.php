@@ -6,18 +6,15 @@
     <div class="col-md-6">
         <h1 class="display-4 fw-bold mb-4">Selamat datang ke Rangkaian Alumni</h1>
         <p class="lead mb-4">
-            Sambungkan semula dengan rakan sekelas anda, kekal dikemaskini dengan berita sekolah,
+            Sambungkan semula dengan rakan sekelas anda, kekal dikemaskini dengan berita tadika,
             dan jadilah sebahagian daripada komuniti alumni kami yang berkembang. Perjalanan anda berterusan di sini.
         </p>
         <div class="d-flex gap-3">
-            <a href="{{ route('alumni.register') }}" class="btn btn-tadika-primary btn-lg">
-                <i class="fas fa-user-plus me-2"></i> Sertai sebagai Alumni
+            <a href="{{ route('alumni.register') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i> Daftar Alumni
             </a>
             <a href="{{ route('tadika.register') }}" class="btn btn-outline-success btn-lg">
                 <i class="fas fa-school me-2"></i> Daftar Tadika
-            </a>
-            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
-                <i class="fas fa-sign-in-alt me-2"></i> Log Masuk Ahli
             </a>
         </div>
     </div>
@@ -45,24 +42,62 @@
             </div>
             <div class="card-body">
                 <div class="row text-center">
-                    <div class="col-md-4 mb-3">
-                        <div class="display-4 fw-bold text-primary">
-                            {{ $totalUsers }}
-                        </div>
-                        <p class="text-muted mb-0">Jumlah Keseluruhan Pengguna</p>
-                    </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <div class="display-4 fw-bold text-success">
                             {{ $totalTadikas }}
                         </div>
                         <p class="text-muted mb-0">Jumlah Tadika Berdaftar</p>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <div class="display-4 fw-bold text-info">
                             {{ $totalAlumni }}
                         </div>
                         <p class="text-muted mb-0">Jumlah Keseluruhan Alumni</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Senarai Tadika -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0"><i class="fas fa-school me-2"></i>Tadika Berdaftar  </h4>
+                </div>
+                <a href="{{ route('tadikas.public.index') }}" class="btn btn-outline-light btn-sm">
+                    Lihat Lanjut <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nama Tadika</th>
+                                <th>Daerah</th>
+                                <th>Negeri</th>
+                                <th>Tahun Daftar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentTadikas as $item)
+                                <tr>
+                                    <td>{{ $item->tadika_name }}</td>
+                                    <td>{{ $item->tadika_district }}</td>
+                                    <td>{{ $item->tadika_state }}</td>
+                                    <td>{{ optional($item->created_at)->year ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">Tiada tadika berdaftar.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -106,9 +141,9 @@
                         <div class="mb-3">
                             <i class="fas fa-hands-helping fa-3x text-warning"></i>
                         </div>
-                        <h5>Menyumbang kepada Sekolah</h5>
+                        <h5>Menyumbang kepada Tadika</h5>
                         <p class="text-muted">
-                            Sertai acara sekolah, bimbing pelajar semasa, dan sumbang kepada pembangunan sekolah.
+                            Sertai acara tadika, bimbing pelajar semasa, dan sumbang kepada pembangunan tadika.
                         </p>
                     </div>
                 </div>

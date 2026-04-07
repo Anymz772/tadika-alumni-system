@@ -49,6 +49,8 @@ Route::get('/dashboard', function () {
     return redirect()->route('profile.show');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/tadikas', [HomeController::class, 'tadikaList'])->name('tadikas.public.index');
+
 // ================= ADMIN ROUTES =================
 Route::middleware(['auth', 'admin'])->group(function () {
     // Admin Dashboard
