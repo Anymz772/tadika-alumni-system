@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Exports\TadikaExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\TadikaCategory;
 
 class TadikaAdminController extends Controller
 {
@@ -43,12 +44,13 @@ class TadikaAdminController extends Controller
     }
 
     public function create()
-    {
+    {   
+        $categories = TadikaCategory::orderBy('name')->get();
         $states = DB::table('glo_bandar')
             ->distinct()
             ->orderBy('bandar_negeri')
             ->pluck('bandar_negeri');
-        return view('tadika.create', compact('states'));
+        return view('tadika.create', compact('states', 'categories'));
     }
 
     public function store(Request $request)

@@ -108,16 +108,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="col-12 mt-2">
-                            <label for="tadika_address" class="form-label required">Alamat</label>
-                            <textarea class="form-control @error('tadika_address') is-invalid @enderror" 
-                                id="tadika_address" name="tadika_address" rows="2" required
-                                placeholder="Alamat penuh tadika">{{ old('tadika_address') }}</textarea>
-                            @error('tadika_address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
                     </div>
                 </div>
 
@@ -161,6 +151,16 @@
                             @enderror
                             <div id="tadika_district_error" class="invalid-feedback"></div>
                             <datalist id="district-list"></datalist>
+                        </div>
+                    
+                        <div class="col-12 mt-2">
+                            <label for="tadika_address" class="form-label required">Alamat</label>
+                            <textarea class="form-control @error('tadika_address') is-invalid @enderror" 
+                                id="tadika_address" name="tadika_address" rows="2" required
+                                placeholder="Alamat penuh tadika">{{ old('tadika_address') }}</textarea>
+                            @error('tadika_address')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
